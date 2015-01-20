@@ -1,9 +1,9 @@
-Spike Team Notification
-=======================
+Spike Team Notifier
+===================
 
-Welcome to CTL's Spikea Team Notification app.
+CTL's Spike Team Alert System
 
-Intro
------
+What's inside?
+--------------
 
-This is the app for alerting the Spike Team to Go, Team, Go!
+This is the app for sending the Go signal to the Spike Team
