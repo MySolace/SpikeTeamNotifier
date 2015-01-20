@@ -1,3 +1,8 @@
+spike_team_user:
+    resource: "@SpikeTeamUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: @AppBundle/Controller/
     type:     annotation
