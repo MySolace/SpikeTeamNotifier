@@ -2,15 +2,16 @@
 
 namespace SpikeTeam\UserBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
  *
- * @ORM\Table()
+ * @ORM\Table(name="fos_user")
  * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\UserRepository")
  */
-class User
+class User extends BaseUser
 {
     /**
      * @var integer
@@ -19,36 +20,33 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_first", type="string", length=255)
+     * @ORM\Column(name="name_first", type="string", length=60, nullable=true)
      */
-    private $nameFirst;
+    private $nameFirst = null;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_last", type="string", length=255)
+     * @ORM\Column(name="name_last", type="string", length=60, nullable=true)
      */
-    private $nameLast;
+    private $nameLast = null;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="phone_number", type="string", length=60, nullable=true)
      */
-    private $email;
+    private $phoneNumber = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone_number", type="string", length=255)
-     */
-    private $phoneNumber;
-
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * Get id
@@ -104,29 +102,6 @@ class User
     public function getNameLast()
     {
         return $this->nameLast;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**

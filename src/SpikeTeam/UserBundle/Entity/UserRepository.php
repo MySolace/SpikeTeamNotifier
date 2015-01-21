@@ -4,6 +4,7 @@ namespace SpikeTeam\UserBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
+
 /**
  * UserRepository
  *
