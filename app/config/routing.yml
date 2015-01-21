@@ -1,3 +1,8 @@
+spike_team_rest:
+    resource: "@SpikeTeamRestBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 spike_team_user:
     resource: "@SpikeTeamUserBundle/Controller/"
     type:     annotation
@@ -5,3 +10,7 @@ spike_team_user:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+rest:
+    type: rest
+    resource: "@SpikeTeamRestBundle/Resources/config/routing.yml"
