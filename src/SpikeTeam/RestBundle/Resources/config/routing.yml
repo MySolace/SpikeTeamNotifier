@@ -1,3 +1,0 @@
-user:
-    type: rest
-    resource: SpikeTeam\RestBundle\Controller\SpikerController

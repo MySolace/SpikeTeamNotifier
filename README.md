@@ -17,4 +17,4 @@ SMS sent via Twilio: https://github.com/twilio/twilio-php
 - FOSRestBundle
 
 API set up via FOSRestBundle: https://github.com/FriendsOfSymfony/FOSRestBundle
-Tutorial: http://npmasters.com/2012/11/25/Symfony2-Rest-FOSRestBundle.html
+Halfway through: http://www.screenfony.com/product/free/symfony-rest-api-1

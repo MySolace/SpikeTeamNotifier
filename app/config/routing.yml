@@ -11,6 +11,6 @@ spike_team_user:
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
-rest:
+spike_team_spiker_api:
     type: rest
-    resource: "@SpikeTeamRestBundle/Resources/config/routing.yml"
+    resource: SpikeTeam\RestBundle\Controller\RestController

@@ -82,10 +82,12 @@ fos_user:
 sensio_framework_extra:
     view:
         annotations: false
+    router:
+        annotations: true
 
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
     format_listener: true
     view:
-        view_response_listener: 'force'
+        view_response_listener: true
