@@ -1,8 +1,3 @@
-spike_team_rest:
-    resource: "@SpikeTeamRestBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 spike_team_user:
     resource: "@SpikeTeamUserBundle/Controller/"
     type:     annotation
@@ -11,6 +6,11 @@ spike_team_user:
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
-spike_team_spiker_api:
+spike_team_rest:
     type: rest
-    resource: SpikeTeam\RestBundle\Controller\RestController
+    prefix: /api
+    resource: "@SpikeTeamRestBundle/Resources/config/routing.yml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc

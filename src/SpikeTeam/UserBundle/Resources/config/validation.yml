@@ -1,0 +1,8 @@
+UserBundle\Entity\Spiker:
+    properties:
+        phoneNumber:
+            - NotBlank: ~
+        firstName:
+            - NotBlank: ~
+        lastName:
+            - NotBlank: ~
