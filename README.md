@@ -18,3 +18,8 @@ SMS sent via Twilio: https://github.com/twilio/twilio-php
 
 API set up via FOSRestBundle: https://github.com/FriendsOfSymfony/FOSRestBundle
 Halfway through: http://www.screenfony.com/product/free/symfony-rest-api-1
+
+API Documentation
+-----------------
+
+Documentation of this app can be found at api/doc/, provided via the Nelmio API Doc Bundle

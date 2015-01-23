@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
 
@@ -21,6 +22,10 @@ class SpikerV1Controller extends FOSRestController
      * @return array
      * @Rest\View()
      * 
+     * @ApiDoc(
+     *  resource=true,
+     *  description="GET all current Spikers",
+     * )
      */
     public function getSpikersAllAction()
     {
@@ -34,6 +39,18 @@ class SpikerV1Controller extends FOSRestController
      * @param $id
      * @return array
      * @Rest\View()
+     * 
+     * @ApiDoc(
+     *  description="GET individual Spiker",
+     *  requirements={
+     *      {
+     *           "name"="id",
+     *           "dataType"="string",
+     *           "requirement"="\d+",
+     *           "description"="The ID of the Spiker you'd like to GET"
+     *       }
+     *   },
+     * )
      */
     public function getSpikerAction($id)
     {
@@ -45,9 +62,18 @@ class SpikerV1Controller extends FOSRestController
     }
 
     /**
-     * The method for adding Spikers via REST
+     * The method for adding Spikers via REST. FOSRestBundle adds that stupid 's' at the end of the URL. No can do.
      * @return Response $response
      * @Rest\View()
+     * 
+     * @ApiDoc(
+     *  description="POST new Spiker",
+     *  parameters={
+     *      {"name"="first_name", "dataType"="string", "required"="true", "description"="First name of Spiker"},
+     *      {"name"="last_name", "dataType"="string", "required"="true", "description"="Last name of Spiker"},
+     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"}
+     *  },
+     * )
      */
     public function postSpikersAddAction()
     {
@@ -64,10 +90,27 @@ class SpikerV1Controller extends FOSRestController
     }
 
     /**
-     * The method for updating Spikers via REST
+     * The method for updating Spikers via REST. Request must include: first_name, last_name, and phone_number.
      * @param $id
      * @return Response $response
      * @Rest\View()
+     *
+     * @ApiDoc(
+     *  description="PUT new Spiker info",
+     *  requirements={
+     *      {
+     *           "name"="id",
+     *           "dataType"="string",
+     *           "requirement"="\d+",
+     *           "description"="The ID of the Spiker you'd like to PUT"
+     *       }
+     *   },
+     *  parameters={
+     *      {"name"="first_name", "dataType"="string", "required"="true", "description"="First name of Spiker"},
+     *      {"name"="last_name", "dataType"="string", "required"="true", "description"="Last name of Spiker"},
+     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"}
+     *  },
+     * )
      */
     public function putSpikersEditAction($id)
     {
@@ -85,6 +128,18 @@ class SpikerV1Controller extends FOSRestController
      * @param $id
      * @return Response $response
      * @Rest\View
+     *
+     * @ApiDoc(
+     *  description="DELETE existing Spiker",
+     *  requirements={
+     *      {
+     *           "name"="id",
+     *           "dataType"="string",
+     *           "requirement"="\d+",
+     *           "description"="The ID of the Spiker you'd like to DELETE"
+     *       }
+     *   },
+     * )
      */
     public function deleteSpikersDeleteAction($id)
     {
