@@ -61,4 +61,4 @@ In order to get started, you'll need to do the following:
 API Documentation
 -----------------
 
-Documentation of this app can be found at api/doc/, provided via the Nelmio API Doc Bundle
+Documentation of this app can be found at <root>/(app_dev.php)/api/doc/, provided via the Nelmio API Doc Bundle: https://github.com/nelmio/NelmioApiDocBundle
