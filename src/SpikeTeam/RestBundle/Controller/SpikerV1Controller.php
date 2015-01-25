@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -30,8 +29,7 @@ class SpikerV1Controller extends FOSRestController
     public function getSpikersAllAction()
     {
         $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findAll();
-
-        return array('spikers' => $spikers);
+        return $this->generateJsonResponse(200, $spikers);
     }
 
     /**
@@ -56,9 +54,10 @@ class SpikerV1Controller extends FOSRestController
     {
         $spiker = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->find($id);
         if (!$spiker) {
-            throw new NotFoundException('User not found');
+            // If no Spiker is found by that ID
+            return $this->generateJsonResponse(404);
         }
-        return array('spiker' => $spiker);
+        return $this->generateJsonResponse(200, $spiker);
     }
 
     /**
@@ -83,7 +82,7 @@ class SpikerV1Controller extends FOSRestController
 
         if ($data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $this->setSpikerInfo($spiker, $data);
-        return $this->generateJsonResponse(201, $responseRoute, $spiker->getId());
+        return $this->generateJsonResponse(201, null, $responseRoute, $spiker->getId());
         } else {
             return $this->generateJsonResponse(400);
         }
@@ -180,23 +179,28 @@ class SpikerV1Controller extends FOSRestController
      * @param $id
      * @return Response $response
      */
-    public function generateJsonResponse($statusCode, $routeName = null, $id = null)
+    public function generateJsonResponse($statusCode, $data = null, $routeName = null, $id = null)
     {
         $response = new Response();
         $response->setStatusCode($statusCode);
-
-        // set the `Location` header only when creating new resources
-        if (201 === $statusCode) {
-            if (NULL === $routeName) {
-                $routeName = 'spiketeam_user_user_spikershow';
+        if (isset($data)) {
+            $serialized = $this->container->get('serializer')->serialize($data, 'json');
+            $response->setContent($serialized);
+        } else {
+            // set the `Location` header only when creating new resources
+            if (201 === $statusCode) {
+                if (NULL === $routeName) {
+                    $routeName = 'spiketeam_user_user_spikershow';
+                }
+                $response->headers->set('Location',
+                    $this->generateUrl(
+                        $routeName, array('id' => $id),
+                        true // absolute
+                    )
+                );
             }
-            $response->headers->set('Location',
-                $this->generateUrl(
-                    $routeName, array('id' => $id),
-                    true // absolute
-                )
-            );
         }
+
         return $response;
     }
 
