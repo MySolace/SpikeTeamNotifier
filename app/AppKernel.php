@@ -22,6 +22,8 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new SpikeTeam\UserBundle\SpikeTeamUserBundle(),
             new SpikeTeam\RestBundle\SpikeTeamRestBundle(),
+            new SpikeTeam\ButtonBundle\SpikeTeamButtonBundle(),
+            new SpikeTeam\AlertBundle\SpikeTeamAlertBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

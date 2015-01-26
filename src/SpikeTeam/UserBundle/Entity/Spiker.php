@@ -38,7 +38,7 @@ class Spiker
     /**
      * @var string
      *
-     * @ORM\Column(name="phone_number", type="string", length=60)
+     * @ORM\Column(name="phone_number", type="string", length=11, unique=true)
      */
     private $phoneNumber;
 

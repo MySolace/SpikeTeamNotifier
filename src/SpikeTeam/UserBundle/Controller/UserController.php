@@ -20,25 +20,25 @@ class UserController extends Controller
      */
     public function spikersAllAction()
     {
-        $repository = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikers = $repository->findAll();
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $spikers = $spikerRepo->findAll();
         // send to template
         return new Response('All the spikers!');
     }
 
     /**
      * Showing individual spiker here
-     * @Route("/spikers/{id}", defaults={"id" = 0})
+     * @Route("/spikers/{phoneNumber}", defaults={"phoneNumber" = 0})
      */
-    public function spikerShowAction($id)
+    public function spikerShowAction($phoneNumber)
     {
         $em = $this->getDoctrine()->getManager();
         $allUrl = $this->generateUrl('spiketeam_user_user_spikersall');
-        if (!$id) {
+        if (!$phoneNumber) {
             return $this->redirect($allUrl);
         } else {
-            $repository = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-            $spiker = $repository->find($id);
+            $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+            $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
             if (!$spiker) {
                 return $this->redirect($allUrl);
             }
@@ -65,7 +65,7 @@ class UserController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl(
                 'spiketeam_user_user_spikershow',
-                array('id' => $spiker->getId())
+                array('phoneNumber' => $spiker->getPhoneNumber())
             ));
         }
 

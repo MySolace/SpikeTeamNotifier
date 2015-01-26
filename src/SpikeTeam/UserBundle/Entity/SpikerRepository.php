@@ -22,15 +22,9 @@ class SpikerRepository extends EntityRepository
 	 */
 	private $container;
 
-    /**
-     * @var $em
-     */
-    private $em;
-
-	public function setContainerEm($container, $em)
+	public function setContainer($container)
 	{
 		$this->container = $container;
-        $this->em = $em;
 	}
 
     /**
@@ -41,11 +35,12 @@ class SpikerRepository extends EntityRepository
      */
     public function setSpikerInfo(Spiker $spiker, $data)
     {
+        $em = $this->getEntityManager();
         $spiker->setFirstName($data['first_name']);
         $spiker->setLastName($data['last_name']);
         $spiker->setPhoneNumber($data['phone_number']);
-        $this->em->persist($spiker);
-        $this->em->flush();
+        $em->persist($spiker);
+        $em->flush();
 
         return $spiker;
     }
@@ -54,10 +49,10 @@ class SpikerRepository extends EntityRepository
      * Common method for setting Response to send
      * @param $statusCode
      * @param $routeName
-     * @param $id
+     * @param $phoneNumber
      * @return Response $response
      */
-    public function generateJsonResponse($statusCode, $data = null, $routeName = null, $id = null)
+    public function generateJsonResponse($statusCode, $data = null, $routeName = null, $phoneNumber = null)
     {
         $response = new Response();
         $response->setStatusCode($statusCode);
@@ -72,7 +67,7 @@ class SpikerRepository extends EntityRepository
                 }
                 $response->headers->set('Location',
                     $this->container->get('router')->generate(
-                        $routeName, array('id' => $id),
+                        $routeName, array('phoneNumber' => $phoneNumber),
                         true // absolute
                     )
                 );

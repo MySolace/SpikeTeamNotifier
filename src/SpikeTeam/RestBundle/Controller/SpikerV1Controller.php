@@ -28,7 +28,7 @@ class SpikerV1Controller extends FOSRestController
     public function getSpikersAllAction()
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+        $spikerRepo->setContainer($this->container);
         $spikers = $spikerRepo->findAll();
         return $spikerRepo->generateJsonResponse(200, $spikers);
     }
@@ -43,19 +43,19 @@ class SpikerV1Controller extends FOSRestController
      *  description="GET individual Spiker",
      *  requirements={
      *      {
-     *           "name"="id",
+     *           "name"="Phone Number",
      *           "dataType"="string",
      *           "requirement"="\d+",
-     *           "description"="The ID of the Spiker you'd like to GET"
+     *           "description"="The phone number of the Spiker you'd like to GET"
      *       }
      *   },
      * )
      */
-    public function getSpikerAction($id)
+    public function getSpikerAction($phoneNumber)
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
-        $spiker = $spikerRepo->find($id);
+        $spikerRepo->setContainer($this->container);
+        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
         if (!$spiker) {
             // If no Spiker is found by that ID
             return $spikerRepo->generateJsonResponse(404);
@@ -80,14 +80,14 @@ class SpikerV1Controller extends FOSRestController
     public function postSpikersAddAction()
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+        $spikerRepo->setContainer($this->container);
 
         $spiker = new Spiker();
         $responseRoute = 'spiketeam_user_user_spikershow';
 
         if ($data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
-        return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getId());
+        return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
         } else {
             return $spikerRepo->generateJsonResponse(400);
         }
@@ -103,10 +103,10 @@ class SpikerV1Controller extends FOSRestController
      *  description="PUT new Spiker info",
      *  requirements={
      *      {
-     *           "name"="id",
+     *           "name"="Phone Number",
      *           "dataType"="string",
      *           "requirement"="\d+",
-     *           "description"="The ID of the Spiker you'd like to PUT"
+     *           "description"="The phone number of the Spiker you'd like to PUT"
      *       }
      *   },
      *  parameters={
@@ -116,11 +116,11 @@ class SpikerV1Controller extends FOSRestController
      *  },
      * )
      */
-    public function putSpikersEditAction($id)
+    public function putSpikersEditAction($phoneNumber)
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
-        $spiker = $spikerRepo->find($id);
+        $spikerRepo->setContainer($this->container);
+        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker) && $data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
@@ -140,22 +140,22 @@ class SpikerV1Controller extends FOSRestController
      *  description="DELETE existing Spiker",
      *  requirements={
      *      {
-     *           "name"="id",
+     *           "name"="Phone Number",
      *           "dataType"="string",
      *           "requirement"="\d+",
-     *           "description"="The ID of the Spiker you'd like to DELETE"
+     *           "description"="The phone number of the Spiker you'd like to DELETE"
      *       }
      *   },
      * )
      */
-    public function deleteSpikersDeleteAction($id)
+    public function deleteSpikersDeleteAction($phoneNumber)
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $em = $this->getDoctrine()->getManager();
-        $spikerRepo->setContainerEm($this->container, $em);
-        $spiker = $spikerRepo->find($id);
+        $spikerRepo->setContainer($this->container);
+        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker)) {
+            $em = $this->getDoctrine()->getManager();
             $em->remove($spiker);
             $em->flush();
             return $spikerRepo->generateJsonResponse(204);

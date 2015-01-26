@@ -1,3 +1,13 @@
+spike_team_alert:
+    resource: "@SpikeTeamAlertBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+spike_team_button:
+    resource: "@SpikeTeamButtonBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 spike_team_user:
     resource: "@SpikeTeamUserBundle/Controller/"
     type:     annotation
