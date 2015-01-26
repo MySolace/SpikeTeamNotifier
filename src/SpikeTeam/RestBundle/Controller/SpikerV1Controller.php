@@ -87,7 +87,11 @@ class SpikerV1Controller extends FOSRestController
 
         if ($data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
-        return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
+            if ($spiker) {
+                return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
+            } else {
+                return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+            }
         } else {
             return $spikerRepo->generateJsonResponse(400);
         }
@@ -124,7 +128,11 @@ class SpikerV1Controller extends FOSRestController
 
         if (isset($spiker) && $data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
-            return $spikerRepo->generateJsonResponse(204);
+            if ($spiker) {
+                return $spikerRepo->generateJsonResponse(204);
+            } else {
+                return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+            }
         } else {
             return $spikerRepo->generateJsonResponse(400);
         }

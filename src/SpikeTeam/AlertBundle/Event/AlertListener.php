@@ -30,12 +30,16 @@ class AlertListener
         $message = $this->container->getParameter('twilio_msg');
         $client = new Services_Twilio($sid, $token);
 
-        $twilioMessage = $client->account->messages->create(array(
+        $twilioSend = $client->account->messages->create(array(
             "From" => $this->container->getParameter('twilio_number_dev'),
             "To" => $phoneNumber,
             "Body" => $message,
         ));
 
-        // return new Response($twilioMessage->sid);
+        if (isset($twilioSend->code) && $twilioSend->code == 21211) {
+            // Error, not valid phone number
+        } else {
+            // sucess!
+        }
     }
 }

@@ -39,10 +39,9 @@ class ButtonController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($push);
             $em->flush();
-            return new Response('done!');
-            //return $this->redirect($this->generateUrl('spiketeam_alert_alert_alert'));
+            return $this->redirect($this->generateUrl('spiketeam_button_button_index'));
         } else {
-            return new Response('No can do!');          
+            return new Response('No can do!');      
         }
     }
 
@@ -59,7 +58,7 @@ class ButtonController extends Controller
 
         if ($pushes) {
             $lastTime = end($pushes)->getPushTime();
-            $testInterval = \DateInterval::createFromDateString('24 hours');
+            $testInterval = \DateInterval::createFromDateString($this->container->getParameter('alert_wait'));
             $testTime = $lastTime->add($testInterval);
             if ($now > $testTime) {  // If outside the 24 hour period, return $now
                 $return = $now;

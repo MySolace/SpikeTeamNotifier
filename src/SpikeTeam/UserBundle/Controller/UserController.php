@@ -32,6 +32,9 @@ class UserController extends Controller
      */
     public function spikerShowAction($phoneNumber)
     {
+        if ($phoneNumber == 'add') {
+            return $this->redirect($this->generateUrl('spiketeam_user_user_spikeraddform'));
+        }
         $em = $this->getDoctrine()->getManager();
         $allUrl = $this->generateUrl('spiketeam_user_user_spikersall');
         if (!$phoneNumber) {
@@ -49,24 +52,39 @@ class UserController extends Controller
 
     /**
      * Form for admins to add spikers directly in-site
-     * @Route("/spikers/add")
+     * @Route("/spiker/add")
      */
     public function spikerAddFormAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $spiker = new Spiker();
 
-        $form = $this->createForm(new SpikerType(), $spiker);
-        $form->add('Add spiker!', 'submit');
+        $form = $this->createFormBuilder($spiker)
+            ->add('firstName')
+            ->add('lastName')
+            ->add('phoneNumber')
+            ->add('Add spiker!', 'submit')
+            ->getForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($spiker);
-            $em->flush();
-            return $this->redirect($this->generateUrl(
-                'spiketeam_user_user_spikershow',
-                array('phoneNumber' => $spiker->getPhoneNumber())
-            ));
+            // Process number to remove extra characters and add '1' country code
+            $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+            $processedNumber = $spikerRepo->processNumber($spiker->getPhoneNumber());
+
+            // If it's valid, go ahead and save. Otherwise, redirect back to this form.
+            if ($processedNumber) {
+                $spiker->setPhoneNumber($processedNumber);
+                $em->persist($spiker);
+                $em->flush();
+                return $this->redirect($this->generateUrl(
+                    'spiketeam_user_user_spikershow',
+                    array('phoneNumber' => $spiker->getPhoneNumber())
+                ));
+            } else {
+                return $this->redirect($this->generateUrl('spiketeam_user_user_spikeraddform'));
+            }
+
         }
 
         return $this->render('SpikeTeamUserBundle:Spiker:addForm.html.twig', array(

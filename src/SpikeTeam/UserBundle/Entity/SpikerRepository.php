@@ -28,21 +28,27 @@ class SpikerRepository extends EntityRepository
 	}
 
     /**
-     * Common method for setting Spiker info
+     * Common method for setting Spiker info. Returns false if phone number can't be formatted correctly.
      * @param Spiker $spiker
      * @param $data
      * @return Spiker $spiker
      */
     public function setSpikerInfo(Spiker $spiker, $data)
     {
-        $em = $this->getEntityManager();
-        $spiker->setFirstName($data['first_name']);
-        $spiker->setLastName($data['last_name']);
-        $spiker->setPhoneNumber($data['phone_number']);
-        $em->persist($spiker);
-        $em->flush();
+        $phoneNumber = $this->processNumber($data['phone_number']);
+        if ($phoneNumber) {
+            $em = $this->getEntityManager();
+            $spiker->setFirstName($data['first_name']);
+            $spiker->setLastName($data['last_name']);
+            $spiker->setLastName($phoneNumber);
+            $spiker->setPhoneNumber();
+            $em->persist($spiker);
+            $em->flush();
 
-        return $spiker;
+            return $spiker;            
+        } else {
+            return false;
+        }
     }
 
 	/**
@@ -75,5 +81,24 @@ class SpikerRepository extends EntityRepository
         }
 
         return $response;
+    }
+
+    public function processNumber($phoneNumber)
+    {
+        $return = false;
+        $phoneNumber = str_replace(
+            array('-', ' ', '(', ')', '+', '{', '}', '.', '/', '\\'), '', $phoneNumber
+        );
+        if (ctype_digit($phoneNumber)) {
+            switch (strlen($phoneNumber)) {
+                case 10:
+                    $return = '1' . $phoneNumber;
+                    break;
+                case 11:
+                    $return = $phoneNumber;
+                    break;
+            }
+        }
+        return $return;
     }
 }
