@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Spiker
  *
  * @ORM\Table(name="spiker")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\SpikerRepository")
  */
 class Spiker
 {

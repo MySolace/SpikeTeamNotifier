@@ -15,7 +15,6 @@ use SpikeTeam\UserBundle\Entity\Spiker;
 
 class SpikerV1Controller extends FOSRestController
 {
-
     /**
      * GET all current Spikers
      * @return array
@@ -28,8 +27,10 @@ class SpikerV1Controller extends FOSRestController
      */
     public function getSpikersAllAction()
     {
-        $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findAll();
-        return $this->generateJsonResponse(200, $spikers);
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+        $spikers = $spikerRepo->findAll();
+        return $spikerRepo->generateJsonResponse(200, $spikers);
     }
 
     /**
@@ -52,12 +53,14 @@ class SpikerV1Controller extends FOSRestController
      */
     public function getSpikerAction($id)
     {
-        $spiker = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->find($id);
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+        $spiker = $spikerRepo->find($id);
         if (!$spiker) {
             // If no Spiker is found by that ID
-            return $this->generateJsonResponse(404);
+            return $spikerRepo->generateJsonResponse(404);
         }
-        return $this->generateJsonResponse(200, $spiker);
+        return $spikerRepo->generateJsonResponse(200, $spiker);
     }
 
     /**
@@ -76,15 +79,17 @@ class SpikerV1Controller extends FOSRestController
      */
     public function postSpikersAddAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+
         $spiker = new Spiker();
         $responseRoute = 'spiketeam_user_user_spikershow';
 
         if ($data = json_decode($this->getRequest()->getContent(), true)) {
-            $spiker = $this->setSpikerInfo($spiker, $data);
-        return $this->generateJsonResponse(201, null, $responseRoute, $spiker->getId());
+            $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
+        return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getId());
         } else {
-            return $this->generateJsonResponse(400);
+            return $spikerRepo->generateJsonResponse(400);
         }
     }
 
@@ -113,12 +118,15 @@ class SpikerV1Controller extends FOSRestController
      */
     public function putSpikersEditAction($id)
     {
-        $spiker = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->find($id);    
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $spikerRepo->setContainerEm($this->container, $this->getDoctrine()->getManager());
+        $spiker = $spikerRepo->find($id);
+
         if (isset($spiker) && $data = json_decode($this->getRequest()->getContent(), true)) {
-            $spiker = $this->setSpikerInfo($spiker, $data);
-            return $this->generateJsonResponse(204);
+            $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
+            return $spikerRepo->generateJsonResponse(204);
         } else {
-            return $this->generateJsonResponse(400);
+            return $spikerRepo->generateJsonResponse(400);
         }
     }
 
@@ -142,66 +150,18 @@ class SpikerV1Controller extends FOSRestController
      */
     public function deleteSpikersDeleteAction($id)
     {
-        $spiker = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->find($id);    
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $em = $this->getDoctrine()->getManager();
+        $spikerRepo->setContainerEm($this->container, $em);
+        $spiker = $spikerRepo->find($id);
+
         if (isset($spiker)) {
-            $em = $this->getDoctrine()->getManager();
             $em->remove($spiker);
             $em->flush();
-            return $this->generateJsonResponse(204);
+            return $spikerRepo->generateJsonResponse(204);
         } else {
-            return $this->generateJsonResponse(400);
+            return $spikerRepo->generateJsonResponse(400);
         }
-    }
-
-    /**
-     * Common method for setting Spiker info
-     * @param Spiker $spiker
-     * @param $data
-     * @return Spiker $spiker
-     */
-    public function setSpikerInfo(Spiker $spiker, $data)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $spiker->setFirstName($data['first_name']);
-        $spiker->setLastName($data['last_name']);
-        $spiker->setPhoneNumber($data['phone_number']);
-        $em->persist($spiker);
-        $em->flush();
-
-        return $spiker;
-    }
-
-    /**
-     * Common method for setting Response to send
-     * @param $statusCode
-     * @param $routeName
-     * @param $id
-     * @return Response $response
-     */
-    public function generateJsonResponse($statusCode, $data = null, $routeName = null, $id = null)
-    {
-        $response = new Response();
-        $response->setStatusCode($statusCode);
-        if (isset($data)) {
-            $serialized = $this->container->get('serializer')->serialize($data, 'json');
-            $response->setContent($serialized);
-        } else {
-            // set the `Location` header only when creating new resources
-            if (201 === $statusCode) {
-                if (NULL === $routeName) {
-                    $routeName = 'spiketeam_user_user_spikershow';
-                }
-                $response->headers->set('Location',
-                    $this->generateUrl(
-                        $routeName, array('id' => $id),
-                        true // absolute
-                    )
-                );
-            }
-        }
-
-        return $response;
     }
 
 }
