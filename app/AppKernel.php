@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new SpikeTeam\RestBundle\SpikeTeamRestBundle(),
             new SpikeTeam\ButtonBundle\SpikeTeamButtonBundle(),
             new SpikeTeam\AlertBundle\SpikeTeamAlertBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
