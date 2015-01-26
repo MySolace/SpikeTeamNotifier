@@ -56,14 +56,15 @@ class ButtonController extends Controller
         $pushes = $pushRepo->findAll();
         $now = new \DateTime();
 
-        if ($pushes) {
+        if ($pushes) {  // If pushes in system, we need to check how recent they were.
             $lastTime = end($pushes)->getPushTime();
+            // Get interval from parameters
             $testInterval = \DateInterval::createFromDateString($this->container->getParameter('alert_wait'));
             $testTime = $lastTime->add($testInterval);
             if ($now > $testTime) {  // If outside the 24 hour period, return $now
                 $return = $now;
             }
-        } else {
+        } else {    // If no pushes in system, we are good to go!
             $return = $now;
         }
         return $return;

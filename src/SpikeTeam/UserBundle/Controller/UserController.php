@@ -50,6 +50,8 @@ class UserController extends Controller
         }
     }
 
+    // NEED TO ADD EDIT FORM PATHWAY
+
     /**
      * Form for admins to add spikers directly in-site
      * @Route("/spiker/add")
@@ -84,7 +86,6 @@ class UserController extends Controller
             } else {
                 return $this->redirect($this->generateUrl('spiketeam_user_user_spikeraddform'));
             }
-
         }
 
         return $this->render('SpikeTeamUserBundle:Spiker:addForm.html.twig', array(

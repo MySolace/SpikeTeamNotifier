@@ -38,10 +38,16 @@ class SpikerRepository extends EntityRepository
         $phoneNumber = $this->processNumber($data['phone_number']);
         if ($phoneNumber) {
             $em = $this->getEntityManager();
-            $spiker->setFirstName($data['first_name']);
-            $spiker->setLastName($data['last_name']);
-            $spiker->setLastName($phoneNumber);
-            $spiker->setPhoneNumber();
+            $spiker->setPhoneNumber($phoneNumber);
+            if (isset($data['first_name'])) {
+                $spiker->setFirstName($data['first_name']);                
+            }
+            if (isset($data['last_name'])) {
+                $spiker->setLastName($data['last_name']);                
+            }
+            if (isset($data['is_enabled'])) {
+                $spiker->setIsEnabled($data['is_enabled']);
+            }
             $em->persist($spiker);
             $em->flush();
 

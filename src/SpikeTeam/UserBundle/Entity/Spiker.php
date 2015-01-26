@@ -42,6 +42,12 @@ class Spiker
      */
     private $phoneNumber;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_enabled", type="boolean", options={"default" = true})
+     */
+    private $isEnabled;
 
     /**
      * Get id
@@ -120,5 +126,28 @@ class Spiker
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Set isEnabled
+     *
+     * @param boolean $isEnabled
+     * @return Spiker
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return boolean 
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
     }
 }

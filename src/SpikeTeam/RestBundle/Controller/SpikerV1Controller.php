@@ -71,9 +71,10 @@ class SpikerV1Controller extends FOSRestController
      * @ApiDoc(
      *  description="POST new Spiker",
      *  parameters={
-     *      {"name"="first_name", "dataType"="string", "required"="true", "description"="First name of Spiker"},
-     *      {"name"="last_name", "dataType"="string", "required"="true", "description"="Last name of Spiker"},
-     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"}
+     *      {"name"="first_name", "dataType"="string", "required"="false", "description"="First name of Spiker"},
+     *      {"name"="last_name", "dataType"="string", "required"="false", "description"="Last name of Spiker"},
+     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"},
+     *      {"name"="(optional) is_enabled", "dataType"="boolean", "required"="false", "description"="If the user is enabled or not"}
      *  },
      * )
      */
@@ -114,9 +115,10 @@ class SpikerV1Controller extends FOSRestController
      *       }
      *   },
      *  parameters={
-     *      {"name"="first_name", "dataType"="string", "required"="true", "description"="First name of Spiker"},
-     *      {"name"="last_name", "dataType"="string", "required"="true", "description"="Last name of Spiker"},
-     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"}
+     *      {"name"="first_name", "dataType"="string", "required"="false", "description"="First name of Spiker"},
+     *      {"name"="last_name", "dataType"="string", "required"="false", "description"="Last name of Spiker"},
+     *      {"name"="phone_number", "dataType"="string", "required"="true", "description"="Phone number of Spiker"},
+     *      {"name"="(optional) is_enabled", "dataType"="boolean", "required"="false", "description"="If the user is enabled or not"}
      *  },
      * )
      */

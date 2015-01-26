@@ -18,7 +18,9 @@ class AlertListener
     public function onAlert(AlertEvent $event)
     {
         foreach($event->getSpikers() as $spiker) {
-            $this->sendMessage($spiker->getPhoneNumber());
+            if ($spiker->getIsEnabled()) {
+                $this->sendMessage($spiker->getPhoneNumber());
+            }
         }
     }
 
