@@ -1,0 +1,10 @@
+@import "partials/variables.scss";
+@import "partials/typography.scss";
+@import "partials/layout.scss";
+
+body {
+    #inner {
+        width: 80%;
+        margin: 0 auto;
+    }
+}

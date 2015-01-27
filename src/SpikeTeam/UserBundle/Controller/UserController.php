@@ -23,7 +23,9 @@ class UserController extends Controller
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikers = $spikerRepo->findAll();
         // send to template
-        return new Response('All the spikers!');
+        return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
+            'spikers' => $spikers,
+        ));
     }
 
     /**
@@ -93,5 +95,32 @@ class UserController extends Controller
         ));
     }
 
+    /**
+     * Showing all admin users here
+     * @Route("/admin")
+     */
+    public function adminAllAction()
+    {
+        $adminRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
+        $admins = $adminRepo->findAll();
+        // send to template
+        return $this->render('SpikeTeamUserBundle:Admin:adminAll.html.twig', array(
+            'admins' => $admins,
+        ));
+    }
+
+    /**
+     * Showing all admin users here
+     * @Route("/admin/{username}")
+     */
+    public function adminShowAction($username)
+    {
+        $adminRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
+        $admin = $adminRepo->findOneByUsername($username);
+        // send to template
+        return $this->render('SpikeTeamUserBundle:Admin:adminShow.html.twig', array(
+            'admin' => $admin,
+        ));
+    }
 
 }

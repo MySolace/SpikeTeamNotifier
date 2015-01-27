@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  * User
  *
  * @ORM\Table(name="fos_user")
- * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\AdminRepository")
  */
-class User extends BaseUser
+class Admin extends BaseUser
 {
     /**
      * @var integer

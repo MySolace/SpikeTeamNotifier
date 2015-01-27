@@ -14,16 +14,14 @@ class ButtonController extends Controller
 {
     /**
      * @Route("/")
-     * @Template()
      */
     public function indexAction()
     {
-        return array('name' => 'there');
+        return $this->render('SpikeTeamButtonBundle:Button:index.html.twig');
     }
 
     /**
      * @Route("/goteamgo")
-     * @Template()
      */
     public function goAction()
     {
@@ -47,7 +45,6 @@ class ButtonController extends Controller
 
     /**
      * Check if we are good to go. Returns false if not, current DateTime to set as new push if so.
-     * @Template()
      */
     public function checkPrevPushes()
     {

@@ -22,10 +22,7 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/rest-bundle": "~1.4",
         "jms/serializer-bundle": "0.13.*",
-        "nelmio/api-doc-bundle": "@dev",
-        "braincrafted/bootstrap-bundle": "~2.1",
-        "twbs/bootstrap": "3.2.*",
-        "components/jquery":  "1.11.*"
+        "nelmio/api-doc-bundle": "@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

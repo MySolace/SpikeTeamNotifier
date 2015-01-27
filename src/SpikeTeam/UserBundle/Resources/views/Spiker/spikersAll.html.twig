@@ -1,0 +1,17 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <ul>
+    {% for spiker in spikers %}
+        <li>{{ spiker.firstName }} {{ spiker.lastName }} - {{ spiker.phoneNumber }} (
+            {% if spiker.isEnabled %}
+                Enabled
+            {% else %}
+                Disabled
+            {% endif %}
+            )
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+

@@ -1,0 +1,15 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <ul>
+    {% for admin in admins %}
+        <li>{{ admin.username }} -
+            {% for role in admin.roles %}
+                {{ role }},
+            {% endfor %}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
+
