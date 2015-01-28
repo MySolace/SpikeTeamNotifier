@@ -103,5 +103,8 @@ fos_rest:
     service:
         inflector: spiketeam.restbundle.util.inflector
 
+escape_wsse_authentication:
+    authentication_provider_class: SpikeTeam\RestBundle\Security\Provider
+
 # Nelmio API Doc Configuration
 nelmio_api_doc: ~

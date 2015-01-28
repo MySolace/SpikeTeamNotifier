@@ -1,6 +1,6 @@
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
+        FOS\UserBundle\Model\UserInterface: bcrypt
 
     providers:
         fos_userbundle:
@@ -15,8 +15,16 @@ security:
             pattern: ^/(_(profiler|wdt|error)|css|images|js)/
             security: false
 
-        #default:
-        #    anonymous: ~
+        wsse_secured:
+            pattern: ^/api
+            wsse:
+                realm: "Secured API"
+                profile: "UsernameToken"
+                lifetime: 300
+                encoder:
+                    algorithm: sha1
+            anonymous: false
+            provider: fos_userbundle
 
         main:
             pattern: ^/

@@ -1,7 +1,5 @@
 {% extends 'admin.html.twig' %}
 
 {% block body %}
-    Hello {{ admin.username }}
+    Hello {{ admin.username }}. Your token is {{ admin.password }}. Use this at http://www.teria.com/~koseki/tools/wssegen/d to generate your X-WSSE request header.
 {% endblock %}
-
-
