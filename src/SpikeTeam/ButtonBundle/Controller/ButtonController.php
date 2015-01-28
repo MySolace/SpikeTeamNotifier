@@ -4,7 +4,6 @@ namespace SpikeTeam\ButtonBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
@@ -17,7 +16,11 @@ class ButtonController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('SpikeTeamButtonBundle:Button:index.html.twig');
+        $canPush = ($this->checkPrevPushes()) ? true : false;
+        return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
+            'goUrl' => $this->generateUrl('spiketeam_button_button_go'),
+            'canPush' => $canPush,
+        ));
     }
 
     /**

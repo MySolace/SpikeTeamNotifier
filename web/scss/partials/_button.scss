@@ -1,0 +1,49 @@
+#nameplate {
+    text-align: center;
+    margin: 30px 0;
+    #nameplate-inner {
+        width: $button-box-width;
+        margin: 0 auto;
+        background-color: $color-nameplate;
+        color: white;
+        padding: .5em;
+    }
+}
+
+#button-box {
+    text-align: center;
+    width: $button-box-width;
+    height: $button-box-height;
+    margin: 0 auto;
+    background: repeating-linear-gradient(
+        -45deg,
+        black,
+        black $button-stripe-width,
+        yellow $button-stripe-width,
+        yellow $button-stripe-width * 2
+    );
+    overflow: hidden;
+}
+
+$button-inner-width: $button-box-width * $button-inner-scale;
+$button-inner-height: $button-box-height * $button-inner-scale;
+
+#button-box-inner {
+    width: $button-inner-width;
+    height: $button-inner-height;
+    margin: ($button-box-height - $button-inner-height)/2 ($button-box-width - $button-inner-width)/2;
+    background-color: $color-background;
+    #button {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: $button-inner-height;
+        img.button-image {
+            width: $button-size;
+            height: $button-size;
+            &.disabled {
+                opacity: .4;
+            }
+        }
+    }
+}

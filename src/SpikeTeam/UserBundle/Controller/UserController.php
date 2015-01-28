@@ -4,7 +4,6 @@ namespace SpikeTeam\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,28 +21,74 @@ class UserController extends Controller
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikers = $spikerRepo->findAll();
+
+        $builder = $this->createFormBuilder(array('enabled' => true));
+        foreach ($spikers as $spiker) {
+            $default = $spiker->getIsEnabled();
+            $builder->add($spiker->getId(), 'checkbox', array(
+                'data' => $default,
+            ));
+        }
+        $form = $builder->getForm();
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
             'spikers' => $spikers,
+            'form' => $form->createView(),
         ));
     }
 
     /**
      * Showing individual spiker here
-     * @Route("/spikers/{phoneNumber}", defaults={"phoneNumber" = 0})
+     * @Route("/spikers/{input}", defaults={"input" = 0})
      */
-    public function spikerShowAction($phoneNumber)
+    public function spikerShowAction($input, Request $request)
     {
-        if ($phoneNumber == 'add') {
-            return $this->redirect($this->generateUrl('spiketeam_user_user_spikeraddform'));
-        }
         $em = $this->getDoctrine()->getManager();
         $allUrl = $this->generateUrl('spiketeam_user_user_spikersall');
-        if (!$phoneNumber) {
+        $formUrl = $this->generateUrl('spiketeam_user_user_spikershow', array('input' => 'add'));
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+
+        if ($input == 'add') {    // If we are adding a spiker here, not viewing one
+
+            $spiker = new Spiker();
+            // refactor code so this form lines up externally with one below
+            $form = $this->createFormBuilder($spiker)
+                ->add('firstName')
+                ->add('lastName')
+                ->add('phoneNumber')
+                ->add('isEnabled', 'hidden', array(
+                    'data' => true,
+                ))
+                ->add('Add spiker!', 'submit')
+                ->getForm();
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                // Process number to remove extra characters and add '1' country code
+                $processedNumber = $spikerRepo->processNumber($spiker->getPhoneNumber());
+
+                // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
+                if ($processedNumber) {
+                    $spiker->setPhoneNumber($processedNumber);
+                    $em->persist($spiker);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl(
+                        'spiketeam_user_user_spikershow',
+                        array('input' => $spiker->getPhoneNumber())
+                    ));
+                } else {
+                    return $this->redirect($formUrl);
+                }
+            }
+
+            return $this->render('SpikeTeamUserBundle:Spiker:form.html.twig', array(
+                'form' => $form->createView(),
+            ));
+
+        } elseif (!$input) {    // If nothing, show all
             return $this->redirect($allUrl);
-        } else {
-            $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-            $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
+        } else {    // Show individual Spiker
+            $spiker = $spikerRepo->findOneByPhoneNumber($input);
             if (!$spiker) {
                 return $this->redirect($allUrl);
             }
@@ -52,47 +97,54 @@ class UserController extends Controller
         }
     }
 
-    // NEED TO ADD EDIT FORM PATHWAY
-
     /**
-     * Form for admins to add spikers directly in-site
-     * @Route("/spiker/add")
+     * Showing individual spiker here
+     * @Route("/spikers/{input}/edit")
      */
-    public function spikerAddFormAction(Request $request)
+    public function spikerEditAction($input, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $spiker = new Spiker();
+        $allUrl = $this->generateUrl('spiketeam_user_user_spikersall');
+        $editUrl = $this->generateUrl('spiketeam_user_user_spikeredit', array('input' => $input));
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
 
-        $form = $this->createFormBuilder($spiker)
-            ->add('firstName')
-            ->add('lastName')
-            ->add('phoneNumber')
-            ->add('Add spiker!', 'submit')
-            ->getForm();
-        $form->handleRequest($request);
+        $processedNumber = $spikerRepo->processNumber($input);
+        if ($processedNumber) {
+            $spiker = $spikerRepo->findOneByPhoneNumber($processedNumber);
+            // refactor code so this form lines up externally with one above
+            $form = $this->createFormBuilder($spiker)
+                ->add('firstName', 'text', array('data' => $spiker->getFirstName()))
+                ->add('lastName', 'text', array('data' => $spiker->getLastName()))
+                ->add('phoneNumber', 'text', array('data' => $spiker->getPhoneNumber()))
+                ->add('isEnabled', 'checkbox', array('data' => $spiker->getIsEnabled()))
+                ->add('Save Spiker!', 'submit')
+                ->getForm();
+            $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            // Process number to remove extra characters and add '1' country code
-            $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-            $processedNumber = $spikerRepo->processNumber($spiker->getPhoneNumber());
+            if ($form->isValid()) {
+                // Process number to remove extra characters and add '1' country code
+                $processedNumber = $spikerRepo->processNumber($spiker->getPhoneNumber());
 
-            // If it's valid, go ahead and save. Otherwise, redirect back to this form.
-            if ($processedNumber) {
-                $spiker->setPhoneNumber($processedNumber);
-                $em->persist($spiker);
-                $em->flush();
-                return $this->redirect($this->generateUrl(
-                    'spiketeam_user_user_spikershow',
-                    array('phoneNumber' => $spiker->getPhoneNumber())
-                ));
-            } else {
-                return $this->redirect($this->generateUrl('spiketeam_user_user_spikeraddform'));
+                // If it's valid, go ahead and save. Otherwise, redirect back to edit page again.
+                if ($processedNumber) {
+                    $spiker->setPhoneNumber($processedNumber);
+                    $em->persist($spiker);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl(
+                        'spiketeam_user_user_spikershow',
+                        array('input' => $spiker->getPhoneNumber())
+                    ));
+                } else {
+                    return $this->redirect($editUrl);
+                }
             }
-        }
 
-        return $this->render('SpikeTeamUserBundle:Spiker:addForm.html.twig', array(
-            'form' => $form->createView(),
-        ));
+            return $this->render('SpikeTeamUserBundle:Spiker:form.html.twig', array(
+                'form' => $form->createView(),
+            ));
+        } else {    // Show individual Spiker
+            return $this->redirect($allUrl);
+        }
     }
 
     /**
@@ -110,7 +162,7 @@ class UserController extends Controller
     }
 
     /**
-     * Showing all admin users here
+     * Showing indiv admin user here
      * @Route("/admin/{username}")
      */
     public function adminShowAction($username)

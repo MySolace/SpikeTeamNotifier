@@ -4,11 +4,56 @@ body {
 nav {
   font-size: 18px; }
 
-body {
-  padding-top: 70px; }
+html {
+  width: 100%;
+  height: 100%; }
 
-body #inner {
-  width: 80%;
-  margin: 0 auto; }
+body {
+  padding-top: 70px;
+  width: 100%;
+  height: 100%;
+  background-color: #FFF; }
+  body #inner {
+    width: 75%;
+    margin: 0 auto; }
+
+#nameplate {
+  text-align: center;
+  margin: 30px 0; }
+  #nameplate #nameplate-inner {
+    width: 300px;
+    margin: 0 auto;
+    background-color: black;
+    color: white;
+    padding: .5em; }
+
+#button-box {
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  background: repeating-linear-gradient(-45deg, black, black 16px, yellow 16px, yellow 32px);
+  overflow: hidden; }
+
+#button-box-inner {
+  width: 225px;
+  height: 225px;
+  margin: 37.5px 37.5px;
+  background-color: #FFF; }
+  #button-box-inner #button {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 225px; }
+    #button-box-inner #button img.button-image {
+      width: 200px;
+      height: 200px; }
+      #button-box-inner #button img.button-image.disabled {
+        opacity: .4; }
+
+@media (max-width: 400px) {
+  #inner {
+    width: 100% !important;
+    margin: 0 !important; } }
 
 /*# sourceMappingURL=stylesheet.css.map */

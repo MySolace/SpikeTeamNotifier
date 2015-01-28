@@ -33,7 +33,7 @@ class AlertListener
         $client = new Services_Twilio($sid, $token);
 
         $twilioSend = $client->account->messages->create(array(
-            "From" => $this->container->getParameter('twilio_number_dev'),
+            "From" => $this->container->getParameter('twilio_number'),
             "To" => $phoneNumber,
             "Body" => $message,
         ));

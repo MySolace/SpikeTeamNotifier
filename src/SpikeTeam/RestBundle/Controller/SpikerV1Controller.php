@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,7 +17,7 @@ class SpikerV1Controller extends FOSRestController
     /**
      * GET all current Spikers
      * @return array
-     * @Rest\View()
+     * @Rest\View
      * 
      * @ApiDoc(
      *  resource=true,
@@ -37,7 +36,7 @@ class SpikerV1Controller extends FOSRestController
      * GET individual Spiker
      * @param $id
      * @return array
-     * @Rest\View()
+     * @Rest\View
      * 
      * @ApiDoc(
      *  description="GET individual Spiker",
@@ -51,7 +50,7 @@ class SpikerV1Controller extends FOSRestController
      *   },
      * )
      */
-    public function getSpikerAction($phoneNumber)
+    public function getSpikersAction($phoneNumber)
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
@@ -66,7 +65,7 @@ class SpikerV1Controller extends FOSRestController
     /**
      * The method for adding Spikers via REST. FOSRestBundle adds that stupid 's' at the end of the URL. No can do.
      * @return Response $response
-     * @Rest\View()
+     * @Rest\View
      * 
      * @ApiDoc(
      *  description="POST new Spiker",
@@ -102,7 +101,7 @@ class SpikerV1Controller extends FOSRestController
      * The method for updating Spikers via REST. Request must include: first_name, last_name, and phone_number.
      * @param $id
      * @return Response $response
-     * @Rest\View()
+     * @Rest\View
      *
      * @ApiDoc(
      *  description="PUT new Spiker info",
@@ -172,6 +171,20 @@ class SpikerV1Controller extends FOSRestController
         } else {
             return $spikerRepo->generateJsonResponse(400);
         }
+    }
+
+    /**
+     * Responding to any response to texts being sent out via Twilio
+     * @return Response $response
+     * @Rest\View
+     */
+    public function incomingTwilioAction()
+    {
+        $msg = $this->container->getParameter('twilio_response');
+        // send to template
+        return $this->render('SpikeTeamRestBundle:Twilio:response.xml.twig', array(
+            'msg' => $msg,
+        ));
     }
 
 }
