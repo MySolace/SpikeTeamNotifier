@@ -7,6 +7,9 @@
         background-color: $color-nameplate;
         color: white;
         padding: .5em;
+        -webkit-box-shadow: 0 8px 6px -6px black;
+           -moz-box-shadow: 0 8px 6px -6px black;
+                box-shadow: 0 8px 6px -6px black;
     }
 }
 
@@ -23,6 +26,9 @@
         yellow $button-stripe-width * 2
     );
     overflow: hidden;
+        -webkit-box-shadow: 0 8px 6px -6px black;
+           -moz-box-shadow: 0 8px 6px -6px black;
+                box-shadow: 0 8px 6px -6px black;
 }
 
 $button-inner-width: $button-box-width * $button-inner-scale;
@@ -46,4 +52,7 @@ $button-inner-height: $button-box-height * $button-inner-scale;
             }
         }
     }
+    -webkit-box-shadow: inset 8px 8px 6px -6px black;
+       -moz-box-shadow: inset 8px 8px 6px -6px black;
+            box-shadow: inset 8px 8px 6px -6px black;
 }
