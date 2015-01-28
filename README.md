@@ -26,11 +26,12 @@ In order to get started, you'll need to do the following:
 
 * Add the following options to app/config/Parameters.yml, according to your needs:
     ```
-    alert_wait:
-    twilio_sid:
-    twilio_tok:
-    twilio_number_dev:
-    twilio_msg:
+    alert_wait: '24 hours'
+    twilio_sid: [ YOUR TWILIO SID ]
+    twilio_tok: [ YOUR TWILIO TOKEN ]
+    twilio_number: [ THE TWILIO NUMBER YOU WANT TO SEND FROM ]
+    twilio_msg: [ YOUR MESSAGE ]
+    twilio_response: [ YOUR AUTO-REPLY MESSAGE TO ANY INCOMING SMS ]
     ```
 
 * Update the database you specified above with the Doctrine schema:
@@ -52,6 +53,11 @@ In order to get started, you'll need to do the following:
 * Get SASS watching the scss files, if that's what you want:
     ```
     sass --watch web/scss:web/css &
+    ```
+
+* In order to get the Twilio auto-reply thing going, you'll need to follow step 2 of the instructions here: https://www.twilio.com/docs/quickstart/php/sms/hello-monkey, using the following url:
+    ```
+    [YOUR APP ROOT]/api/v1/twilio/incoming
     ```
 
 * Get started developing!

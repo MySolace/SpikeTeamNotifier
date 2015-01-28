@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View as FOSView;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
@@ -84,6 +85,8 @@ class SpikerV1Controller extends FOSRestController
 
         $spiker = new Spiker();
         $responseRoute = 'spiketeam_user_user_spikershow';
+
+        // TEST FOR EXISITING SPIKER BY THAT PHONE NUMBER
 
         if ($data = json_decode($this->getRequest()->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);

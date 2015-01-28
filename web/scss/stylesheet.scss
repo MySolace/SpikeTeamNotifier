@@ -3,6 +3,14 @@
 @import "partials/layout.scss";
 @import "partials/button.scss";
 
+body {
+    background-image: url("../images/steel-bg.jpg");
+}
+
+nav {
+    background-color: rgba(248, 248, 248, .7) !important;
+}
+
 @media (max-width: $button-box-width * 4/3) {
     #inner {
         width: 100% !important;
