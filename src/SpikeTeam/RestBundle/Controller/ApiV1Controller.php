@@ -12,7 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
 
-class SpikerV1Controller extends FOSRestController
+class ApiV1Controller extends FOSRestController
 {
     /**
      * GET all current Spikers
