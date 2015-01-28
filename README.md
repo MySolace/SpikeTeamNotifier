@@ -49,6 +49,11 @@ In order to get started, you'll need to do the following:
     php app/console server:run
     ```
 
+* Get SASS watching the scss files, if that's what you want:
+    ```
+    sass --watch web/scss:web/css &
+    ```
+
 * Get started developing!
 
 API Documentation
