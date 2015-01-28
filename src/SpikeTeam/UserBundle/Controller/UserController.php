@@ -22,18 +22,9 @@ class UserController extends Controller
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikers = $spikerRepo->findAll();
 
-        $builder = $this->createFormBuilder(array('enabled' => true));
-        foreach ($spikers as $spiker) {
-            $default = $spiker->getIsEnabled();
-            $builder->add($spiker->getId(), 'checkbox', array(
-                'data' => $default,
-            ));
-        }
-        $form = $builder->getForm();
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
             'spikers' => $spikers,
-            'form' => $form->createView(),
         ));
     }
 

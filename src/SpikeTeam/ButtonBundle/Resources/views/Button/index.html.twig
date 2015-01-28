@@ -1,21 +1,15 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin.button.html.twig' %}
 
 {% block body %}
-    <div id="nameplate">
-        <div id="nameplate-inner">
+    <div class="nameplate">
+        <div class="nameplate-inner">
             &bull;&nbsp;&nbsp;ALERT SPIKE TEAM&nbsp;&nbsp;&bull;
         </div>
     </div>
     <div id="button-box">
         <div id="button-box-inner">
-            <div id="button">
-                {% if canPush %}
-                    <a href="{{ goUrl }}">
-                        <img class="button-image enabled" src="{{ asset('images/button.png') }}" />
-                    </a>
-                {% else %}
-                    <img class="button-image disabled" src="{{ asset('images/button.png') }}" />
-                {% endif %}
+            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
+                <img class="button-image" src="{{ asset('images/button.png') }}" />
             </div>
         </div>
     </div>

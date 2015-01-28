@@ -1,7 +1,7 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin.spikers.html.twig' %}
 
 {% block body %}
-    <table>
+    <table class="table table-striped">
         <tr>
             <th>Enabled</th>
             <th>First Name</th>
@@ -11,7 +11,7 @@
         </tr>
     {% for spiker in spikers %}
         <tr>
-            <td>
+            <td class="enabled">
                 {% if spiker.isEnabled %}
                     <i class="fa fa-check-square"></i>
                 {% else %}
@@ -28,7 +28,6 @@
     {% endfor %}
     </table>
 
-    {{ form(form, {'method': 'POST'}) }}
 {% endblock %}
 
 

@@ -8,10 +8,11 @@
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/darkly/bootstrap.min.css" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <link tyep="text/css" href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body class ="{% block bodySection %}anon{% endblock %}">
         {% block navbar %}{% endblock %}
         <div id="body">
             <div id="inner">
@@ -21,6 +22,20 @@
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $("body.section-button").find("li.button").addClass("active");
+                    $("body.section-spikers").find("li.spikers").addClass("active");
+                    $("body.section-admin").find("li.admin").addClass("active");
+                    $("body.section-user").find("li.user").addClass("active");
+                    $("#button.enabled").click(function(){
+                        if (confirm("Are you sure you want to notify the Spike Team?") == true) {
+                            $.ajax('/goteamgo');
+                            $(this).removeClass("enabled").addClass("disabled");
+                        }
+                    })
+                });
+            </script>
         {% endblock %}
     </body>
 </html>

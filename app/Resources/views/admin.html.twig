@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block bodySection %}logged-in{% endblock %}
+
 {% block navbar %}
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container-fluid">
@@ -16,12 +18,12 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="/">The Button<span class="sr-only">(current)</span></a></li>
-            <li><a href="/spikers">Spike Team</a></li>
-            <li><a href="/admin">Admin Users</a></li>
+            <li class="button"><a href="/">The Button<span class="sr-only">(current)</span></a></li>
+            <li class="spikers"><a href="/spikers">Spike Team</a></li>
+            <li class="admin"><a href="/admin">Admin Users</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/admin/{{ app.user.username }}">{{ app.user.username }}</a></li>
+            <li class="user"><a href="/admin/{{ app.user.username }}">{{ app.user.username }}</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->

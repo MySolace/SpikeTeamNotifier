@@ -8,7 +8,26 @@ body {
 }
 
 nav {
-    background-color: rgba(248, 248, 248, .7) !important;
+//    background-color: rgba(248, 248, 248, .7) !important;
+}
+
+.nameplate {
+    text-align: center;
+    margin: 30px 0;
+    .nameplate-inner {
+        width: $button-box-width;
+        margin: 0 auto;
+        background-color: $color-nameplate;
+        color: white;
+        padding: .5em;
+        -webkit-box-shadow: 0 8px 6px -6px black;
+           -moz-box-shadow: 0 8px 6px -6px black;
+                box-shadow: 0 8px 6px -6px black;
+    }
+}
+
+td.enabled {
+    text-align: center;
 }
 
 @media (max-width: $button-box-width * 4/3) {

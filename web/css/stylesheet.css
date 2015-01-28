@@ -17,19 +17,6 @@ body {
     width: 75%;
     margin: 0 auto; }
 
-#nameplate {
-  text-align: center;
-  margin: 30px 0; }
-  #nameplate #nameplate-inner {
-    width: 300px;
-    margin: 0 auto;
-    background-color: black;
-    color: white;
-    padding: .5em;
-    -webkit-box-shadow: 0 8px 6px -6px black;
-    -moz-box-shadow: 0 8px 6px -6px black;
-    box-shadow: 0 8px 6px -6px black; }
-
 #button-box {
   text-align: center;
   width: 300px;
@@ -57,14 +44,27 @@ body {
     #button-box-inner #button img.button-image {
       width: 200px;
       height: 200px; }
-      #button-box-inner #button img.button-image.disabled {
-        opacity: .4; }
+    #button-box-inner #button.disabled img.button-image {
+      opacity: .4; }
 
 body {
   background-image: url("../images/steel-bg.jpg"); }
 
-nav {
-  background-color: rgba(248, 248, 248, 0.7) !important; }
+.nameplate {
+  text-align: center;
+  margin: 30px 0; }
+  .nameplate .nameplate-inner {
+    width: 300px;
+    margin: 0 auto;
+    background-color: black;
+    color: white;
+    padding: .5em;
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black; }
+
+td.enabled {
+  text-align: center; }
 
 @media (max-width: 400px) {
   #inner {

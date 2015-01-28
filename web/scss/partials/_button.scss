@@ -1,18 +1,3 @@
-#nameplate {
-    text-align: center;
-    margin: 30px 0;
-    #nameplate-inner {
-        width: $button-box-width;
-        margin: 0 auto;
-        background-color: $color-nameplate;
-        color: white;
-        padding: .5em;
-        -webkit-box-shadow: 0 8px 6px -6px black;
-           -moz-box-shadow: 0 8px 6px -6px black;
-                box-shadow: 0 8px 6px -6px black;
-    }
-}
-
 #button-box {
     text-align: center;
     width: $button-box-width;
@@ -47,7 +32,9 @@ $button-inner-height: $button-box-height * $button-inner-scale;
         img.button-image {
             width: $button-size;
             height: $button-size;
-            &.disabled {
+        }
+        &.disabled {
+            img.button-image {
                 opacity: .4;
             }
         }
