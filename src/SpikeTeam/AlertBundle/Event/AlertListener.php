@@ -19,6 +19,7 @@ class AlertListener
     {
         foreach($event->getSpikers() as $spiker) {
             if ($spiker->getIsEnabled()) {
+                // NEED TO HANDLE UNREAL PHONE NUMBERS - TRY TRY/CATCH HERE?
                 $this->sendMessage($spiker->getPhoneNumber());
             }
         }

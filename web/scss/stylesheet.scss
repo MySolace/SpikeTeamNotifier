@@ -3,6 +3,11 @@
 @import "partials/layout.scss";
 @import "partials/button.scss";
 
+a, a:hover {
+    color: red;
+    text-decoration: none;
+}
+
 body {
     background-image: url("../images/steel-bg.jpg");
 }
@@ -15,7 +20,7 @@ nav {
     text-align: center;
     margin: 30px 0;
     .nameplate-inner {
-        width: $button-box-width;
+        display: inline-block;
         margin: 0 auto;
         background-color: $color-nameplate;
         color: white;
@@ -24,6 +29,10 @@ nav {
            -moz-box-shadow: 0 8px 6px -6px black;
                 box-shadow: 0 8px 6px -6px black;
     }
+}
+
+body.section-button .nameplate-inner {
+    width: $button-box-width;
 }
 
 td.enabled {

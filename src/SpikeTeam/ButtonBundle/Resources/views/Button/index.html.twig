@@ -9,7 +9,13 @@
     <div id="button-box">
         <div id="button-box-inner">
             <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
-                <img class="button-image" src="{{ asset('images/button.png') }}" />
+                {% if canPush %}
+                    <a href="/goteamgo">
+                        <img class="button-image" src="{{ asset('images/button.png') }}" />
+                    </a>
+                {% else %}
+                    <img class="button-image" src="{{ asset('images/button.png') }}" />
+                {% endif %}
             </div>
         </div>
     </div>

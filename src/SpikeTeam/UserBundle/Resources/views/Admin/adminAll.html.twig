@@ -1,6 +1,11 @@
 {% extends 'admin.admin.html.twig' %}
 
 {% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;ADMIN USERS&nbsp;&nbsp;&bull;
+        </div>
+    </div>
     <ul>
     {% for admin in admins %}
         <li>{{ admin.username }} -

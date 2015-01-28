@@ -139,6 +139,24 @@ class UserController extends Controller
     }
 
     /**
+     * Showing individual spiker here
+     * @Route("/spikers/{input}/delete")
+     */
+    public function spikerDeleteAction($input)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+
+        $processedNumber = $spikerRepo->processNumber($input);
+        if ($processedNumber) {
+            $spiker = $spikerRepo->findOneByPhoneNumber($processedNumber);
+            $em->remove($spiker);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('spiketeam_user_user_spikersall'));
+    }
+
+    /**
      * Showing all admin users here
      * @Route("/admin")
      */
