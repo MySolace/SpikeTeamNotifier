@@ -1,3 +1,8 @@
+spike_team_setting:
+    resource: "@SpikeTeamSettingBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 spike_team_button:
     resource: "@SpikeTeamButtonBundle/Controller/"
     type:     annotation

@@ -8,11 +8,11 @@ use Services_Twilio;
 class AlertListener
 {
 
-    protected $container;
+    protected $em;
 
-    public function __construct($container)
+    public function __construct($em)
     {
-        $this->container = $container;
+        $this->em = $em;
     }
 
     public function onAlert(AlertEvent $event)
@@ -26,14 +26,15 @@ class AlertListener
 
     public function sendMessage($phoneNumber)
     {
-        // Pulling CTL Twilio credentials from parameters.yml
-        $sid = $this->container->getParameter('twilio_sid');
-        $token = $this->container->getParameter('twilio_tok');
-        $message = $this->container->getParameter('twilio_msg');
+        $settingRepo = $this->em->getRepository('SpikeTeamSettingBundle:Setting');
+        // Pulling CTL Twilio credentials from settings in db
+        $sid = $settingRepo->findOneByName('twilio_sid')->getSetting();
+        $token = $settingRepo->findOneByName('twilio_token')->getSetting();
+        $message = $settingRepo->findOneByName('twilio_message')->getSetting();
         $client = new Services_Twilio($sid, $token);
 
         $twilioSend = $client->account->messages->create(array(
-            "From" => $this->container->getParameter('twilio_number'),
+            "From" => $settingRepo->findOneByName('twilio_number')->getSetting(),
             "To" => $phoneNumber,
             "Body" => $message,
         ));

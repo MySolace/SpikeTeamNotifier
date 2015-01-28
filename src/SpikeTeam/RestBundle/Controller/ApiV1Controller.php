@@ -236,7 +236,8 @@ class ApiV1Controller extends FOSRestController
      */
     public function incomingTwilioAction()
     {
-        $msg = $this->container->getParameter('twilio_response');
+        $msg = $this->getDoctrine()->getEntityManager()
+            ->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('twilio_response')->getSetting();
         // send to template
         return $this->render('SpikeTeamRestBundle:Twilio:response.xml.twig', array(
             'msg' => $msg,

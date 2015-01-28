@@ -3,4 +3,4 @@ services:
         class: SpikeTeam\AlertBundle\Event\AlertListener
         tags:
             - { name: kernel.event_listener, event: alert.send, method: onAlert }
-        arguments: [@service_container]
+        arguments: [@doctrine.orm.entity_manager]

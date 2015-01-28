@@ -15,6 +15,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
@@ -25,6 +26,7 @@ class AppKernel extends Kernel
             new SpikeTeam\RestBundle\SpikeTeamRestBundle(),
             new SpikeTeam\ButtonBundle\SpikeTeamButtonBundle(),
             new SpikeTeam\AlertBundle\SpikeTeamAlertBundle(),
+            new SpikeTeam\SettingBundle\SpikeTeamSettingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

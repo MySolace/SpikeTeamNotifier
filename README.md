@@ -24,20 +24,21 @@ In order to get started, you'll need to do the following:
     composer install
     ```
 
-* Add the following options to app/config/Parameters.yml, according to your needs:
-    ```
-    alert_wait: '24 hours'
-    twilio_sid: [ YOUR TWILIO SID ]
-    twilio_tok: [ YOUR TWILIO TOKEN ]
-    twilio_number: [ THE TWILIO NUMBER YOU WANT TO SEND FROM ]
-    twilio_msg: [ YOUR MESSAGE ]
-    twilio_response: [ YOUR AUTO-REPLY MESSAGE TO ANY INCOMING SMS ]
-    ```
-
 * Update the database you specified above with the Doctrine schema:
     ```
     php app/console doctrine:database:create
     php app/console doctrine:schema:update --force
+    php app/console doctrine:migrations:migrate
+    ```
+
+* Be sure to check the following settings, as per your needs:
+    ```
+    alert_timeout: '24 hours'
+    twilio_sid: [ YOUR TWILIO SID ]
+    twilio_token: [ YOUR TWILIO TOKEN ]
+    twilio_number: [ THE TWILIO NUMBER YOU WANT TO SEND FROM ]
+    twilio_message: [ YOUR MESSAGE ]
+    twilio_response: [ YOUR AUTO-REPLY MESSAGE TO ANY INCOMING SMS ]
     ```
 
 * Create a super-admin user:

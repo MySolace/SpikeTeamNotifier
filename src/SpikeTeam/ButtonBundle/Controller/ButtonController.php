@@ -59,7 +59,9 @@ class ButtonController extends Controller
         if ($pushes) {  // If pushes in system, we need to check how recent they were.
             $lastTime = end($pushes)->getPushTime();
             // Get interval from parameters
-            $testInterval = \DateInterval::createFromDateString($this->container->getParameter('alert_wait'));
+            $intervalString = $this->getDoctrine()->getEntityManager()
+                ->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('alert_timeout')->getSetting();
+            $testInterval = \DateInterval::createFromDateString($intervalString);
             $testTime = $lastTime->add($testInterval);
             if ($now > $testTime) {  // If outside the 24 hour period, return $now
                 $return = $now;
