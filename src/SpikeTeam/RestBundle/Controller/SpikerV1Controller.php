@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View as FOSView;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
@@ -23,12 +22,23 @@ class SpikerV1Controller extends FOSRestController
      * @ApiDoc(
      *  resource=true,
      *  description="GET all current Spikers",
+     *  requirements={
+     *      {
+     *           "name"="X-WSSE",
+     *           "dataType"="Header",
+     *           "requirement"="Your username and token",
+     *           "description"="Need to set X-WSSE request header, generated from your token. Check http://bit.ly/1uBiS5z for help on generating X-WSSE headers"
+     *       }
+     *   },
      * )
      */
     public function getSpikersAllAction()
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
+        $request = $this->getRequest();
+        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+
         $spikers = $spikerRepo->findAll();
         return $spikerRepo->generateJsonResponse(200, $spikers);
     }
@@ -43,6 +53,12 @@ class SpikerV1Controller extends FOSRestController
      *  description="GET individual Spiker",
      *  requirements={
      *      {
+     *           "name"="X-WSSE",
+     *           "dataType"="Header",
+     *           "requirement"="Your username and token",
+     *           "description"="Need to set X-WSSE request header, generated from your token. Check http://bit.ly/1uBiS5z for help on generating X-WSSE headers"
+     *       },
+     *      {
      *           "name"="Phone Number",
      *           "dataType"="string",
      *           "requirement"="\d+",
@@ -55,6 +71,9 @@ class SpikerV1Controller extends FOSRestController
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
+        $request = $this->getRequest();
+        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+
         $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
         if (!$spiker) {
             // If no Spiker is found by that ID
@@ -70,6 +89,14 @@ class SpikerV1Controller extends FOSRestController
      * 
      * @ApiDoc(
      *  description="POST new Spiker",
+     *  requirements={
+     *      {
+     *           "name"="X-WSSE",
+     *           "dataType"="Header",
+     *           "requirement"="Your username and token",
+     *           "description"="Need to set X-WSSE request header, generated from your token. Check http://bit.ly/1uBiS5z for help on generating X-WSSE headers"
+     *       }
+     *   },
      *  parameters={
      *      {"name"="first_name", "dataType"="string", "required"="false", "description"="First name of Spiker"},
      *      {"name"="last_name", "dataType"="string", "required"="false", "description"="Last name of Spiker"},
@@ -82,18 +109,26 @@ class SpikerV1Controller extends FOSRestController
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
+        $request = $this->getRequest();
+        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
 
-        $spiker = new Spiker();
-        $responseRoute = 'spiketeam_user_user_spikershow';
+        if ($data = json_decode($request->getContent(), true)) {
 
-        // TEST FOR EXISITING SPIKER BY THAT PHONE NUMBER
-
-        if ($data = json_decode($this->getRequest()->getContent(), true)) {
-            $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
-            if ($spiker) {
-                return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
+            // If Spiker exists by that phone number, return error
+            $existing = $spikerRepo->findOneByPhoneNumber($data['phone_number']);
+            if ($existing) {
+                return $spikerRepo->generateJsonResponse(400);
             } else {
-                return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+            // Otherwise, continue on.
+                $spiker = new Spiker();
+                $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
+                $responseRoute = 'spiketeam_user_user_spikershow';
+                if ($spiker) {
+                    return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
+                } else {
+                    return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+                }
+
             }
         } else {
             return $spikerRepo->generateJsonResponse(400);
@@ -109,6 +144,12 @@ class SpikerV1Controller extends FOSRestController
      * @ApiDoc(
      *  description="PUT new Spiker info",
      *  requirements={
+     *      {
+     *           "name"="X-WSSE",
+     *           "dataType"="Header",
+     *           "requirement"="Your username and token",
+     *           "description"="Need to set X-WSSE request header, generated from your token. Check http://bit.ly/1uBiS5z for help on generating X-WSSE headers"
+     *       },
      *      {
      *           "name"="Phone Number",
      *           "dataType"="string",
@@ -128,9 +169,12 @@ class SpikerV1Controller extends FOSRestController
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
+        $request = $this->getRequest();
+        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+
         $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
 
-        if (isset($spiker) && $data = json_decode($this->getRequest()->getContent(), true)) {
+        if (isset($spiker) && $data = json_decode($request->getContent(), true)) {
             $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
             if ($spiker) {
                 return $spikerRepo->generateJsonResponse(204);
@@ -152,6 +196,12 @@ class SpikerV1Controller extends FOSRestController
      *  description="DELETE existing Spiker",
      *  requirements={
      *      {
+     *           "name"="X-WSSE",
+     *           "dataType"="Header",
+     *           "requirement"="Your username and token",
+     *           "description"="Need to set X-WSSE request header, generated from your token. Check http://bit.ly/1uBiS5z for help on generating X-WSSE headers"
+     *       },
+     *      {
      *           "name"="Phone Number",
      *           "dataType"="string",
      *           "requirement"="\d+",
@@ -164,6 +214,9 @@ class SpikerV1Controller extends FOSRestController
     {
         $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $spikerRepo->setContainer($this->container);
+        $request = $this->getRequest();
+        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+
         $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker)) {
@@ -188,6 +241,10 @@ class SpikerV1Controller extends FOSRestController
         return $this->render('SpikeTeamRestBundle:Twilio:response.xml.twig', array(
             'msg' => $msg,
         ));
+    }
+
+    public function testForWsse($request) {
+        return ($request->headers->get('X-WSSE')) ? true : false;
     }
 
 }
