@@ -120,11 +120,12 @@ class ApiV1Controller extends FOSRestController
                 return $spikerRepo->generateJsonResponse(400);
             } else {
             // Otherwise, continue on.
+                $data['is_enabled'] = true;
                 $spiker = new Spiker();
                 $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
-                $responseRoute = 'spiketeam_user_user_spikershow';
+                $responseRoute = 'spiketeam_user_spiker_spikersall';
                 if ($spiker) {
-                    return $spikerRepo->generateJsonResponse(201, null, $responseRoute, $spiker->getPhoneNumber());
+                    return $spikerRepo->generateJsonResponse(201, null, $responseRoute);
                 } else {
                     return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
                 }

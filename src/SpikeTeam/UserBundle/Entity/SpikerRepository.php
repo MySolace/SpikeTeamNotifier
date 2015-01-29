@@ -66,7 +66,7 @@ class SpikerRepository extends EntityRepository implements ContainerAwareInterfa
      * @param $phoneNumber
      * @return Response $response
      */
-    public function generateJsonResponse($statusCode, $data = null, $routeName = null, $phoneNumber = null)
+    public function generateJsonResponse($statusCode, $data = null, $routeName = null)
     {
         $response = new Response();
         $response->setStatusCode($statusCode);
@@ -77,12 +77,11 @@ class SpikerRepository extends EntityRepository implements ContainerAwareInterfa
             // set the `Location` header only when creating new resources
             if (201 === $statusCode) {
                 if (NULL === $routeName) {
-                    $routeName = 'spiketeam_user_user_spikershow';
+                    $routeName = 'spiketeam_user_spiker_spikersall';
                 }
                 $response->headers->set('Location',
                     $this->container->get('router')->generate(
-                        $routeName, array('phoneNumber' => $phoneNumber),
-                        true // absolute
+                        $routeName, array(), true // absolute
                     )
                 );
             }

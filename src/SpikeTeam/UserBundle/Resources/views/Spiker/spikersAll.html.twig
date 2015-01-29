@@ -14,23 +14,33 @@
             <th>Phone Number</th>
             <th></th>
         </tr>
-    {% for spiker in spikers %}
-        <tr>
-            <td class="enabled">
-                {% if spiker.isEnabled %}
-                    <i class="fa fa-check-square"></i>
-                {% else %}
-                    <i class="fa fa-square-o"></i>
-                {% endif %}
-            </td>
-            <td>{{ spiker.firstName }}</td>
-            <td>{{ spiker.lastName }}</td>
-            <td>{{ spiker.phoneNumber }}</td>
-            <td>
-                <a href="/spikers/{{ spiker.phoneNumber }}/edit">Edit</a>
-            </td>
-        </tr>
-    {% endfor %}
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% for spiker in spikers %}
+                <tr>
+                    <td class="enabled">
+                        {% if spiker.isEnabled %}
+                            <i class="fa fa-check-square"></i>
+                        {% else %}
+                            <i class="fa fa-square-o"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{ spiker.firstName }}</td>
+                    <td>{{ spiker.lastName }}</td>
+                    <td>{{ spiker.phoneNumber }}</td>
+                    <td>
+                        <a href="/spikers/{{ spiker.phoneNumber }}/edit">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td class="enabled"><i class="fa fa-check-square"></i></td>
+                <td>{{ form_widget(form.firstName) }}</td>
+                <td>{{ form_widget(form.lastName) }}</td>
+                <td>{{ form_widget(form.phoneNumber) }}</td>
+                <td>{{ form_widget(form.Add) }}</td>
+            </tr>
+        {{ form_end(form) }}
     </table>
 
 {% endblock %}

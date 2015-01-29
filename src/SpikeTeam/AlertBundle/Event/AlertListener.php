@@ -19,13 +19,12 @@ class AlertListener
     {
         foreach($event->getSpikers() as $spiker) {
             if ($spiker->getIsEnabled()) {
-                // NEED TO HANDLE UNREAL PHONE NUMBERS - TRY TRY/CATCH HERE?
-                $this->sendMessage($spiker->getPhoneNumber());
+                $this->sendMessage($spiker);
             }
         }
     }
 
-    public function sendMessage($phoneNumber)
+    public function sendMessage($spiker)
     {
         $settingRepo = $this->em->getRepository('SpikeTeamSettingBundle:Setting');
         // Pulling CTL Twilio credentials from settings in db
@@ -34,16 +33,19 @@ class AlertListener
         $message = $settingRepo->findOneByName('twilio_message')->getSetting();
         $client = new Services_Twilio($sid, $token);
 
-        $twilioSend = $client->account->messages->create(array(
-            "From" => $settingRepo->findOneByName('twilio_number')->getSetting(),
-            "To" => $phoneNumber,
-            "Body" => $message,
-        ));
-
-        if (isset($twilioSend->code) && $twilioSend->code == 21211) {
-            // Error, not valid phone number
-        } else {
-            // sucess!
+        try {
+            $twilioSend = $client->account->messages->create(array(
+                "From" => $settingRepo->findOneByName('twilio_number')->getSetting(),
+                "To" => $spiker->getPhoneNumber(),
+                "Body" => $message,
+            ));       
+        } catch (\Services_Twilio_RestException $e) {
+            if ($e->getStatus() != 200) {
+                $spiker->setIsEnabled(false);
+                $this->em->persist($spiker);
+                $this->em->flush();
+            }
         }
+
     }
 }

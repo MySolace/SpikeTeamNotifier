@@ -45,7 +45,7 @@ class Spiker
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_enabled", type="boolean", options={"default" = true})
+     * @ORM\Column(name="is_enabled", type="boolean")
      */
     private $isEnabled;
 
