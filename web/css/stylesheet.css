@@ -1,8 +1,12 @@
 body {
+  font-size: 18px; }
+
+.nameplate {
   font-size: 24px; }
 
-nav {
-  font-size: 18px; }
+a, a:hover {
+  color: red;
+  text-decoration: none; }
 
 html {
   width: 100%;
@@ -47,10 +51,6 @@ body {
     #button-box-inner #button.disabled img.button-image {
       opacity: .4; }
 
-a, a:hover {
-  color: red;
-  text-decoration: none; }
-
 body {
   background-image: url("../images/steel-bg.jpg"); }
 
@@ -70,7 +70,19 @@ body {
 body.section-button .nameplate-inner {
   width: 300px; }
 
-td.enabled {
+.page {
+  background-color: white;
+  color: black;
+  padding: 1.5em 2em;
+  min-width: 520px;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
+.token-para {
+  margin-top: 1em; }
+
+td.center {
   text-align: center; }
 
 @media (max-width: 400px) {

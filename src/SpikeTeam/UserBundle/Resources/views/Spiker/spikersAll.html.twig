@@ -6,19 +6,20 @@
             &bull;&nbsp;&nbsp;SPIKE TEAM MEMBERS&nbsp;&nbsp;&bull;
         </div>
     </div>
-    <table class="table">
-        <tr>
-            <th>Enabled</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th></th>
-        </tr>
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
+
+    <div class="page">
+        <table class="table">
+            <tr>
+                <th>Enabled</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone Number</th>
+                <th></th>
+            </tr>
+
             {% for spiker in spikers %}
                 <tr>
-                    <td class="enabled">
+                    <td class="center">
                         {% if spiker.isEnabled %}
                             <i class="fa fa-check-square"></i>
                         {% else %}
@@ -28,20 +29,23 @@
                     <td>{{ spiker.firstName }}</td>
                     <td>{{ spiker.lastName }}</td>
                     <td>{{ spiker.phoneNumber }}</td>
-                    <td>
+                    <td class="center">
                         <a href="/spikers/{{ spiker.phoneNumber }}/edit">Edit</a>
                     </td>
                 </tr>
             {% endfor %}
             <tr>
-                <td class="enabled"><i class="fa fa-check-square"></i></td>
-                <td>{{ form_widget(form.firstName) }}</td>
-                <td>{{ form_widget(form.lastName) }}</td>
-                <td>{{ form_widget(form.phoneNumber) }}</td>
-                <td>{{ form_widget(form.Add) }}</td>
+                {{ form_start(form, {'attr': {'class': 'form-inline'} }) }}
+                    <td class="center"><i class="fa fa-check-square"></i></td>
+                    <td>{{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}</td>
+                    <td>{{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}</td>
+                    <td>{{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}</td>
+                    <td class="center">{{ form_widget(form.Add, {'attr': {'class': 'btn btn-default'} }) }}</td>
+                {{ form_end(form) }}
             </tr>
-        {{ form_end(form) }}
-    </table>
+        </table>
+
+    </div>
 
 {% endblock %}
 

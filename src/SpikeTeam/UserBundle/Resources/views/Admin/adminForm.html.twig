@@ -1,0 +1,38 @@
+{% extends 'admin.admin.html.twig' %}
+
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;ADMIN: {{ admin.username }}&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+    <div class="page">
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Username'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
+                {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+            </div>
+
+            {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            {{ form_widget(form.remove, { 'label': 'Remove', 'attr': {'class': 'btn'} }) }}
+        {{ form_end(form) }}
+
+        <hr/>
+
+        
+        <button class="token-button btn para-show">Click here to view/hide token</button>
+        <div class="token-para"><strong>Username:</strong> {{ admin.username }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
+    </div>
+{% endblock %}

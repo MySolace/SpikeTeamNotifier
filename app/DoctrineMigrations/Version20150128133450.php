@@ -33,6 +33,7 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
             'twilio_number' => 'Your Twilio number',
             'twilio_message' => 'Default message',
             'twilio_response' => 'Default response',
+            'token_usage' => 'Use this username-token pair to generate your X-WSSE request headers, as per the instructions at http://bit.ly/1uBiS5z if you\'d like to use the API.'
         );
 
         foreach ($settingsToSet as $key => $value) {
@@ -56,6 +57,7 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
             'twilio_number',
             'twilio_message',
             'twilio_response',
+            'token_usage'
         );
 
         foreach ($settingsToErase as $name) {

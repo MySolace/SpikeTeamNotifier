@@ -77,12 +77,12 @@ class SpikerController extends Controller
                     'data' => $spiker->getIsEnabled(),
                     'required' => false,
                 ))
-                ->add('Save Spiker!', 'submit')
-                ->add('Remove', 'submit')
+                ->add('save', 'submit')
+                ->add('remove', 'submit')
                 ->getForm();
             $form->handleRequest($request);
 
-            if ($form->get('Remove')->isClicked()) {
+            if ($form->get('remove')->isClicked()) {
                 return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikerdelete', array('input' => $input)));
             }
 
@@ -101,7 +101,8 @@ class SpikerController extends Controller
                 }
             }
 
-            return $this->render('SpikeTeamUserBundle:Spiker:form.html.twig', array(
+            return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
+                'spiker' => $spiker,
                 'form' => $form->createView(),
             ));
         } else {    // Show individual Spiker

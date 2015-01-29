@@ -1,19 +1,12 @@
 @import "partials/variables.scss";
 @import "partials/typography.scss";
+@import "partials/mixins.scss";
 @import "partials/layout.scss";
 @import "partials/button.scss";
 
-a, a:hover {
-    color: red;
-    text-decoration: none;
-}
 
 body {
     background-image: url("../images/steel-bg.jpg");
-}
-
-nav {
-//    background-color: rgba(248, 248, 248, .7) !important;
 }
 
 .nameplate {
@@ -25,9 +18,7 @@ nav {
         background-color: $color-nameplate;
         color: white;
         padding: .5em;
-        -webkit-box-shadow: 0 8px 6px -6px black;
-           -moz-box-shadow: 0 8px 6px -6px black;
-                box-shadow: 0 8px 6px -6px black;
+        @include drops;
     }
 }
 
@@ -35,7 +26,21 @@ body.section-button .nameplate-inner {
     width: $button-box-width;
 }
 
-td.enabled {
+.page {
+    background-color: white;
+    color: black;
+    padding: $page-padding-y $page-padding-x;
+    min-width: 520px;
+    @include drops;
+}
+
+.token-para {
+    margin-top: 1em;
+}
+
+
+
+td.center {
     text-align: center;
 }
 

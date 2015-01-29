@@ -2,6 +2,11 @@ body {
     font-size: $body-size;
 }
 
-nav {
-    font-size: $navbar-size;
+.nameplate {
+    font-size: $nameplate-size;
+}
+
+a, a:hover {
+    color: red;
+    text-decoration: none;
 }

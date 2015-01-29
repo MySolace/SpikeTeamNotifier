@@ -11,9 +11,7 @@
         yellow $button-stripe-width * 2
     );
     overflow: hidden;
-        -webkit-box-shadow: 0 8px 6px -6px black;
-           -moz-box-shadow: 0 8px 6px -6px black;
-                box-shadow: 0 8px 6px -6px black;
+    @include drops;
 }
 
 $button-inner-width: $button-box-width * $button-inner-scale;
