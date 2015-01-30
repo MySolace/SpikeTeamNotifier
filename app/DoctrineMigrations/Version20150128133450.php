@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\SettingBundle\Entity\Setting;
+use SpikeTeam\UserBundle\Entity\Admin;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -44,6 +45,14 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
             $em->flush();
         }
 
+        $admin = new Admin();
+        $admin->setUsername('admin');
+        $admin->setEmail('admin@sample.com');
+        $admin->setPlainPassword('admin');
+        $admin->setEnabled('true');
+        $admin->addRole('ROLE_SUPER_ADMIN');
+        $em->persist($admin);
+        $em->flush();
     }
 
     public function down(Schema $schema)
@@ -66,5 +75,8 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
             $em->flush();
         }
 
+        $admin = $em->getRepository('SpikeTeamUserBundle:Admin')->findOneByUsername('admin');
+        $em->remove($admin);
+        $em->flush();
     }
 }
