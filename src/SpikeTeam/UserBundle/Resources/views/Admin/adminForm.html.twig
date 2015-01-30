@@ -20,19 +20,21 @@
                 {{ form_label(form.password) }}
                 {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}
             </div>
-            <div class="form-group">
-                {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
-                {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
-            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div class="form-group">
+                    {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
+                    {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+                </div>
+            {% endif %}
 
-            {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
-            {{ form_widget(form.remove, { 'label': 'Remove', 'attr': {'class': 'btn'} }) }}
+            {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
+            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
         {{ form_end(form) }}
 
         <hr/>
 
-        
         <button class="token-button btn para-show">Click here to view/hide token</button>
-        <div class="token-para"><strong>Username:</strong> {{ admin.username }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
+        <div class="token-para" style="display: none;"><strong>Username:</strong> {{ admin.username }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
     </div>
 {% endblock %}

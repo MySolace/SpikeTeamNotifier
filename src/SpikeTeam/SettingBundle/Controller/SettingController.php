@@ -36,4 +36,58 @@ class SettingController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * Showing all settings here
+     * @Route("/settings")
+     */
+    public function settingsAllAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $settingRepo = $this->getDoctrine()->getRepository('SpikeTeamSettingBundle:Setting');
+        $settings = $settingRepo->findAll();
+
+        // send to template
+        return $this->render('SpikeTeamSettingBundle:Setting:settingsAll.html.twig', array(
+            'settings' => $settings,
+        ));
+    }
+
+    /**
+     * Showing indiv setting here
+     * @Route("/settings/{name}/edit")
+     */
+    public function settingEditAction($name, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $allUrl = $this->generateUrl('spiketeam_setting_setting_settingsall');
+        $settingRepo = $this->getDoctrine()->getRepository('SpikeTeamSettingBundle:Setting');
+        $setting = $settingRepo->findOneByName($name);
+
+        $form = $this->createFormBuilder($setting)
+            ->add('name', 'text', array(
+                'data' => $setting->getName(),
+                'required' => true,
+            ))
+            ->add('setting', 'text', array(
+                'data' => $setting->getSetting(),
+                'required' => true,
+            ))
+            ->add('save', 'submit')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->persist($setting);
+            $em->flush();
+            return $this->redirect($allUrl);
+        }
+
+        return $this->render('SpikeTeamSettingBundle:Setting:settingForm.html.twig', array(
+            'setting' => $setting,
+            'form' => $form->createView(),
+            'cancel' => $allUrl
+        ));
+    }
+
 }

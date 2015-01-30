@@ -1,0 +1,33 @@
+{% extends 'admin.settings.html.twig' %}
+
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;SETTINGS&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+
+    <div class="page">
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Setting</th>
+                <th></th>
+            </tr>
+
+            {% for setting in settings %}
+                <tr>
+                    <td>{{ setting.name }}</td>
+                    <td>{{ setting.setting }}</td>
+                    <td class="center">
+                        <a href="/settings/{{ setting.name }}/edit">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+{% endblock %}
+
+

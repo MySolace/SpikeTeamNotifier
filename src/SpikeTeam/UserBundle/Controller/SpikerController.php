@@ -24,9 +24,9 @@ class SpikerController extends Controller
 
         $newSpiker = new Spiker();
         $form = $this->createFormBuilder($newSpiker)
-            ->add('firstName')
-            ->add('lastName')
-            ->add('phoneNumber')
+            ->add('firstName', 'text', array('required' => true))
+            ->add('lastName', 'text', array('required' => true))
+            ->add('phoneNumber', 'text', array('required' => true))
             ->add('isEnabled', 'hidden', array(
                 'data' => true,
             ))
@@ -67,24 +67,29 @@ class SpikerController extends Controller
 
         $processedNumber = $spikerRepo->processNumber($input);
         if ($processedNumber) {
+            $deleteUrl = $this->generateUrl('spiketeam_user_spiker_spikerdelete', array('input' => $processedNumber));
             $spiker = $spikerRepo->findOneByPhoneNumber($processedNumber);
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
-                ->add('firstName', 'text', array('data' => $spiker->getFirstName()))
-                ->add('lastName', 'text', array('data' => $spiker->getLastName()))
-                ->add('phoneNumber', 'text', array('data' => $spiker->getPhoneNumber()))
+                ->add('firstName', 'text', array(
+                    'data' => $spiker->getFirstName(),
+                    'required' => true,
+                ))
+                ->add('lastName', 'text', array(
+                    'data' => $spiker->getLastName(),
+                    'required' => true,
+                ))
+                ->add('phoneNumber', 'text', array(
+                    'data' => $spiker->getPhoneNumber(),
+                    'required' => true,
+                ))
                 ->add('isEnabled', 'checkbox', array(
                     'data' => $spiker->getIsEnabled(),
                     'required' => false,
                 ))
                 ->add('save', 'submit')
-                ->add('remove', 'submit')
                 ->getForm();
             $form->handleRequest($request);
-
-            if ($form->get('remove')->isClicked()) {
-                return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikerdelete', array('input' => $input)));
-            }
 
             if ($form->isValid()) {
                 // Process number to remove extra characters and add '1' country code
@@ -104,6 +109,8 @@ class SpikerController extends Controller
             return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
                 'spiker' => $spiker,
                 'form' => $form->createView(),
+                'cancel' => $allUrl,
+                'remove' => $deleteUrl
             ));
         } else {    // Show individual Spiker
             return $this->redirect($allUrl);

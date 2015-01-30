@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -21,27 +21,7 @@
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    $("body.section-button").find("li.button").addClass("active");
-                    $("body.section-spikers").find("li.spikers").addClass("active");
-                    $("body.section-admin").find("li.admin").addClass("active");
-                    $("body.section-user").find("li.user").addClass("active");
-                    $("#button.enabled").find("img").unwrap();
-                    $("#button.enabled").click(function(){
-                        if (confirm("Are you sure you want to notify the Spike Team?") == true) {
-                            $.ajax({url:"goteamgo"});
-                            $(this).removeClass("enabled").addClass("disabled");
-                        }
-                    });
-                    $("#button.disabled").click(function(){
-                        alert("Sorry, you cannot alert the Spike Team yet.");
-                    });
-                    $("button.token-button").click(function(){
-                        $(".token-para").toggle();
-                    });
-                });
-            </script>
+            <script src="{{ asset('js/app.js') }}"></script>
         {% endblock %}
     </body>
 </html>

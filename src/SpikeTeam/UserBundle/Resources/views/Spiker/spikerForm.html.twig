@@ -26,7 +26,8 @@
             </div>
 
             {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
-            {{ form_widget(form.remove, { 'label': 'Remove', 'attr': {'class': 'btn'} }) }}
+            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
+            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
         {{ form_end(form) }}
     </div>
 {% endblock %}
