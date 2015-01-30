@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Setting
  *
  * @ORM\Table(name="setting")
- * @ORM\Entity(repositoryClass="SpikeTeam\SettingBundle\Entity\SettingRepository")
+ * @ORM\Entity()
  */
 class Setting
 {
