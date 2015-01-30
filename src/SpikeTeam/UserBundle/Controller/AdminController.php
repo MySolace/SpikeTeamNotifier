@@ -6,20 +6,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\UserBundle\Entity\Admin;
 
 class AdminController extends Controller
 {
+
+    protected $container;
+    protected $em;
+    protected $repo;
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->em = $this->getDoctrine()->getManager();
+        $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
+    }
+
     /**
      * Showing all admin users here
      * @Route("/admin")
      */
     public function adminAllAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $adminRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
-        $admins = $adminRepo->findAll();
+        $admins = $this->repo->findAll();
 
         $newAdmin = new Admin();
         $form = $this->createFormBuilder($newAdmin)
@@ -34,8 +44,8 @@ class AdminController extends Controller
             $newAdmin->setPlainPassword($newAdmin->getPassword());
             $newAdmin->addRole('ROLE_ADMIN');
             $newAdmin->setEnabled(true);
-            $em->persist($newAdmin);
-            $em->flush();
+            $this->em->persist($newAdmin);
+            $this->em->flush();
 
             return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
         }
@@ -53,15 +63,13 @@ class AdminController extends Controller
      */
     public function adminEditAction($username, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->get('security.context');
         $currentUser = $securityContext->getToken()->getUser();
         $allUrl = $this->generateUrl('spiketeam_user_admin_adminall');
         if ($currentUser->getUsername() == $username || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
-            $adminRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
-            $admin = $adminRepo->findOneByUsername($username);
+            $admin = $this->repo->findOneByUsername($username);
             $deleteUrl = $this->generateUrl('spiketeam_user_admin_admindelete', array('username' => $username));
-            $message = $em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('token_usage')->getSetting();
+            $message = $this->em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('token_usage')->getSetting();
 
             if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form = $this->createFormBuilder($admin)
@@ -103,8 +111,8 @@ class AdminController extends Controller
 
             if ($form->isValid()) {
                 $admin->setPlainPassword($admin->getPassword());
-                $em->persist($admin);
-                $em->flush();
+                $this->em->persist($admin);
+                $this->em->flush();
                 return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
             }
 
@@ -126,12 +134,9 @@ class AdminController extends Controller
      */
     public function adminDeleteAction($username)
     {
-        $em = $this->getDoctrine()->getManager();
-        $adminRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Admin');
-
-        $admin = $adminRepo->findOneByUsername($username);
-        $em->remove($admin);
-        $em->flush();
+        $admin = $this->repo->findOneByUsername($username);
+        $this->em->remove($admin);
+        $this->em->flush();
 
         return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
     }

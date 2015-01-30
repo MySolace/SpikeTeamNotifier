@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * User
  *
  * @ORM\Table(name="fos_user")
- * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\AdminRepository")
+ * @ORM\Entity()
  */
 class Admin extends BaseUser
 {

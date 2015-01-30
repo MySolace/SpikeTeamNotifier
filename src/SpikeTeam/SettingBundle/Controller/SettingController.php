@@ -6,11 +6,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\SettingBundle\Entity\Setting;
 
 class SettingController extends Controller
 {
+
+    protected $container;
+    protected $em;
+    protected $repo;
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->em = $this->getDoctrine()->getManager();
+        $this->repo = $this->getDoctrine()->getRepository('SpikeTeamSettingBundle:Setting');
+    }
+
     /**
      * Showing individual spiker here
      * @Route("/admin/settings/add")
@@ -26,9 +38,8 @@ class SettingController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($setting);
-            $em->flush();
+            $this->em->persist($setting);
+            $this->em->flush();
             return $this->redirect($this->generateUrl('spiketeam_setting_setting_addsetting'));
         }
 
@@ -43,9 +54,7 @@ class SettingController extends Controller
      */
     public function settingsAllAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $settingRepo = $this->getDoctrine()->getRepository('SpikeTeamSettingBundle:Setting');
-        $settings = $settingRepo->findAll();
+        $settings = $this->repo->findAll();
 
         // send to template
         return $this->render('SpikeTeamSettingBundle:Setting:settingsAll.html.twig', array(
@@ -59,10 +68,8 @@ class SettingController extends Controller
      */
     public function settingEditAction($name, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $allUrl = $this->generateUrl('spiketeam_setting_setting_settingsall');
-        $settingRepo = $this->getDoctrine()->getRepository('SpikeTeamSettingBundle:Setting');
-        $setting = $settingRepo->findOneByName($name);
+        $setting = $this->repo->findOneByName($name);
 
         $form = $this->createFormBuilder($setting)
             ->add('name', 'text', array(
@@ -78,8 +85,8 @@ class SettingController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em->persist($setting);
-            $em->flush();
+            $this->em->persist($setting);
+            $this->em->flush();
             return $this->redirect($allUrl);
         }
 

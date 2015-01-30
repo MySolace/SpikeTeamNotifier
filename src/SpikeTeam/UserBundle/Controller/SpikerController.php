@@ -6,11 +6,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
 
 class SpikerController extends Controller
 {
+
+    protected $container;
+    protected $em;
+    protected $repo;
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->em = $this->getDoctrine()->getManager();
+        $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+    }
 
     /**
      * Showing all spikers here
@@ -18,9 +29,7 @@ class SpikerController extends Controller
      */
     public function spikersAllAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikers = $spikerRepo->findAll();
+        $spikers = $this->repo->findAll();
 
         $newSpiker = new Spiker();
         $form = $this->createFormBuilder($newSpiker)
@@ -36,13 +45,13 @@ class SpikerController extends Controller
 
         if ($form->isValid()) {
             // Process number to remove extra characters and add '1' country code
-            $processedNumber = $spikerRepo->processNumber($newSpiker->getPhoneNumber());
+            $processedNumber = $this->repo->processNumber($newSpiker->getPhoneNumber());
 
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
             if ($processedNumber) {
                 $newSpiker->setPhoneNumber($processedNumber);
-                $em->persist($newSpiker);
-                $em->flush();
+                $this->em->persist($newSpiker);
+                $this->em->flush();
             }
             return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
         }
@@ -60,15 +69,13 @@ class SpikerController extends Controller
      */
     public function spikerEditAction($input, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $allUrl = $this->generateUrl('spiketeam_user_spiker_spikersall');
         $editUrl = $this->generateUrl('spiketeam_user_spiker_spikeredit', array('input' => $input));
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
 
-        $processedNumber = $spikerRepo->processNumber($input);
+        $processedNumber = $this->repo->processNumber($input);
         if ($processedNumber) {
             $deleteUrl = $this->generateUrl('spiketeam_user_spiker_spikerdelete', array('input' => $processedNumber));
-            $spiker = $spikerRepo->findOneByPhoneNumber($processedNumber);
+            $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
@@ -93,13 +100,13 @@ class SpikerController extends Controller
 
             if ($form->isValid()) {
                 // Process number to remove extra characters and add '1' country code
-                $processedNumber = $spikerRepo->processNumber($spiker->getPhoneNumber());
+                $processedNumber = $this->repo->processNumber($spiker->getPhoneNumber());
 
                 // If it's valid, go ahead and save. Otherwise, redirect back to edit page again.
                 if ($processedNumber) {
                     $spiker->setPhoneNumber($processedNumber);
-                    $em->persist($spiker);
-                    $em->flush();
+                    $this->em->persist($spiker);
+                    $this->em->flush();
                     return $this->redirect($allUrl);
                 } else {
                     return $this->redirect($editUrl);
@@ -123,14 +130,11 @@ class SpikerController extends Controller
      */
     public function spikerDeleteAction($input)
     {
-        $em = $this->getDoctrine()->getManager();
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-
-        $processedNumber = $spikerRepo->processNumber($input);
+        $processedNumber = $this->repo->processNumber($input);
         if ($processedNumber) {
-            $spiker = $spikerRepo->findOneByPhoneNumber($processedNumber);
-            $em->remove($spiker);
-            $em->flush();
+            $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
+            $this->em->remove($spiker);
+            $this->em->flush();
         }
         return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
     }

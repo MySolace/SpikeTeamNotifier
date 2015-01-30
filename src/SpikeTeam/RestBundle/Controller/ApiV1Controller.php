@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -14,6 +15,18 @@ use SpikeTeam\UserBundle\Entity\Spiker;
 
 class ApiV1Controller extends FOSRestController
 {
+
+    protected $container;
+    protected $em;
+    protected $repo;
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->em = $this->getDoctrine()->getManager();
+        $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $this->repo->setContainer($container);
+    }
+
     /**
      * GET all current Spikers
      * @return array
@@ -32,15 +45,12 @@ class ApiV1Controller extends FOSRestController
      *   },
      * )
      */
-    public function getSpikersAllAction()
+    public function getSpikersAllAction(Request $request)
     {
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainer($this->container);
-        $request = $this->getRequest();
-        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
 
-        $spikers = $spikerRepo->findAll();
-        return $spikerRepo->generateJsonResponse(200, $spikers);
+        $spikers = $this->repo->findAll();
+        return $this->repo->generateJsonResponse(200, $spikers);
     }
 
     /**
@@ -67,19 +77,16 @@ class ApiV1Controller extends FOSRestController
      *   },
      * )
      */
-    public function getSpikersAction($phoneNumber)
+    public function getSpikersAction(Request $request, $phoneNumber)
     {
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainer($this->container);
-        $request = $this->getRequest();
-        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
 
-        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
+        $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
         if (!$spiker) {
             // If no Spiker is found by that ID
-            return $spikerRepo->generateJsonResponse(404);
+            return $this->repo->generateJsonResponse(404);
         }
-        return $spikerRepo->generateJsonResponse(200, $spiker);
+        return $this->repo->generateJsonResponse(200, $spiker);
     }
 
     /**
@@ -105,34 +112,31 @@ class ApiV1Controller extends FOSRestController
      *  },
      * )
      */
-    public function postSpikersAddAction()
+    public function postSpikersAddAction(Request $request)
     {
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainer($this->container);
-        $request = $this->getRequest();
-        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
 
         if ($data = json_decode($request->getContent(), true)) {
 
             // If Spiker exists by that phone number, return error
-            $existing = $spikerRepo->findOneByPhoneNumber($data['phone_number']);
+            $existing = $this->repo->findOneByPhoneNumber($data['phone_number']);
             if ($existing) {
-                return $spikerRepo->generateJsonResponse(400);
+                return $this->repo->generateJsonResponse(400);
             } else {
             // Otherwise, continue on.
                 $data['is_enabled'] = true;
                 $spiker = new Spiker();
-                $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
+                $spiker = $this->repo->setSpikerInfo($spiker, $data);
                 $responseRoute = 'spiketeam_user_spiker_spikersall';
                 if ($spiker) {
-                    return $spikerRepo->generateJsonResponse(201, null, $responseRoute);
+                    return $this->repo->generateJsonResponse(201, null, $responseRoute);
                 } else {
-                    return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+                    return $this->repo->generateJsonResponse(418);  // This is a joke, replace it eventually
                 }
 
             }
         } else {
-            return $spikerRepo->generateJsonResponse(400);
+            return $this->repo->generateJsonResponse(400);
         }
     }
 
@@ -166,24 +170,21 @@ class ApiV1Controller extends FOSRestController
      *  },
      * )
      */
-    public function putSpikersEditAction($phoneNumber)
+    public function putSpikersEditAction(Request $request, $phoneNumber)
     {
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainer($this->container);
-        $request = $this->getRequest();
-        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
 
-        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
+        $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker) && $data = json_decode($request->getContent(), true)) {
-            $spiker = $spikerRepo->setSpikerInfo($spiker, $data);
+            $spiker = $this->repo->setSpikerInfo($spiker, $data);
             if ($spiker) {
-                return $spikerRepo->generateJsonResponse(204);
+                return $this->repo->generateJsonResponse(204);
             } else {
-                return $spikerRepo->generateJsonResponse(418);  // This is a joke, replace it eventually
+                return $this->repo->generateJsonResponse(418);  // This is a joke, replace it eventually
             }
         } else {
-            return $spikerRepo->generateJsonResponse(400);
+            return $this->repo->generateJsonResponse(400);
         }
     }
 
@@ -211,22 +212,19 @@ class ApiV1Controller extends FOSRestController
      *   },
      * )
      */
-    public function deleteSpikersDeleteAction($phoneNumber)
+    public function deleteSpikersDeleteAction(Request $request, $phoneNumber)
     {
-        $spikerRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $spikerRepo->setContainer($this->container);
-        $request = $this->getRequest();
-        if (!$this->testForWsse($request)) return $spikerRepo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
 
-        $spiker = $spikerRepo->findOneByPhoneNumber($phoneNumber);
+        $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker)) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($spiker);
             $em->flush();
-            return $spikerRepo->generateJsonResponse(204);
+            return $this->repo->generateJsonResponse(204);
         } else {
-            return $spikerRepo->generateJsonResponse(400);
+            return $this->repo->generateJsonResponse(400);
         }
     }
 
