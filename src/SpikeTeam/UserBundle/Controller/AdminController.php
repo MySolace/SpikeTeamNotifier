@@ -24,7 +24,7 @@ class AdminController extends Controller
         $newAdmin = new Admin();
         $form = $this->createFormBuilder($newAdmin)
             ->add('username', 'text', array('required' => true))
-            ->add('email', 'text', array('required' => true))
+            ->add('email', 'email', array('required' => true))
             ->add('password', 'password', array('required' => true))
             ->add('Add', 'submit')
             ->getForm();
@@ -69,7 +69,7 @@ class AdminController extends Controller
                         'data' => $admin->getUsername(),
                         'required' => true,
                     ))
-                    ->add('email', 'text', array(
+                    ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
                     ))
@@ -88,7 +88,7 @@ class AdminController extends Controller
                         'data' => $admin->getUsername(),
                         'required' => true,
                     ))
-                    ->add('email', 'text', array(
+                    ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
                     ))

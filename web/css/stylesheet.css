@@ -4,12 +4,16 @@ body {
 .nameplate {
   font-size: 24px; }
 
-a, a:hover {
+a, a:hover, a:active, a:focus {
   color: red;
-  text-decoration: none; }
+  text-decoration: none;
+  outline: 0; }
 
 a button {
   color: black; }
+
+input::-moz-focus-inner {
+  border: 0; }
 
 html {
   width: 100%;
@@ -23,6 +27,47 @@ body {
   body #inner {
     width: 75%;
     margin: 0 auto; }
+
+.nameplate {
+  text-align: center;
+  margin: 30px 0; }
+  .nameplate .nameplate-inner {
+    display: inline-block;
+    margin: 0 auto;
+    background-color: black;
+    color: white;
+    padding: .5em;
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black; }
+
+.page {
+  background-color: white;
+  color: black;
+  padding: 1.5em 2em;
+  min-width: 520px;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
+.token-para {
+  margin-top: 1em; }
+
+td.center {
+  text-align: center; }
+
+body.anon #inner #fos-user {
+  margin: 150px auto;
+  width: 300px; }
+  body.anon #inner #fos-user input {
+    font-size: 18px; }
+  body.anon #inner #fos-user .nameplate-inner {
+    width: 300px; }
+  body.anon #inner #fos-user #remember label {
+    font-weight: normal;
+    padding: .5em 0; }
+  body.anon #inner #fos-user #submit input {
+    width: 300px; }
 
 #button-box {
   text-align: center;
@@ -57,36 +102,8 @@ body {
 body {
   background-image: url("../images/steel-bg.jpg"); }
 
-.nameplate {
-  text-align: center;
-  margin: 30px 0; }
-  .nameplate .nameplate-inner {
-    display: inline-block;
-    margin: 0 auto;
-    background-color: black;
-    color: white;
-    padding: .5em;
-    -webkit-box-shadow: 0 8px 6px -6px black;
-    -moz-box-shadow: 0 8px 6px -6px black;
-    box-shadow: 0 8px 6px -6px black; }
-
 body.section-button .nameplate-inner {
   width: 300px; }
-
-.page {
-  background-color: white;
-  color: black;
-  padding: 1.5em 2em;
-  min-width: 520px;
-  -webkit-box-shadow: 0 8px 6px -6px black;
-  -moz-box-shadow: 0 8px 6px -6px black;
-  box-shadow: 0 8px 6px -6px black; }
-
-.token-para {
-  margin-top: 1em; }
-
-td.center {
-  text-align: center; }
 
 @media (max-width: 400px) {
   #inner {

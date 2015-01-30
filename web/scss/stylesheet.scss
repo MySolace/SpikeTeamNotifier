@@ -2,46 +2,16 @@
 @import "partials/typography.scss";
 @import "partials/mixins.scss";
 @import "partials/layout.scss";
+@import "partials/elements.scss";
+@import "partials/anon.scss";
 @import "partials/button.scss";
-
 
 body {
     background-image: url("../images/steel-bg.jpg");
 }
 
-.nameplate {
-    text-align: center;
-    margin: 30px 0;
-    .nameplate-inner {
-        display: inline-block;
-        margin: 0 auto;
-        background-color: $color-nameplate;
-        color: white;
-        padding: .5em;
-        @include drops;
-    }
-}
-
 body.section-button .nameplate-inner {
     width: $button-box-width;
-}
-
-.page {
-    background-color: white;
-    color: black;
-    padding: $page-padding-y $page-padding-x;
-    min-width: 520px;
-    @include drops;
-}
-
-.token-para {
-    margin-top: 1em;
-}
-
-
-
-td.center {
-    text-align: center;
 }
 
 @media (max-width: $button-box-width * 4/3) {

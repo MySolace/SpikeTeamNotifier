@@ -69,7 +69,7 @@ class SettingController extends Controller
                 'data' => $setting->getName(),
                 'required' => true,
             ))
-            ->add('setting', 'text', array(
+            ->add('setting', 'textarea', array(
                 'data' => $setting->getSetting(),
                 'required' => true,
             ))
