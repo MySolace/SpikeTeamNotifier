@@ -9,7 +9,6 @@
 /build/
 /vendor/
 /bin/
-/composer.phar
 *.sass-cache
 *.log
 *.DS_Store
