@@ -27,13 +27,18 @@ $button-inner-height: $button-box-height * $button-inner-scale;
         height: 100%;
         text-align: center;
         line-height: $button-inner-height;
-        img.button-image {
+        button.button-image {
             width: $button-size;
             height: $button-size;
+            border: none;
+            background: url("../images/button-200-400.png") no-repeat  0 0 rgba(0, 0, 0, 0);
+        }
+        button.button-image:active {
+            background-position: 0 (-1 * $button-size);
         }
         &.disabled {
-            img.button-image {
-                opacity: .4;
+            button.button-image {
+                opacity: .6;
             }
         }
     }
