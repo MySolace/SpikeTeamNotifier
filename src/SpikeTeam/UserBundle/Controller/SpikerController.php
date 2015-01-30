@@ -132,7 +132,7 @@ class SpikerController extends Controller
     {
         $processedNumber = $this->repo->processNumber($input);
         if ($processedNumber) {
-            $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
+            $spiker = $this->repo->findOneByPhoneNumber($input);
             $this->em->remove($spiker);
             $this->em->flush();
         }

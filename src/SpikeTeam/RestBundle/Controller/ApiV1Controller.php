@@ -228,21 +228,6 @@ class ApiV1Controller extends FOSRestController
         }
     }
 
-    /**
-     * Responding to any response to texts being sent out via Twilio
-     * @return Response $response
-     * @Rest\View
-     */
-    public function incomingTwilioAction()
-    {
-        $msg = $this->getDoctrine()->getEntityManager()
-            ->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('twilio_response')->getSetting();
-        // send to template
-        return $this->render('SpikeTeamRestBundle:Twilio:response.xml.twig', array(
-            'msg' => $msg,
-        ));
-    }
-
     public function testForWsse($request) {
         return ($request->headers->get('X-WSSE')) ? true : false;
     }
