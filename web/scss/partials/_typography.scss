@@ -1,0 +1,22 @@
+body {
+    font-size: $body-size;
+}
+
+.nameplate {
+    font-size: $nameplate-size;
+}
+
+a, a:hover, a:active, a:focus {
+    color: red;
+    text-decoration: none;
+    outline: 0;
+}
+
+a button {
+    color: black;
+}
+
+
+input::-moz-focus-inner {
+    border: 0;
+}

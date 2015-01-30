@@ -1,0 +1,40 @@
+{% extends 'admin.admin.html.twig' %}
+
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;ADMIN: {{ admin.username }}&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+    <div class="page">
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Username'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}
+            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div class="form-group">
+                    {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
+                    {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+                </div>
+            {% endif %}
+
+            {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
+            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
+        {{ form_end(form) }}
+
+        <hr/>
+
+        <button class="token-button btn">Click here to <span class="replace">view</span> token</button>
+        <div class="token-para" style="display: none;"><strong>Username:</strong> {{ admin.username }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
+    </div>
+{% endblock %}

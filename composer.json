@@ -11,6 +11,8 @@
         "symfony/symfony": "2.6.*",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/migrations": "1.0.*@dev",
+        "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -18,7 +20,12 @@
         "sensio/distribution-bundle": "~3.0.12",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "twilio/sdk": "~3.12.8"
+        "twilio/sdk": "~3.12.8",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/rest-bundle": "~1.4",
+        "jms/serializer-bundle": "0.13.*",
+        "nelmio/api-doc-bundle": "@dev",
+        "escapestudios/wsse-authentication-bundle": "2.3.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

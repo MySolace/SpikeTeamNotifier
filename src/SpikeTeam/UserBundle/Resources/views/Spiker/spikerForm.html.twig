@@ -1,0 +1,33 @@
+{% extends 'admin.spikers.html.twig' %}
+
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;SPIKER: {{ spiker.firstName }} {{ spiker.lastName }}&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+    <div class="page">
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.firstName) }}
+                {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.lastName) }}
+                {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.phoneNumber) }}
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.isEnabled, {'attr': {'class': 'inlineCheckbox'} }) }}
+                {{ form_label(form.isEnabled, 'Enabled?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+            </div>
+
+            {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
+            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

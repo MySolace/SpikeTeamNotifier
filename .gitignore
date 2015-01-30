@@ -12,4 +12,6 @@
 /composer.phar
 *.sass-cache
 *.log
-.DS_Store
+*.DS_Store
+.sass-cache/*
+*.css.map

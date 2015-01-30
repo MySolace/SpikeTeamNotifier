@@ -1,3 +1,26 @@
-app:
-    resource: @AppBundle/Controller/
+spike_team_setting:
+    resource: "@SpikeTeamSettingBundle/Controller/"
     type:     annotation
+    prefix:   /
+
+spike_team_button:
+    resource: "@SpikeTeamButtonBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+spike_team_user:
+    resource: "@SpikeTeamUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+spike_team_rest:
+    type: rest
+    prefix: /api
+    resource: "@SpikeTeamRestBundle/Resources/config/routing.yml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc

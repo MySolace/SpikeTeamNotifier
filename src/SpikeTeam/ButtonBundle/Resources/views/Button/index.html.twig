@@ -1,0 +1,24 @@
+{% extends 'admin.button.html.twig' %}
+
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;ALERT SPIKE TEAM&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+    <div id="button-box">
+        <div id="button-box-inner">
+            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
+                {% if canPush %}
+                    <a href="/goteamgo">
+                        <button class="button-image" /></button>
+                    </a>
+                {% else %}
+                    <button class="button-image" /></button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

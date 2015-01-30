@@ -1,0 +1,29 @@
+/* Stylesheet for CTL's Spike Team Notifier app
+ * 
+ * Image Credits:
+ * Metal 006 - Brushed Metal: ZooBoing | TurboSquid (http://www.turbosquid.com/FullPreview/Index.cfm/ID/682619)
+ * Button: http://server.ashoresystems.com/~battlepa/battleparty/assets/scripts/game/images/
+ */
+
+@import "partials/variables.scss";
+@import "partials/typography.scss";
+@import "partials/mixins.scss";
+@import "partials/layout.scss";
+@import "partials/elements.scss";
+@import "partials/anon.scss";
+@import "partials/button.scss";
+
+body {
+    background-image: url("../images/steel-bg.jpg");
+}
+
+body.section-button .nameplate-inner {
+    width: $button-box-width;
+}
+
+@media (max-width: $button-box-width * 4/3) {
+    #inner {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}

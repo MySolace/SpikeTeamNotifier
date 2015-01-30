@@ -1,0 +1,5 @@
+spiker_api:
+    type: rest
+    prefix: /v1
+    resource: "SpikeTeam\RestBundle\Controller\ApiV1Controller"
+    name_prefix:  api_v1_ # naming collision
