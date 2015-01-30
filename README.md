@@ -10,8 +10,8 @@ In order to get started, you'll need to do the following:
 * Clone this repo.
 
 * Install MySQL and, optionally, MySQL workbench:
-    http://dev.mysql.com/downloads/mysql/
-    http://mysqlworkbench.org/
+    * http://dev.mysql.com/downloads/mysql/
+    * http://mysqlworkbench.org/
 
 * Install composer and use it globally:
     ```
@@ -41,14 +41,9 @@ In order to get started, you'll need to do the following:
     twilio_response: [ YOUR AUTO-REPLY MESSAGE TO ANY INCOMING SMS ]
     ```
 
-* Create a super-admin user:
-    ```
-    php app/console fos:user:create --super-admin
-    ```
-
 * Start the sever:
     ```
-    php app/console server:run
+    php app/console server:run &
     ```
 
 * Get SASS watching the scss files, if that's what you want:
@@ -58,8 +53,16 @@ In order to get started, you'll need to do the following:
 
 * In order to get the Twilio auto-reply thing going, you'll need to follow step 2 of the instructions here: https://www.twilio.com/docs/quickstart/php/sms/hello-monkey, using the following url:
     ```
-    [YOUR APP ROOT]/api/v1/twilio/incoming
+    [YOUR APP ROOT]/twilio/incoming
     ```
+
+* Log into the default admin account at [YOUR APP ROOT], with:
+    ```
+    username: admin
+    password: admin
+    ```
+
+* Navigate to [YOUR APP ROOT]/admin/admin/edit and change your email address and password as you see fit.
 
 * Get started developing!
 
