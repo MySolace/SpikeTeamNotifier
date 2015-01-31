@@ -6,8 +6,8 @@ $(document).ready(function(){
     $("#button.enabled").find("button").unwrap();
     $("#button.enabled").click(function(){
         if (confirm("Are you sure you want to notify the Spike Team?") == true) {
-            $.ajax({url:"goteamgo"});
             $(this).removeClass("enabled").addClass("disabled");
+            $.ajax({url:"goteamgo"});
         }
     });
     $("#button.disabled").click(function(){
