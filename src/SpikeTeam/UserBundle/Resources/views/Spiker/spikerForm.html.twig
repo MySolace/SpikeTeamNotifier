@@ -25,7 +25,7 @@
                 {{ form_label(form.isEnabled, 'Enabled?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
             </div>
 
-            {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
             <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
             <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
         {{ form_end(form) }}

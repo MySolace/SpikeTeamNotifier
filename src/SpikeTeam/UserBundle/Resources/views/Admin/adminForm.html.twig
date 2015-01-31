@@ -27,7 +27,7 @@
                 </div>
             {% endif %}
 
-            {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-primary'} }) }}
+            {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
             <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
             <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
         {{ form_end(form) }}
