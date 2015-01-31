@@ -1,6 +1,6 @@
 Spike Team Notifier
 ===================
-CTL's Spike Team Alert System
+This is the app developed by Crisis Text Line (crisistextline.org) to notify CTL's spike team, a hardcore group of on-call volunteers in the event of a spike in volume in the system. It is essentially a list of phone numbers, and an API call to a Twilio account to send a standardized message to all of the volunteers. There is also API for the app itself, secured by WSSE, for CRUD operations related to the team members.
 
 Getting Started
 ---------------
@@ -46,6 +46,17 @@ In order to get started, you'll need to do the following:
     php app/console server:run &
     ```
 
+* You might need to edit the following lines in app/config/security.yml if you aren't running an SSL on the server where you are hosting the files:
+    ```
+    access_control:
+        - { path: ^/twilio, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/, roles: ROLE_ADMIN, requires_channel: https }
+        - { path: ^/api, roles: ROLE_API, requires_channel: http }
+    ```
+
+* If you do the step above, please be sure to reverse the changes before commiting back to the repo. Will have to find a better way to manage this, but for now, this is what we'll do.
+
 * Get SASS watching the scss files, if that's what you want:
     ```
     sass --watch web/scss:web/css &
@@ -62,11 +73,11 @@ In order to get started, you'll need to do the following:
     password: admin
     ```
 
-* Navigate to [YOUR APP ROOT]/admin/admin/edit and change your email address and password as you see fit.
+* Once logged in, navigate to [YOUR APP ROOT]/admin/admin/edit and change your email address and password as you see fit. Make sure to edit the default settings at [YOUR APP ROOT]/settings, too.
 
 * Get started developing!
 
 API Documentation
 -----------------
 
-Documentation of this app can be found at [app root]/(app_dev.php)/api/doc/, provided via the Nelmio API Doc Bundle: https://github.com/nelmio/NelmioApiDocBundle
+Documentation of this app can be found at [app root]/api/doc/, provided via the Nelmio API Doc Bundle: https://github.com/nelmio/NelmioApiDocBundle
