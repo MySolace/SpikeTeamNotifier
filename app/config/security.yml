@@ -40,4 +40,3 @@ security:
         - { path: ^/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/, roles: ROLE_ADMIN, requires_channel: https }
         - { path: ^/api, roles: ROLE_API, requires_channel: http }
-
