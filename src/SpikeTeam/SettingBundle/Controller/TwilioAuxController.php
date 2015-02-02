@@ -17,7 +17,7 @@ class TwilioAuxController extends Controller
      */
     public function incomingTwilioAction()
     {
-        $msg = $this->getDoctrine()->getEntityManager()
+        $msg = $this->getDoctrine()->getManager()
             ->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('twilio_response')->getSetting();
         // send to template
         return $this->render('SpikeTeamSettingBundle:Twilio:response.xml.twig', array(

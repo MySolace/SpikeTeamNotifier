@@ -32,7 +32,7 @@ class SpikerRepository extends EntityRepository
     {
         $phoneNumber = $this->processNumber($data['phone_number']);
         if ($phoneNumber) {
-            $em = $this->getEntityManager();
+            $em = $this->getManager();
             $spiker->setPhoneNumber($phoneNumber);
             if (isset($data['first_name'])) {
                 $spiker->setFirstName($data['first_name']);                
