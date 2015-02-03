@@ -103,6 +103,7 @@ body.anon #inner #fos-user {
     text-align: center;
     line-height: 225px; }
     #button-box-inner #button button.button-image {
+      margin: 12.5px 0;
       width: 200px;
       height: 200px;
       border: none;

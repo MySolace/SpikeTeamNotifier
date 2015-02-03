@@ -28,6 +28,7 @@ $button-inner-height: $button-box-height * $button-inner-scale;
         text-align: center;
         line-height: $button-inner-height;
         button.button-image {
+            margin: ($button-inner-height - $button-size)/2 0;
             width: $button-size;
             height: $button-size;
             border: none;

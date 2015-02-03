@@ -72,8 +72,6 @@ class SpikerController extends Controller
         // AJAX request/fire event here, instead of HTML redirect?
         $spikers = $this->repo->findAll();
         $data = $request->request->all();
-        var_dump($data);
-        var_dump($spikers);
         foreach ($spikers as $key => $spiker) {
             if (isset($data[$spiker->getId()]) && $data[$spiker->getId()] == '1') {
                 $spiker->setIsEnabled(true);
