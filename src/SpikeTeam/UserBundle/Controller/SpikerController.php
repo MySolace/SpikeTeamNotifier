@@ -64,6 +64,29 @@ class SpikerController extends Controller
     }
 
     /**
+     * Mass enable/disable Spikers here
+     * @Route("/spikers/enabler")
+     */
+    public function spikerEnablerAction(Request $request)
+    {
+        // AJAX request/fire event here, instead of HTML redirect?
+        $spikers = $this->repo->findAll();
+        $data = $request->request->all();
+        var_dump($data);
+        var_dump($spikers);
+        foreach ($spikers as $key => $spiker) {
+            if (isset($data[$spiker->getId()]) && $data[$spiker->getId()] == '1') {
+                $spiker->setIsEnabled(true);
+            } else {
+                $spiker->setIsEnabled(false);
+            }
+            $this->em->persist($spiker);
+        }
+        $this->em->flush();
+        return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
+    }
+
+    /**
      * Showing individual spiker here
      * @Route("/spikers/{input}/edit")
      */
