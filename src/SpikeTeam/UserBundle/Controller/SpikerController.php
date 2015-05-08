@@ -39,6 +39,7 @@ class SpikerController extends Controller
             ->add('isEnabled', 'hidden', array(
                 'data' => true,
             ))
+            ->add('email')
             ->add('Add', 'submit')
             ->getForm();
         $form->handleRequest($request);
@@ -110,6 +111,10 @@ class SpikerController extends Controller
                 ->add('phoneNumber', 'text', array(
                     'data' => $spiker->getPhoneNumber(),
                     'required' => true,
+                ))
+                ->add('email', 'text', array(
+                    'data' => $spiker->getEmail(),
+                    'required' => false,
                 ))
                 ->add('isEnabled', 'checkbox', array(
                     'data' => $spiker->getIsEnabled(),

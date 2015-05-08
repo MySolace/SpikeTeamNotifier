@@ -43,6 +43,13 @@ class Spiker
     private $phoneNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", unique=true, nullable=true)
+     */
+    private $email;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_enabled", type="boolean")
@@ -126,6 +133,29 @@ class Spiker
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Spiker
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**

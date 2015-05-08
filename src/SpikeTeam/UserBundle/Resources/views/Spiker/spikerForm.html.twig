@@ -21,6 +21,10 @@
                 {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}
             </div>
             <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
+            </div>
+            <div class="form-group">
                 {{ form_widget(form.isEnabled, {'attr': {'class': 'inlineCheckbox'} }) }}
                 {{ form_label(form.isEnabled, 'Enabled?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
             </div>
