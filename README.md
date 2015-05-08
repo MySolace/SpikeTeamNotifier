@@ -57,6 +57,11 @@ In order to get started, you'll need to do the following:
 
 * If you do the step above, please be sure to reverse the changes before commiting back to the repo. Will have to find a better way to manage this, but for now, this is what we'll do.
 
+* Now you can go to the local version of the Notifier by going to:
+   ```
+   localhost:8000
+   ```
+
 * Get SASS watching the scss files, if that's what you want:
     ```
     sass --watch web/scss:web/css &
