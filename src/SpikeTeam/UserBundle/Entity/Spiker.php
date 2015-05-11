@@ -43,6 +43,20 @@ class Spiker
     private $phoneNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", unique=true, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_supervisor", type="boolean")
+     */
+    private $isSupervisor;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_enabled", type="boolean")
@@ -52,7 +66,7 @@ class Spiker
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -75,7 +89,7 @@ class Spiker
     /**
      * Get firstName
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -98,7 +112,7 @@ class Spiker
     /**
      * Get lastName
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -121,11 +135,57 @@ class Spiker
     /**
      * Get phoneNumber
      *
-     * @return string 
+     * @return string
      */
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Spiker
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set isSupervisor
+     *
+     * @param boolean $isSupervisor
+     * @return Spiker
+     */
+    public function setIsSupervisor($isSupervisor)
+    {
+        $this->isSupervisor = $isSupervisor;
+
+        return $this;
+    }
+
+    /**
+     * Get isSupervisor
+     *
+     * @return boolean
+     */
+    public function getIsSupervisor()
+    {
+        return $this->isSupervisor;
     }
 
     /**
@@ -144,7 +204,7 @@ class Spiker
     /**
      * Get isEnabled
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsEnabled()
     {
