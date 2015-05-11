@@ -36,6 +36,7 @@ class SpikerController extends Controller
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))
             ->add('phoneNumber', 'text', array('required' => true))
+            ->add('isSupervisor')
             ->add('isEnabled', 'hidden', array(
                 'data' => true,
             ))
@@ -114,6 +115,10 @@ class SpikerController extends Controller
                 ))
                 ->add('email', 'text', array(
                     'data' => $spiker->getEmail(),
+                    'required' => false,
+                ))
+                ->add('isSupervisor', 'checkbox', array(
+                    'data' => $spiker->getIsSupervisor(),
                     'required' => false,
                 ))
                 ->add('isEnabled', 'checkbox', array(

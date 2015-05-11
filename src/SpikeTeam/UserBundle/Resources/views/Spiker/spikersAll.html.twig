@@ -11,6 +11,7 @@
         <table class="table">
             <tr>
                 <th>Enabled</th>
+                <th>Supervisor?</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Phone Number</th>
@@ -28,6 +29,13 @@
                                 <i class="fa fa-square-o"></i>
                             {% endif %} -->
                         </td>
+                        <td class="center">
+                            {% if spiker.isSupervisor %}
+                                <i class="fa fa-check-square"></i>
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </td>
                         <td>{{ spiker.firstName }}</td>
                         <td>{{ spiker.lastName }}</td>
                         <td>{{ spiker.phoneNumber }}</td>
@@ -39,7 +47,7 @@
                 {% endfor %}
 
                 <tr>
-                    <td colspan="6">
+                    <td colspan="7">
                         <input type="submit" name="enabler" value="Save Status" class="btn btn-default" />
                     </td>
                 </tr>
@@ -47,7 +55,9 @@
 
             <tr>
                 {{ form_start(form, {'attr': {'class': 'form-inline'} }) }}
-                    <td class="center"><i class="fa fa-check-square"></i></td>
+                    <!-- <td class="center"><i class="fa fa-check-square"></i></td> -->
+                    <td></td>
+                    <td class="center">{{ form_widget(form.isSupervisor) }}</td>
                     <td>{{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}</td>
                     <td>{{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}</td>
                     <td>{{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}</td>
