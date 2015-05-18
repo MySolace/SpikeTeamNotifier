@@ -33,7 +33,8 @@ class AdminController extends Controller
 
         $newAdmin = new Admin();
         $form = $this->createFormBuilder($newAdmin)
-            ->add('username', 'text', array('required' => true))
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
             ->add('email', 'email', array('required' => true))
             ->add('password', 'password', array('required' => true))
             ->add('Add', 'submit')
@@ -59,24 +60,34 @@ class AdminController extends Controller
 
     /**
      * Showing indiv admin user here
-     * @Route("/admin/{username}/edit")
+     * @Route("/admin/{email}/edit")
      */
-    public function adminEditAction($username, Request $request)
+    public function adminEditAction($email, Request $request)
     {
         $securityContext = $this->get('security.context');
         $currentUser = $securityContext->getToken()->getUser();
         $allUrl = $this->generateUrl('spiketeam_user_admin_adminall');
-        if ($currentUser->getUsername() == $username || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
-            $admin = $this->repo->findOneByUsername($username);
-            $deleteUrl = $this->generateUrl('spiketeam_user_admin_admindelete', array('username' => $username));
+        if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
+            $admin = $this->repo->findOneByEmail($email);
+            $deleteUrl = $this->generateUrl('spiketeam_user_admin_admindelete', array('email' => $email));
             $message = $this->em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('token_usage')->getSetting();
 
             if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form = $this->createFormBuilder($admin)
+                    ->add('firstName', 'text', array(
+                        'data' => $admin->getFirstName(),
+                        'required' => false,
+                    ))
+                    ->add('lastName', 'text', array(
+                        'data' => $admin->getLastName(),
+                        'required' => false,
+                    ))
+                    /*
                     ->add('username', 'text', array(
                         'data' => $admin->getUsername(),
                         'required' => true,
                     ))
+                    */
                     ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
@@ -92,10 +103,20 @@ class AdminController extends Controller
                     ->getForm();
             } else {
                 $form = $this->createFormBuilder($admin)
+                    ->add('firstName', 'text', array(
+                        'data' => $admin->getFirstName(),
+                        'required' => false,
+                    ))
+                    ->add('lastName', 'text', array(
+                        'data' => $admin->getLastName(),
+                        'required' => false,
+                    ))
+                    /*
                     ->add('username', 'text', array(
                         'data' => $admin->getUsername(),
                         'required' => true,
                     ))
+                    */
                     ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
@@ -130,11 +151,11 @@ class AdminController extends Controller
 
     /**
      * Delete individual admin here
-     * @Route("/admin/{username}/delete")
+     * @Route("/admin/{email}/delete")
      */
-    public function adminDeleteAction($username)
+    public function adminDeleteAction($email)
     {
-        $admin = $this->repo->findOneByUsername($username);
+        $admin = $this->repo->findOneByEmail($email);
         $this->em->remove($admin);
         $this->em->flush();
 

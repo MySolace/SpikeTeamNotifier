@@ -11,7 +11,8 @@
         <table class="table">
             <tr>
                 <th>Superadmin</th>
-                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th></th>
                 <th></th>
@@ -20,7 +21,7 @@
             {% for admin in admins %}
 
                 {% set super_admin_bool = false %}
-                {% for role in admin.getRoles() %} 
+                {% for role in admin.getRoles() %}
                     {% if role == 'ROLE_SUPER_ADMIN' %}{% set super_admin_bool = true %}{% endif %}
                 {% endfor %}
 
@@ -33,13 +34,18 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ admin.username }}
+                        {{ admin.firstName }}
                     </td>
-                    <td>{{ admin.email }}</td>
+                    <td>
+                        {{ admin.lastName }}
+                    </td>
+                    <td>
+                        {{ admin.email }}
+                    </td>
                     <td></td>
                     <td class="center">
-                        {% if is_granted('ROLE_SUPER_ADMIN') or app.user.username == admin.username %}
-                            <a href="/admin/{{ admin.username }}/edit">Edit</a>
+                        {% if is_granted('ROLE_SUPER_ADMIN') or app.user.email == admin.email %}
+                            <a href="/admin/{{ admin.email }}/edit">Edit</a>
                         {% else %}
                         {% endif %}
                     </td>
@@ -49,7 +55,8 @@
                 <tr>
                     {{ form_start(form, {'attr': {'class': 'form-inline'} }) }}
                         <td class="center"><i class="fa fa-check-square"></i></td>
-                        <td>{{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Username'} }) }}</td>
+                        <td>{{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}</td>
+                        <td>{{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}</td>
                         <td>{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}</td>
                         <td>{{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}</td>
                         <td class="center">{{ form_widget(form.Add, {'attr': {'class': 'btn btn-default'} }) }}</td>

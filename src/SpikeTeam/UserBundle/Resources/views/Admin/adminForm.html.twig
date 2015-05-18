@@ -3,14 +3,18 @@
 {% block body %}
     <div class="nameplate">
         <div class="nameplate-inner">
-            &bull;&nbsp;&nbsp;ADMIN: {{ admin.username }}&nbsp;&nbsp;&bull;
+            &bull;&nbsp;&nbsp;ADMIN: {% if admin.firstName is not defined and admin.lastName is not defined %}{{ admin.email }}{% else %}{{ admin.firstName }} {{ admin.lastName }}{% endif %}&nbsp;&nbsp;&bull;
         </div>
     </div>
     <div class="page">
         {{ form_start(form) }}
             <div class="form-group">
-                {{ form_label(form.username) }}
-                {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'Username'} }) }}
+                {{ form_label(form.firstName) }}
+                {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.lastName) }}
+                {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}
             </div>
             <div class="form-group">
                 {{ form_label(form.email) }}
@@ -29,12 +33,16 @@
 
             {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
             <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
-            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
+            {% set super_admin_bool = false %}
+            {% for role in admin.getRoles() %}
+                {% if role == 'ROLE_SUPER_ADMIN' %}{% set super_admin_bool = true %}{% endif %}
+            {% endfor %}
+            {% if super_admin_bool %}<a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>{% endif %}
         {{ form_end(form) }}
 
         <hr/>
 
         <button class="token-button btn">Click here to <span class="replace">view</span> token</button>
-        <div class="token-para" style="display: none;"><strong>Username:</strong> {{ admin.username }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
+        <div class="token-para" style="display: none;"><strong>Username:</strong> {{ admin.email }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
     </div>
 {% endblock %}
