@@ -3,7 +3,7 @@
 {% block body %}
     <div class="nameplate">
         <div class="nameplate-inner">
-            &bull;&nbsp;&nbsp;ADMIN: {% if admin.firstName is not defined and admin.lastName is not defined %}{{ admin.email }}{% else %}{{ admin.firstName }}{{ admin.lastName }}{% endif %}&nbsp;&nbsp;&bull;
+            &bull;&nbsp;&nbsp;ADMIN: {% if admin.firstName is not defined and admin.lastName is not defined %}{{ admin.email }}{% else %}{{ admin.firstName }} {{ admin.lastName }}{% endif %}&nbsp;&nbsp;&bull;
         </div>
     </div>
     <div class="page">
