@@ -8,6 +8,9 @@
     </div>
 
     <div class="page table-responsive">
+        {% if existing %}
+            <div class="alert">Sorry! A spiker by this phone number or email address already exists. Please fix the record and try again.</div>
+        {% endif %}
         <table class="table">
             <tr>
                 <th>Enabled</th>

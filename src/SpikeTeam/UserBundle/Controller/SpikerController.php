@@ -30,6 +30,7 @@ class SpikerController extends Controller
     public function spikersAllAction(Request $request)
     {
         $spikers = $this->repo->findAll();
+        $existing = false;
 
         $newSpiker = new Spiker();
         $form = $this->createFormBuilder($newSpiker)
@@ -49,17 +50,24 @@ class SpikerController extends Controller
 
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
             if ($processedNumber) {
-                $newSpiker->setPhoneNumber($processedNumber);
-                $this->em->persist($newSpiker);
-                $this->em->flush();
+                if (count($this->repo->findByEmail($newSpiker->getEmail()))
+                    || count($this->repo->findByPhoneNumber($processedNumber))
+                    ) {
+                    $existing = true;
+                } else {
+                    $newSpiker->setPhoneNumber($processedNumber);
+                    $this->em->persist($newSpiker);
+                    $this->em->flush();
+                    return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
+                }
             }
-            return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
         }
 
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
             'spikers' => $spikers,
             'form' => $form->createView(),
+            'existing' => $existing,
         ));
     }
 
