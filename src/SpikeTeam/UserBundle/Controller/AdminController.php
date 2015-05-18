@@ -82,18 +82,12 @@ class AdminController extends Controller
                         'data' => $admin->getLastName(),
                         'required' => false,
                     ))
-                    /*
-                    ->add('username', 'text', array(
-                        'data' => $admin->getUsername(),
-                        'required' => true,
-                    ))
-                    */
                     ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
                     ))
                     ->add('password', 'password', array(
-                        'required' => true,
+                        'required' => false,
                     ))
                     ->add('superadmin', 'checkbox', array(      // This shouldn't work this way, but it totally does. WTF.
                         'data' => $admin->hasRole('ROLE_SUPER_ADMIN'),
@@ -111,18 +105,12 @@ class AdminController extends Controller
                         'data' => $admin->getLastName(),
                         'required' => false,
                     ))
-                    /*
-                    ->add('username', 'text', array(
-                        'data' => $admin->getUsername(),
-                        'required' => true,
-                    ))
-                    */
                     ->add('email', 'email', array(
                         'data' => $admin->getEmail(),
                         'required' => true,
                     ))
                     ->add('password', 'password', array(
-                        'required' => true,
+                        'required' => false,
                     ))
                     ->add('save', 'submit')
                     ->getForm();
