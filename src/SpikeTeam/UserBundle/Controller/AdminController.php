@@ -116,10 +116,18 @@ class AdminController extends Controller
                     ->getForm();
             }
 
+            $existingPassword = $admin->getPassword();
+
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $admin->setPlainPassword($admin->getPassword());
+                // Only set new password if the password field is filled out
+                if ($request->request->get($form->getName())['password'] !== '') {
+                    $admin->setPlainPassword($admin->getPassword());
+                } else {
+                    // else, set password using same password
+                    $admin->setPassword($existingPassword);
+                }
                 $this->em->persist($admin);
                 $this->em->flush();
                 return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
