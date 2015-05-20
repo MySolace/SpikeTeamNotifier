@@ -42,7 +42,7 @@ class Version20150520102335 extends AbstractMigration implements ContainerAwareI
         $userManager = $this->container->get('fos_user.user_manager');
 
         foreach($admins as $admin) {
-            $admin->setPlainPassword(' ');
+            $admin->setPlainPassword($admin->getLastName().'!');
             $userManager->updateUser($admin, true);
         }
     }
