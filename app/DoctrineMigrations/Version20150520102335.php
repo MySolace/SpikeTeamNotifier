@@ -14,7 +14,6 @@ use SpikeTeam\UserBundle\Entity\Admin;
  */
 class Version20150520102335 extends AbstractMigration implements ContainerAwareInterface
 {
-
     private $container;
 
     public function setContainer(ContainerInterface $container = null)
@@ -30,8 +29,6 @@ class Version20150520102335 extends AbstractMigration implements ContainerAwareI
         $userManager = $this->container->get('fos_user.user_manager');
 
         foreach($admins as $admin) {
-            var_dump($admin->getEmail());
-            var_dump($admin->getLastName().'!');
             $admin->setPlainPassword($admin->getLastName().'!');
             $userManager->updateUser($admin, true);
         }
@@ -43,6 +40,7 @@ class Version20150520102335 extends AbstractMigration implements ContainerAwareI
         $admins = $this->container->get('doctrine.orm.entity_manager')
                     ->getRepository('SpikeTeamUserBundle:Admin')->findAll();
         $userManager = $this->container->get('fos_user.user_manager');
+
         foreach($admins as $admin) {
             $admin->setPlainPassword(' ');
             $userManager->updateUser($admin, true);
