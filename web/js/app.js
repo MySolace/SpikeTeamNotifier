@@ -7,6 +7,7 @@ $(document).ready(function(){
     $("body.section-spikers").find("li.spikers").addClass("active");
     $("body.section-admin").find("li.admin").addClass("active");
     $("body.section-settings").find("li.settings").addClass("active");
+    $("body.section-stats").find("li.stats").addClass("active");
     $("#button.enabled").find("button").unwrap();
     $("#button").click(function(){
         if ($(this).is(".enabled")) {
