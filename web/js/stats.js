@@ -28,6 +28,7 @@ var Stats = {
     },
 
     update: function (idx) {
+        $('.issue').remove();
         $('li.messages-count span').text(this.data[idx][1]);
         $('li.conversations-count span').text(this.data[idx][2]);
         $('li.unique-texters-count span').text(this.data[idx][3]);
@@ -37,5 +38,14 @@ var Stats = {
         $('li.engaged-rate span').text(this.data[idx][7]);
         $('li.satisfaction-rate span').text(this.data[idx][8]);
         $('li.new-texters-rate span').text(this.data[idx][9]);
+
+        if (this.data[idx].length > 10) {
+            for (var i = 10; i < this.data[idx].length; i += 2) {
+                $issue = $('<li>');
+                $issue.text(this.data[idx][i] + ': ' + this.data[idx][i+1]);
+                $issue.addClass('issue');
+                $('.stat-list').append($issue);
+            }
+        } 
     }
 };
