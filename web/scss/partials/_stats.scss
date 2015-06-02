@@ -10,26 +10,38 @@
 
 div.stats {
     @extend.group;
+    padding-top: 15px;
     position: relative;
     display: block;
     float: none;
 }
 
+.stats li span {
+    color: red;
+}
+
 ul.left-list, ul.right-list, ul.issues-list {
     list-style-type: none;
+    padding: 0;
 }
 
 ul.left-list {
     text-align: left;
     position: relative;
     float: left;
-    padding: 0;
+    @media screen and (max-width: 880px) {
+        float: none;
+        text: align-center;
+    }
 }
 
 ul.right-list {
-    text-align: right;
+    text-align: left;
     float: right;
-    padding: 0;
+    @media screen and (max-width: 880px) {
+        float: none;
+        text: align-center;
+    }
 }
 
 ul.left-list li, ul.right-list li {

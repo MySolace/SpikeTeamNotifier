@@ -129,23 +129,34 @@ body.anon #inner #fos-user {
   text-align: center; }
 
 div.stats {
+  padding-top: 15px;
   position: relative;
   display: block;
   float: none; }
 
+.stats li span {
+  color: red; }
+
 ul.left-list, ul.right-list, ul.issues-list {
-  list-style-type: none; }
+  list-style-type: none;
+  padding: 0; }
 
 ul.left-list {
   text-align: left;
   position: relative;
-  float: left;
-  padding: 0; }
+  float: left; }
+  @media screen and (max-width: 880px) {
+    ul.left-list {
+      float: none;
+      text: align-center; } }
 
 ul.right-list {
-  text-align: right;
-  float: right;
-  padding: 0; }
+  text-align: left;
+  float: right; }
+  @media screen and (max-width: 880px) {
+    ul.right-list {
+      float: none;
+      text: align-center; } }
 
 ul.left-list li, ul.right-list li {
   margin: 5px; }

@@ -42,8 +42,9 @@ var Stats = {
         if (this.data[idx].length > 10) {
             for (var i = 10; i < this.data[idx].length; i += 2) {
                 $issue = $('<li>');
-                $issue.text(this.data[idx][i] + ': ' + this.data[idx][i+1]);
-                $issue.addClass('issue');
+                var issueName = this.data[idx][i].replace(/"/g, "");
+                $issue.text(issueName + ': ' + this.data[idx][i+1]);
+                $issue.addClass('issue').css("text-transform","capitalize");
                 $('.issues-list').append($issue);
             }
         } 
