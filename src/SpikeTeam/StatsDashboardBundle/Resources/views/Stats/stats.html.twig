@@ -2,40 +2,53 @@
 
 
 {% block body %}
-	<main>
-        <h1 class="stats-header">Stats</h1>
-        <div class="date-select">Date: <select></select></div>
-        <ul class="stat-list">
-            <li class="messages-count">
-                # of Messages: <span></span>
-            </li>
-            <li class="conversations-count">
-                # of Conversations: <span></span>
-            </li>
-            <li class="unique-texters-count">
-                # of Unique Texters: <span></span>
-            </li>
-            <li class="unique-counselors-count">
-                # of Unique Counselors: <span></span>
-            </li>
+    <header class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;STATS&nbsp;&nbsp;&bull;
+        </div>
+    </header>
 
-            <li class="active-rescues-count">
-                # of Active Rescues: <span></span>
-            </li>
-            <li class="five-minute-wait-rate">
-                Conversations Waiting Over 5 Minutes: <span></span>%
-            </li>
-            <li class="engaged-rate">
-                Engaged Conversations: <span></span>%
-            </li>
-            <li class="satisfaction-rate">
-                Satisfactory Conversations: <span></span>%
-            </li>
-            <li class="new-texters-rate">    
-                New Texters: <span></span>%
-            </li>
-        </ul>
-    </main>
+    <div class="page">
+        <div class="date-select">Date: <select></select></div>
+        <div class="stats">
+            <ul class="left-list">
+                <li class="messages-count">
+                    # of Messages: <span></span>
+                </li>
+                <li class="conversations-count">
+                    # of Conversations: <span></span>
+                </li>
+                <li class="unique-texters-count">
+                    # of Unique Texters: <span></span>
+                </li>
+                <li class="unique-counselors-count">
+                    # of Unique Counselors: <span></span>
+                </li>
+                <li class="active-rescues-count">
+                    # of Active Rescues: <span></span>
+                </li>
+            </ul>
+            <ul class="right-list">
+                <li class="five-minute-wait-rate">
+                    Conversations Waiting Over 5 Minutes: <span></span>%
+                </li>
+                <li class="engaged-rate">
+                    Engaged Conversations: <span></span>%
+                </li>
+                <li class="satisfaction-rate">
+                    Satisfactory Conversations: <span></span>%
+                </li>
+                <li class="new-texters-rate">    
+                    New Texters: <span></span>%
+                </li>
+            </ul>
+        </div>
+        <div class="issues">
+            <p>Issue Breakdown</p>
+            <ul class="issues-list">
+            </ul>
+        </div>
+    </div>
 
     <script type="text/javascript">
         window.onload = function() {

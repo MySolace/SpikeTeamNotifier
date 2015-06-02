@@ -1,0 +1,41 @@
+.group:after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.date-select, .issues {
+    text-align: center;
+}
+
+div.stats {
+    @extend.group;
+    position: relative;
+    display: block;
+    float: none;
+}
+
+ul.left-list, ul.right-list, ul.issues-list {
+    list-style-type: none;
+}
+
+ul.left-list {
+    text-align: left;
+    position: relative;
+    float: left;
+    padding: 0;
+}
+
+ul.right-list {
+    text-align: right;
+    float: right;
+    padding: 0;
+}
+
+ul.left-list li, ul.right-list li {
+    margin: 5px;
+}
+
+.issues {
+    text-align: center;
+}

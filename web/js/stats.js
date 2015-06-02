@@ -44,7 +44,7 @@ var Stats = {
                 $issue = $('<li>');
                 $issue.text(this.data[idx][i] + ': ' + this.data[idx][i+1]);
                 $issue.addClass('issue');
-                $('.stat-list').append($issue);
+                $('.issues-list').append($issue);
             }
         } 
     }
