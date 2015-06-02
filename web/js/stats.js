@@ -29,21 +29,19 @@ var Stats = {
 
     update: function (idx) {
         $('.issue').remove();
-        $('li.messages-count span').text(this.data[idx][1]);
-        $('li.conversations-count span').text(this.data[idx][2]);
-        $('li.unique-texters-count span').text(this.data[idx][3]);
-        $('li.unique-counselors-count span').text(this.data[idx][4]);
-        $('li.active-rescues-count span').text(this.data[idx][5]);
-        $('li.five-minute-wait-rate span').text(this.data[idx][6]);
-        $('li.engaged-rate span').text(this.data[idx][7]);
-        $('li.satisfaction-rate span').text(this.data[idx][8]);
-        $('li.new-texters-rate span').text(this.data[idx][9]);
+        for (var i = 0; i < $('div.stats li').length; i++) {
+            $('div.stats li span').eq(i).text(this.data[idx][i+1]);
+        }
+
+        $('.right-list li span').append("%");
 
         if (this.data[idx].length > 10) {
-            for (var i = 10; i < this.data[idx].length; i += 2) {
+            for (i = 10; i < this.data[idx].length; i += 2) {
                 $issue = $('<li>');
                 var issueName = this.data[idx][i].replace(/"/g, "");
-                $issue.text(issueName + ': ' + this.data[idx][i+1]);
+                $issuePercentage = $('<span>');
+                $issuePercentage.text(this.data[idx][i+1] + "%");
+                $issue.html(issueName + ': <span>' + this.data[idx][i+1] + '%</span>');
                 $issue.addClass('issue').css("text-transform","capitalize");
                 $('.issues-list').append($issue);
             }

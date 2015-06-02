@@ -134,7 +134,7 @@ div.stats {
   display: block;
   float: none; }
 
-.stats li span {
+.stats li span, .issues li span {
   color: red; }
 
 ul.left-list, ul.right-list, ul.issues-list {
