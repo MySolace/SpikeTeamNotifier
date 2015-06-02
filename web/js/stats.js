@@ -37,11 +37,11 @@ var Stats = {
 
         if (this.data[idx].length > 10) {
             for (i = 10; i < this.data[idx].length; i += 2) {
-                $issue = $('<li>');
-                var issueName = this.data[idx][i].replace(/"/g, "");
-                $issuePercentage = $('<span>');
-                $issuePercentage.text(this.data[idx][i+1] + "%");
-                $issue.html(issueName + ': <span>' + this.data[idx][i+1] + '%</span>');
+                var $issue = $('<li>'),
+                    issueName = this.data[idx][i].replace(/"/g, ""),
+                    issuePercentage = Math.round(this.data[idx][i+1] /
+                        this.data[idx][2] * 10000) / 100;
+                $issue.html(issueName + ': <span>' + issuePercentage+ '%</span>');
                 $issue.addClass('issue').css("text-transform","capitalize");
                 $('.issues-list').append($issue);
             }
