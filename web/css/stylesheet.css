@@ -145,24 +145,29 @@ ul.left-list {
   text-align: left;
   position: relative;
   float: left; }
-  @media screen and (max-width: 880px) {
+  @media screen and (max-width: 900px) {
     ul.left-list {
       float: none;
-      text: align-center; } }
+      border-bottom: 1px solid black; } }
 
 ul.right-list {
   text-align: left;
   float: right; }
-  @media screen and (max-width: 880px) {
+  @media screen and (max-width: 900px) {
     ul.right-list {
       float: none;
-      text: align-center; } }
+      text-align: left;
+      border-bottom: 1px solid black; } }
 
 ul.left-list li, ul.right-list li {
   margin: 5px; }
 
 .issues {
   text-align: center; }
+  @media screen and (max-width: 900px) {
+    .issues {
+      text-align: left;
+      border-bottom: 1px solid black; } }
 
 body {
   background-image: url("../images/steel-bg.jpg"); }

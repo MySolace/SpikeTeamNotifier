@@ -29,18 +29,19 @@ ul.left-list {
     text-align: left;
     position: relative;
     float: left;
-    @media screen and (max-width: 880px) {
+    @media screen and (max-width: 900px) {
         float: none;
-        text: align-center;
+        border-bottom: 1px solid black;
     }
 }
 
 ul.right-list {
     text-align: left;
     float: right;
-    @media screen and (max-width: 880px) {
+    @media screen and (max-width: 900px) {
         float: none;
-        text: align-center;
+        text-align: left;
+        border-bottom: 1px solid black;
     }
 }
 
@@ -50,4 +51,8 @@ ul.left-list li, ul.right-list li {
 
 .issues {
     text-align: center;
+    @media screen and (max-width: 900px) {
+        text-align: left;
+        border-bottom: 1px solid black;
+    }
 }
