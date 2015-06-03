@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class StatsController extends Controller
 {
     /**
+     * Displays stats
      * @Route("/stats/", name="getStats")
      * @Method("GET")
      * @Template()
@@ -22,6 +23,7 @@ class StatsController extends Controller
     }
 
     /**
+     * Accepts latest stats in CSV form if API key is valid
      * @Route("/stats/", name="postStats")
      * @Method("POST")
      */
