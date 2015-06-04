@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new SpikeTeam\ButtonBundle\SpikeTeamButtonBundle(),
             new SpikeTeam\AlertBundle\SpikeTeamAlertBundle(),
             new SpikeTeam\SettingBundle\SpikeTeamSettingBundle(),
+            new SpikeTeam\StatsDashboardBundle\StatsDashboardBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
