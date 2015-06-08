@@ -2,7 +2,7 @@ var Stats = {
     initialize: function () {
         $.ajax({
             type: "GET",
-            url: "../stats.csv",
+            url: "/var/www/data/stats.csv",
             dataType: "text",
             success: function(data) {
                 this.data = data;

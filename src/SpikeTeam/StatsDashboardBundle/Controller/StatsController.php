@@ -31,7 +31,7 @@ class StatsController extends Controller
     {
         if ($request->request->get('api_key') === $this->container->getParameter('api_key')) {
             $uploadedFile = $request->files->get('stats');
-            $file = $uploadedFile->move('../web/', 'stats.csv');
+            $file = $uploadedFile->move('/var/www/data/', 'stats.csv');
             return array();
         } else {
             $response = new Response('Invalid Key', 403);
