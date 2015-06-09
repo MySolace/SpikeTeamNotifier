@@ -4,10 +4,6 @@
   display: block;
 }
 
-.date-select, .issues {
-    text-align: center;
-}
-
 div.stats {
     @extend.group;
     padding-top: 15px;
@@ -36,6 +32,7 @@ ul.left-list {
 }
 
 ul.right-list {
+    font-size: 1em;
     text-align: left;
     float: right;
     @media screen and (max-width: 900px) {
@@ -49,10 +46,16 @@ ul.left-list li, ul.right-list li {
     margin: 5px;
 }
 
-.issues {
+.date-select, .issues {
     text-align: center;
     @media screen and (max-width: 900px) {
         text-align: left;
-        border-bottom: 1px solid black;
     }
+}
+
+.issues {
+    font-size: 1em;
+    @media screen and (max-width: 900px) {
+        border-bottom: 1px solid black;
+    } 
 }
