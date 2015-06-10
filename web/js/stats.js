@@ -2,7 +2,7 @@ var Stats = {
     initialize: function () {
         $.ajax({
             type: "GET",
-            url: "../data/stats.csv",
+            url: "/data/stats.csv",
             dataType: "text",
             success: function(data) {
                 this.data = data;
@@ -17,7 +17,7 @@ var Stats = {
             this.data[i] = this.data[i].split(",");
             var $option = $('<option>');
             $option.attr({'value': i}).text(this.data[i][0]);
-            $('div.date-select select').append($option);
+            $('div.date-select select').prepend($option);
         }
 
         $("select").change(function(){
