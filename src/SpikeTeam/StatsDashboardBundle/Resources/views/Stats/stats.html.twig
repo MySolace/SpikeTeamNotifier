@@ -7,46 +7,28 @@
             &bull;&nbsp;&nbsp;STATS&nbsp;&nbsp;&bull;
         </div>
     </header>
-
-    <div class="page">
+    <div class="dashboard-container">
         <div class="date-select">Date: <select></select></div>
-        <div class="stats">
-            <ul class="left-list">
-                <li class="messages-count">
-                    # of Messages: <span></span>
-                </li>
-                <li class="conversations-count">
-                    # of Conversations: <span></span>
-                </li>
-                <li class="unique-texters-count">
-                    # of Unique Texters: <span></span>
-                </li>
-                <li class="unique-counselors-count">
-                    # of Unique Counselors: <span></span>
-                </li>
-                <li class="active-rescues-count">
-                    # of Active Rescues: <span></span>
-                </li>
-            </ul>
-            <ul class="right-list">
-                <li class="five-minute-wait-rate">
-                    Conversations Waiting >5 Min: <span>%</span>
-                </li>
-                <li class="engaged-rate">
-                    Engaged Conversations: <span>%</span>
-                </li>
-                <li class="satisfaction-rate">
-                    Satisfactory Conversations: <span>%</span>
-                </li>
-                <li class="new-texters-rate">    
-                    New Texters: <span>%</span>
-                </li>
-            </ul>
-        </div>
-        <div class="issues">
-            <p>Issue Breakdown</p>
-            <ul class="issues-list">
-            </ul>
+        <div class="stats-container">
+            <div class="stats">
+                <ul class="users-list">
+                    <li class="messages-count"># of Messages: <span></span></li>
+                    <li class="conversations-count"># of Conversations: <span></span></li>
+                    <li class="counselors-count"># of Crisis Counselors: <span></span></li>
+                    <li class="texters-count"># of Unique Texters: <span></span></li>
+                    <li class="new-texters-rate">New Texter Rate: <span>%</span></li>
+                </ul>
+                <ul class="stats-list">
+                    <li class="five-minute-wait-rate">Conversations Waiting >5 Min: <span>%</span></li>
+                    <li class="engaged-rate">Engagement Rate: <span>%</span></li>
+                    <li class="quality-rating">Quality Rating: <span>%</span></li>
+                </ul>
+            </div>
+            <div class="issues">
+                <p class="active-rescues-count"># of Active Rescues: <span></span></p>
+                <p>Issue Breakdown</p>
+                <ul class="issues-list"></ul>
+            </div>
         </div>
     </div>
 

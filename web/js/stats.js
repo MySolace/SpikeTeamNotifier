@@ -29,11 +29,15 @@ var Stats = {
 
     update: function (idx) {
         $('.issue').remove();
-        for (var i = 0; i < $('div.stats li').length; i++) {
-            $('div.stats li span').eq(i).text(this.data[idx][i+1]);
-        }
-
-        $('.right-list li span').append("%");
+        $('.messages-count span').text(this.data[idx][1]);
+        $('.conversations-count span').text(this.data[idx][2]);
+        $('.texters-count span').text(this.data[idx][3]);
+        $('.counselors-count span').text(this.data[idx][4]);
+        $('.active-rescues-count span').text(this.data[idx][5]);
+        $('.five-minute-wait-rate span').text(this.data[idx][6] + '%');
+        $('.engaged-rate span').text(this.data[idx][7] + '%');
+        $('.quality-rating span').text(this.data[idx][8] + '%');
+        $('.new-texters-rate span').text(this.data[idx][9] + '%');
 
         if (this.data[idx].length > 10) {
             for (i = 10; i < this.data[idx].length; i += 2) {
@@ -45,6 +49,25 @@ var Stats = {
                 $issue.addClass('issue').css("text-transform","capitalize");
                 $('.issues-list').append($issue);
             }
-        } 
+        }
+
+        //sort issues list in descending percentages
+        var $issuesList = $('ul.issues-list'),
+            $issues = $issuesList.children('li');
+
+        $issues.sort(function(x,y){
+            var xVar = parseFloat($(x).children('span').text()),
+                yVar = parseFloat($(y).children('span').text());
+
+            if (xVar > yVar) {
+                return -1;
+            } else if (xVar < yVar) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        $issues.detach().appendTo($issuesList);
     }
 };

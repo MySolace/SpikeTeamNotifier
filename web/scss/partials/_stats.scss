@@ -1,61 +1,48 @@
-.group:after {
-  clear: both;
-  content: "";
-  display: block;
-}
-
-div.stats {
-    @extend.group;
-    padding-top: 15px;
-    position: relative;
+div.stats-container {
+    margin: 0 auto;
     display: block;
-    float: none;
+    padding: 10px;
+    background: white;
+    @media screen and (max-width: 600px) {
+        display: block;
+    }
 }
 
-.stats li span, .issues li span {
+div.dashboard-container {
+    text-align: center;
+}
+
+.stats span, .issues span {
     color: red;
 }
 
-ul.left-list, ul.right-list, ul.issues-list {
+.date-select {
+    text-align: center;
+    margin: 10px 0;
+}
+
+ul.users-list, ul.stats-list {
+    display: inline-block;
+    border-bottom: 1px solid black;
+}
+
+ul.users-list, ul.stats-list, ul.issues-list, .issues, {
+    text-align: center;
+    display: block;
+    min-width: 50px;
     list-style-type: none;
-    padding: 0;
-}
-
-ul.left-list {
-    text-align: left;
+    padding: 10px 0;
+    margin: 0 auto;
     position: relative;
-    float: left;
-    @media screen and (max-width: 900px) {
-        float: none;
-        border-bottom: 1px solid black;
+    @media screen and (max-width: 600px) {
+        text-align: left;
     }
 }
 
-ul.right-list {
-    font-size: 1em;
-    text-align: left;
-    float: right;
-    @media screen and (max-width: 900px) {
-        float: none;
-        text-align: left;
-        border-bottom: 1px solid black;
-    }
-}
 
 ul.left-list li, ul.right-list li {
+    display: inline-block;
     margin: 5px;
 }
 
-.date-select, .issues {
-    text-align: center;
-    @media screen and (max-width: 900px) {
-        text-align: left;
-    }
-}
 
-.issues {
-    font-size: 1em;
-    @media screen and (max-width: 900px) {
-        border-bottom: 1px solid black;
-    } 
-}
