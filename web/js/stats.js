@@ -42,9 +42,11 @@ var Stats = {
         if (this.data[idx].length > 10) {
             for (i = 10; i < this.data[idx].length; i += 2) {
                 var $issue = $('<li>'),
-                    issueName = this.data[idx][i].replace(/"/g, ""),
+                    issueName = this.data[idx][i].replace(/"/g, ""), //remove quotes
                     issuePercentage = Math.round(this.data[idx][i+1] /
                         this.data[idx][2] * 10000) / 100;
+
+                issueName = issueName.replace(/_/g, " "); //remove underscores
                 $issue.html(issueName + ': <span>' + issuePercentage+ '%</span>');
                 $issue.addClass('issue').css("text-transform","capitalize");
                 $('.issues-list').append($issue);

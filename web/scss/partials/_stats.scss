@@ -1,11 +1,7 @@
 div.stats-container {
-    margin: 0 auto;
-    display: block;
     padding: 10px;
     background: white;
-    @media screen and (max-width: 600px) {
-        display: block;
-    }
+    @include drops;
 }
 
 div.dashboard-container {
@@ -22,26 +18,30 @@ div.dashboard-container {
 }
 
 ul.users-list, ul.stats-list {
-    display: inline-block;
     border-bottom: 1px solid black;
 }
 
 ul.users-list, ul.stats-list, ul.issues-list, .issues, {
     text-align: center;
-    display: block;
-    min-width: 50px;
     list-style-type: none;
-    padding: 10px 0;
-    margin: 0 auto;
-    position: relative;
     @media screen and (max-width: 600px) {
         text-align: left;
     }
 }
+ul.users-list, ul.stats-list {
+    padding: 10px 0;
+}
+
+.issues, ul.issues-list {
+    padding: 5px 0;
+}
+
+.issues p:last-of-type {
+    text-decoration: underline;
+}
 
 
 ul.left-list li, ul.right-list li {
-    display: inline-block;
     margin: 5px;
 }
 
