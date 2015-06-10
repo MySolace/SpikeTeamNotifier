@@ -51,7 +51,7 @@ class StatsController extends Controller
     {   
         $headers = array(
             'Content-Type' => 'text/csv',
-            'Cache-Control' => 'max-age=0'
+            'Cache-Control' => 'max-age=0, no-cache, no-store'
         );  
 
         return new Response(file_get_contents($this->get('kernel')
