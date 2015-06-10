@@ -31,7 +31,8 @@ class StatsController extends Controller
     {
         if ($request->request->get('api_key') === $this->container->getParameter('api_key')) {
             $uploadedFile = $request->files->get('stats');
-            $file = $uploadedFile->move('../web/data/', 'stats.csv');
+            $file = $uploadedFile->move($this->get('kernel')
+            ->getRootDir().'/data/', 'stats.csv');
             return array();
         } else {
             $response = new Response('Invalid Key', 403);
@@ -39,4 +40,20 @@ class StatsController extends Controller
         }
         
     }
+
+    /** 
+     * Serves stats.csv
+     *
+     * @Route("/data/stats.csv", name="stats_csv")
+     */
+    public function csvAction()
+    {   
+        $headers = array(
+            'Content-Type' => 'text/csv',
+            'Cache-Control' => 'max-age=0'
+        );  
+
+        return new Response(file_get_contents($this->get('kernel')
+            ->getRootDir().'/data/stats.csv'), 200, $headers);
+    }   
 }
