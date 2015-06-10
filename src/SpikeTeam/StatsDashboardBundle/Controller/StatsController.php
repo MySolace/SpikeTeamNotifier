@@ -32,7 +32,8 @@ class StatsController extends Controller
         if ($request->request->get('api_key') === $this->container->getParameter('api_key')) {
             $uploadedFile = $request->files->get('stats');
             $file = $uploadedFile->move($this->get('kernel')
-            ->getRootDir().'/data/', 'stats.csv');
+                ->getRootDir().'/data/', 'stats.csv');
+
             return array();
         } else {
             $response = new Response('Invalid Key', 403);
