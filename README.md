@@ -74,7 +74,7 @@ In order to get started, you'll need to do the following:
 
 * Log into the default admin account at [YOUR APP ROOT], with:
     ```
-    username: admin
+    email: admin@sample.com
     password: admin
     ```
 
