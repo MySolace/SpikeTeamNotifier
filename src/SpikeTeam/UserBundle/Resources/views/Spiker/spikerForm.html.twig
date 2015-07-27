@@ -25,6 +25,10 @@
                 {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
             </div>
             <div class="form-group">
+                {{ form_label(form.isSupervisor, 'Group') }}
+                {{ form_widget(form.group) }}
+            </div>
+            <div class="form-group">
                 {{ form_widget(form.isSupervisor, {'attr': {'class': 'inlineCheckbox'} }) }}
                 {{ form_label(form.isSupervisor, 'Supervisor?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
             </div>

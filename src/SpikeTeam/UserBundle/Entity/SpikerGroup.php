@@ -147,4 +147,9 @@ class SpikerGroup
         return $this->pushes;
     }
 
+    public function __toString()
+    {
+        return strval($this->id);
+    }
+
 }

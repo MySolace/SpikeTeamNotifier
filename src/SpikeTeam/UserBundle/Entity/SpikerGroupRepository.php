@@ -30,6 +30,26 @@ class SpikerGroupRepository extends EntityRepository
     }
 
     /**
+     * Returns Group with fewest members
+     */
+    public function findEmptiest()
+    {
+        $qb = $this->createQueryBuilder('g');
+        $qb->addSelect('COUNT(s) AS HIDDEN spikerCount')
+            ->join('g.spikers', 's')
+            ->where('s.isEnabled = 1')
+            ->groupBy('g')
+            ->orderBy('spikerCount', 'ASC')
+            ->setMaxResults(1);
+
+        try {
+            return $qb->getQuery()->getSingleResult();
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
+    /**
      * Returns array of ids for all current groups
      */
     public function getAllIds()

@@ -22,11 +22,13 @@ class SpikerController extends Controller
     protected $container;
     protected $em;
     protected $repo;
+    protected $gRepo;
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
         $this->em = $this->getDoctrine()->getManager();
         $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
+        $this->gRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup');
     }
 
     /**
@@ -36,13 +38,15 @@ class SpikerController extends Controller
     public function spikersAllAction(Request $request)
     {
         $spikers = $this->repo->findAll();
+        $recentGroup = $this->gRepo->findMostRecentAlerted()->getId();
+
         $existing = false;
-
-        $groupRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup');
-        $recentId = $groupRepo->findMostRecentAlerted()->getId();
-
         $newSpiker = new Spiker();
         $form = $this->createFormBuilder($newSpiker)
+            ->add('group', 'entity', array(
+                'class' => 'SpikeTeamUserBundle:SpikerGroup',
+                'data' => $this->gRepo->findEmptiest()
+            ))
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))
             ->add('phoneNumber', 'text', array('required' => true))
@@ -77,12 +81,12 @@ class SpikerController extends Controller
             'spikers' => $spikers,
             'form' => $form->createView(),
             'existing' => $existing,
-            'group_ids' => $groupRepo->getAllIds()
+            'group_ids' => $this->gRepo->getAllIds(),
         ));
     }
 
     /**
-     * Mass enable/disable Spikers here
+     * Mass enable/disable Spikers and set Groups here
      * @Route("/enabler", name="spikers_enable")
      */
     public function spikerEnablerAction(Request $request)
@@ -90,14 +94,14 @@ class SpikerController extends Controller
         // AJAX request/fire event here, instead of HTML redirect?
         $spikers = $this->repo->findAll();
         $data = $request->request->all();
-        foreach ($spikers as $key => $spiker) {
-            if (isset($data[$spiker->getId().'-enabled']) && $data[$spiker->getId().'-enabled'] == '1') {
+        foreach ($spikers as $spiker) {
+            $sid = $spiker->getId();
+            if (isset($data[$sid.'-enabled']) && $data[$sid.'-enabled'] == '1') {
                 $spiker->setIsEnabled(true);
             } else {
                 $spiker->setIsEnabled(false);
             }
-            $group = $groupRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')
-                ->find($data[$spiker->getId().'-group']);
+            $group = $this->gRepo->find($data[$sid.'-group']);
             $spiker->setGroup($group);
             $this->em->persist($spiker);
         }
@@ -135,6 +139,10 @@ class SpikerController extends Controller
                 ->add('email', 'text', array(
                     'data' => $spiker->getEmail(),
                     'required' => false,
+                ))
+                ->add('group', 'entity', array(
+                    'class' => 'SpikeTeamUserBundle:SpikerGroup',
+                    'required' => true
                 ))
                 ->add('isSupervisor', 'checkbox', array(
                     'data' => $spiker->getIsSupervisor(),
