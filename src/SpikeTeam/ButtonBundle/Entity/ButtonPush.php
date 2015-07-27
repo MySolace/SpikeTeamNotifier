@@ -35,6 +35,12 @@ class ButtonPush
     private $userId;
 
     /**
+     * @var integer
+     * @ORM\Column(name="group_id", type="integer")
+     */
+    private $groupId;
+
+    /**
      * Construct with $pushTime and $userId
      *
      * @param \DateTime $pushTime
@@ -95,10 +101,33 @@ class ButtonPush
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * Set groupId
+     *
+     * @param integer $groupId
+     * @return ButtonPush
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    /**
+     * Get groupId
+     *
+     * @return integer 
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
     }
 }

@@ -4,6 +4,8 @@ namespace SpikeTeam\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use SpikeTeam\UserBundle\Entity\SpikerGroup;
+
 /**
  * Spiker
  *
@@ -48,6 +50,11 @@ class Spiker
      * @ORM\Column(name="email", type="string", unique=true, nullable=true)
      */
     private $email;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SpikerGroup", inversedBy="spikers", cascade={"persist"})
+     */
+    private $group;
 
     /**
      * @var boolean
@@ -163,6 +170,30 @@ class Spiker
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set group
+     *
+     * @param SpikerGroup $group
+     *
+     * @return Spiker
+     */
+    public function setGroup(SpikerGroup $group = null)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return SpikerGroup
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**
