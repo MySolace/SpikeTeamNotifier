@@ -12,4 +12,36 @@ use Doctrine\ORM\EntityRepository;
  */
 class SpikerGroupRepository extends EntityRepository
 {
+    /**
+     * Returns Group that was most recently alerted
+     */
+    public function findMostRecentAlerted()
+    {
+        $qb = $this->createQueryBuilder('g');
+        $qb->join('g.pushes', 'p')
+            ->orderBy('p.pushTime', 'DESC')
+            ->setMaxResults(1);
+
+        try {
+            return $qb->getQuery()->getSingleResult();
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns array of ids for all current groups
+     */
+    public function getAllIds()
+    {
+        $stmt = $this->_em->getConnection()->prepare("SELECT GROUP_CONCAT(id) from spiker_group");
+        $stmt->execute();
+
+        try {
+            return explode(',', $stmt->fetchAll()[0]['GROUP_CONCAT(id)']);
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
 }

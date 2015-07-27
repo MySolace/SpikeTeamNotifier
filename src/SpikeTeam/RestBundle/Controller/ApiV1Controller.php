@@ -127,7 +127,7 @@ class ApiV1Controller extends FOSRestController
                 $data['is_enabled'] = true;
                 $spiker = new Spiker();
                 $spiker = $this->repo->setSpikerInfo($spiker, $data);
-                $responseRoute = 'spiketeam_user_spiker_spikersall';
+                $responseRoute = 'spikers';
                 if ($spiker) {
                     return $this->repo->generateJsonResponse(201, null, $responseRoute);
                 } else {

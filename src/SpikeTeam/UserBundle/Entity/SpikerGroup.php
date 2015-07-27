@@ -5,11 +5,12 @@ namespace SpikeTeam\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
+use SpikeTeam\ButtonBundle\Entity\ButtonPush;
 
 /**
  * SpikerGroup
  *
- * @ORM\Table()
+ * @ORM\Table(name="spiker_group")
  * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\SpikerGroupRepository")
  */
 class SpikerGroup
@@ -34,6 +35,11 @@ class SpikerGroup
      * @ORM\OneToMany(targetEntity="Spiker", mappedBy="group")
      */
     private $spikers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SpikeTeam\ButtonBundle\Entity\ButtonPush", mappedBy="group")
+     */
+    private $pushes;
 
     public function __construct()
     {
@@ -105,6 +111,40 @@ class SpikerGroup
     public function getSpikers()
     {
         return $this->spikers;
+    }
+
+    /**
+     * Add pushes
+     *
+     * @param ButtonPush $pushes
+     *
+     * @return SpikerGroup
+     */
+    public function addPush(ButtonPush $pushes)
+    {
+        $this->pushes[] = $pushes;
+
+        return $this;
+    }
+
+    /**
+     * Remove pushes
+     *
+     * @param ButtonPush $pushes
+     */
+    public function removePush(ButtonPush $pushes)
+    {
+        $this->pushes->removeElement($pushes);
+    }
+
+    /**
+     * Get pushes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPushes()
+    {
+        return $this->pushes;
     }
 
 }

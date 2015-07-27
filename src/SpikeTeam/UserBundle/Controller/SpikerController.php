@@ -4,12 +4,18 @@ namespace SpikeTeam\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
 
+/**
+ * Spiker controller.
+ *
+ * @Route("/spikers")
+ */
 class SpikerController extends Controller
 {
 
@@ -25,12 +31,15 @@ class SpikerController extends Controller
 
     /**
      * Showing all spikers here
-     * @Route("/spikers")
+     * @Route("/", name="spikers")
      */
     public function spikersAllAction(Request $request)
     {
         $spikers = $this->repo->findAll();
         $existing = false;
+
+        $groupRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup');
+        $recentId = $groupRepo->findMostRecentAlerted()->getId();
 
         $newSpiker = new Spiker();
         $form = $this->createFormBuilder($newSpiker)
@@ -58,7 +67,7 @@ class SpikerController extends Controller
                     $newSpiker->setPhoneNumber($processedNumber);
                     $this->em->persist($newSpiker);
                     $this->em->flush();
-                    return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
+                    return $this->redirect($this->generateUrl('spikers'));
                 }
             }
         }
@@ -68,12 +77,13 @@ class SpikerController extends Controller
             'spikers' => $spikers,
             'form' => $form->createView(),
             'existing' => $existing,
+            'group_ids' => $groupRepo->getAllIds()
         ));
     }
 
     /**
      * Mass enable/disable Spikers here
-     * @Route("/spikers/enabler")
+     * @Route("/enabler", name="spikers_enable")
      */
     public function spikerEnablerAction(Request $request)
     {
@@ -81,29 +91,32 @@ class SpikerController extends Controller
         $spikers = $this->repo->findAll();
         $data = $request->request->all();
         foreach ($spikers as $key => $spiker) {
-            if (isset($data[$spiker->getId()]) && $data[$spiker->getId()] == '1') {
+            if (isset($data[$spiker->getId().'-enabled']) && $data[$spiker->getId().'-enabled'] == '1') {
                 $spiker->setIsEnabled(true);
             } else {
                 $spiker->setIsEnabled(false);
             }
+            $group = $groupRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')
+                ->find($data[$spiker->getId().'-group']);
+            $spiker->setGroup($group);
             $this->em->persist($spiker);
         }
         $this->em->flush();
-        return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
+        return $this->redirect($this->generateUrl('spikers'));
     }
 
     /**
      * Showing individual spiker here
-     * @Route("/spikers/{input}/edit")
+     * @Route("/{input}/edit", name="spikers_edit")
      */
     public function spikerEditAction($input, Request $request)
     {
-        $allUrl = $this->generateUrl('spiketeam_user_spiker_spikersall');
-        $editUrl = $this->generateUrl('spiketeam_user_spiker_spikeredit', array('input' => $input));
+        $allUrl = $this->generateUrl('spikers');
+        $editUrl = $this->generateUrl('spikers_edit', array('input' => $input));
 
         $processedNumber = $this->repo->processNumber($input);
         if ($processedNumber) {
-            $deleteUrl = $this->generateUrl('spiketeam_user_spiker_spikerdelete', array('input' => $processedNumber));
+            $deleteUrl = $this->generateUrl('spikers_delete', array('input' => $processedNumber));
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
@@ -163,7 +176,7 @@ class SpikerController extends Controller
 
     /**
      * Delete individual spiker here
-     * @Route("/spikers/{input}/delete")
+     * @Route("/{input}/delete", name="spikers_delete")
      */
     public function spikerDeleteAction($input)
     {
@@ -173,7 +186,7 @@ class SpikerController extends Controller
             $this->em->remove($spiker);
             $this->em->flush();
         }
-        return $this->redirect($this->generateUrl('spiketeam_user_spiker_spikersall'));
+        return $this->redirect($this->generateUrl('spikers'));
     }
 
 }

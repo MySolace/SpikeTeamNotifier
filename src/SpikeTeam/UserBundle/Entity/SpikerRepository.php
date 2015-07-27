@@ -70,7 +70,7 @@ class SpikerRepository extends EntityRepository
             // set the `Location` header only when creating new resources
             if (201 === $statusCode) {
                 if (NULL === $routeName) {
-                    $routeName = 'spiketeam_user_spiker_spikersall';
+                    $routeName = 'spikers';
                 }
                 $response->headers->set('Location',
                     $this->container->get('router')->generate(
