@@ -19,6 +19,23 @@
             </div>
         </div>
     </div>
+    <div class="page">
+        <div class="group-select">
+            Send Alert to Group: 
+            <select>
+                {% for id in ids %}
+                    <option value="{{ id }}"
+                        {% if id == nextGroup %}selected="selected"{% endif %}
+                        {% if mostRecentGroup.id is defined and id == mostRecentGroup.id %}disabled="disabled"{% endif %}>{{ id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if mostRecentGroup.id is defined %}
+        <div class="latest">
+            (Latest: Group {{ mostRecentGroup.id }} on -----)
+        </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
 

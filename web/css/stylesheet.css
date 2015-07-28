@@ -55,6 +55,7 @@ body {
   color: black;
   padding: 1.5em 2em;
   min-width: 520px;
+  margin-bottom: 20px;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black; }
@@ -89,15 +90,27 @@ body.anon #inner #fos-user {
     width: 300px; }
 
 #button-box {
+  clear: both;
   text-align: center;
   width: 300px;
   height: 300px;
-  margin: 0 auto;
+  margin: 30px auto;
   background: repeating-linear-gradient(-45deg, black, black 16px, yellow 16px, yellow 32px);
   overflow: hidden;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black; }
+
+.section-button .page {
+  text-align: center;
+  min-width: 10px !important;
+  width: 300px;
+  margin: 0 auto; }
+  .section-button .page .latest {
+    font-size: 14px;
+    font-style: italic;
+    color: gray;
+    padding-top: 1em; }
 
 #button-box-inner {
   width: 225px;

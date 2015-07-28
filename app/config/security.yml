@@ -36,7 +36,7 @@ security:
 
     access_control:
         - { path: ^/twilio, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/stats, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
-        - { path: ^/, roles: ROLE_ADMIN, requires_channel: http }
+        - { path: ^/, roles: ROLE_ADMIN, requires_channel: https }
         - { path: ^/api, roles: ROLE_API, requires_channel: http }

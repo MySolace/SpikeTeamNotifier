@@ -10,7 +10,7 @@ use SpikeTeam\UserBundle\Entity\SpikerGroup;
  * ButtonPush
  *
  * @ORM\Table(name="button_push")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SpikeTeam\ButtonBundle\Entity\ButtonPushRepository")
  */
 class ButtonPush
 {

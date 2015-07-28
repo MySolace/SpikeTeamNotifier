@@ -16,6 +16,7 @@
     color: black;
     padding: $page-padding-y $page-padding-x;
     min-width: 520px;
+    margin-bottom: 20px;
     @include drops;
 }
 
