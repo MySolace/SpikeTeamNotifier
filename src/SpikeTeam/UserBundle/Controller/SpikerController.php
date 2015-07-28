@@ -38,7 +38,6 @@ class SpikerController extends Controller
     public function spikersAllAction(Request $request)
     {
         $spikers = $this->repo->findAll();
-        // $recentGroup = $this->gRepo->findMostRecentAlerted()->getId();
 
         $existing = false;
         $newSpiker = new Spiker();
@@ -75,6 +74,17 @@ class SpikerController extends Controller
                 }
             }
         }
+
+        // Sorting by group, then first name
+        usort($spikers, function($a, $b) {
+            $aid = $a->getGroup()->getId();
+            $bid = $b->getGroup()->getId();
+            if ($aid == $bid) {
+                return $a->getFirstName() >= $b->getFirstName();
+            } else {
+                return $aid > $bid;
+            }
+        });
 
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(

@@ -11,7 +11,7 @@
             <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
                 {% if canPush %}
                     <a href="{{ goUrl }}">
-                        <button id="{{ next }}" class="button-image" /></button>
+                        <button class="button-image" /></button>
                     </a>
                 {% else %}
                     <button class="button-image" /></button>
@@ -32,7 +32,17 @@
             </select>
         </div>
         <div class="latest">
-            Latest: {% if mostRecent.group.id is defined %}Group {{ mostRecent.group.id }}{% else %}All Spikers{% endif %} at {{ mostRecent.pushTime|date('G:i, m/d/y') }}
+            Latest:
+                <span class="latest-group">
+                    {% if mostRecent.group.id is defined %}
+                        Group {{ mostRecent.group.id }}
+                    {% else %}
+                        All Spikers
+                    {% endif %}
+                </span> at
+                <span class="latest-time">
+                    {{ mostRecent.pushTime|date('G:i, m/d/y') }}
+                </span>
         </div>
     </div>
 {% endblock %}

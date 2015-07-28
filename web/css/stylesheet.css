@@ -109,8 +109,9 @@ body.anon #inner #fos-user {
   .section-button .page .latest {
     font-size: 14px;
     font-style: italic;
-    color: gray;
-    padding-top: 1em; }
+    color: gray; }
+  .section-button .page select:hover {
+    cursor: pointer; }
 
 #button-box-inner {
   width: 225px;

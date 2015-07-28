@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
 use SpikeTeam\UserBundle\Form\SpikerGroupType;
 
@@ -22,7 +23,6 @@ class SpikerGroupController extends Controller
      *
      * @Route("/", name="group_create")
      * @Method("POST")
-     * @Template("SpikeTeamUserBundle:SpikerGroup:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -35,7 +35,6 @@ class SpikerGroupController extends Controller
      *
      * @Route("/new", name="group_new", options={"expose"=true})
      * @Method("GET")
-     * @Template()
      */
     public function newAction()
     {

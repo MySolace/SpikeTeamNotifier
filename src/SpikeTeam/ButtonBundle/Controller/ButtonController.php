@@ -5,6 +5,7 @@ namespace SpikeTeam\ButtonBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
 use SpikeTeam\ButtonBundle\Event\AlertEvent;
@@ -23,7 +24,8 @@ class ButtonController extends Controller
         $next = 1;
 
         if ($group && $group->getId() != null) {
-            $next = ($group->getId() + 1) % count($ids);
+            $modulo = ($group->getId() + 1) % count($ids);
+            $next = ($modulo) ? $modulo : count($ids);
         }
 
         $canPush = ($this->checkPrevPushes()) ? true : false;
@@ -65,7 +67,13 @@ class ButtonController extends Controller
 
             $em->persist($push);
             $em->flush();
-            return $this->redirect($this->generateUrl('spiketeam_button_button_index'));
+
+            // Send back latest push info
+            $id = ($push->getGroup() == null) ? 'All Spikers' : 'Group '.$push->getGroup()->getId();
+            return new JsonResponse(array(
+                'id' => $id,
+                'time' => $push->getPushTime()->format('G:i, m/d/y')
+            ));
         } else {
             return new Response('No can do!');      
         }

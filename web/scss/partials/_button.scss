@@ -24,7 +24,9 @@
         font-size: 14px;
         font-style: italic;
         color: gray;
-        padding-top: 1em;
+    }
+    select:hover {
+        cursor: pointer;
     }
 }
 
