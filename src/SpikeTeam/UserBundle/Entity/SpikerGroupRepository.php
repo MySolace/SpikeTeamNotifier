@@ -13,23 +13,6 @@ use Doctrine\ORM\EntityRepository;
 class SpikerGroupRepository extends EntityRepository
 {
     /**
-     * Returns Group that was most recently alerted
-     */
-    public function findMostRecentAlerted()
-    {
-        $qb = $this->createQueryBuilder('g');
-        $qb->join('g.pushes', 'p')
-            ->orderBy('p.pushTime', 'DESC')
-            ->setMaxResults(1);
-
-        try {
-            return $qb->getQuery()->getSingleResult();
-        }  catch(\Doctrine\ORM\NoResultException $e) {
-            return false;
-        }
-    }
-
-    /**
      * Returns Group with fewest members
      */
     public function findEmptiest()
