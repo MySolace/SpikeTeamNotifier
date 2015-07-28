@@ -18,39 +18,51 @@ class ButtonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
-        $mostRecentGroup = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findMostRecentAlerted();
+        $group = $mostRecent->getGroup();
         $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
         $next = 1;
-        if ($mostRecentGroup && $mostRecentGroup->getId() != null) {
-            $next = ($mostRecentGroup->getId() + 1) % count($ids);
+
+        if ($group && $group->getId() != null) {
+            $next = ($group->getId() + 1) % count($ids);
         }
 
         $canPush = ($this->checkPrevPushes()) ? true : false;
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
-            'goUrl' => $this->generateUrl('spiketeam_button_button_go'),
+            'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),
             'canPush' => $canPush,
             'mostRecent' => $mostRecent,
-            'mostRecentGroup' => $mostRecentGroup,
             'ids' => $ids,
-            'nextGroup' => $next
+            'next' => $next
         ));
     }
 
     /**
-     * @Route("/goteamgo")
+     * @Route("/goteamgo/{gid}", name="goteamgo", options={"expose"=true})
      */
-    public function goAction()
+    public function goAction($gid)
     {
+        $em = $this->getDoctrine()->getManager();
         $newPushTime = $this->checkPrevPushes();
         if ($newPushTime) {
-            // Dispatch alert event
-            $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findAll();
+            // Dispatch alert event, to appropriate group if specified
+            switch($gid) {
+                case 'all':
+                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findAll();
+                    break;
+                default:
+                    $group = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($gid);
+                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findByGroup($group);
+                    break;
+            }
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('alert.send', new AlertEvent($spikers));
 
             // Record button push
             $push = new ButtonPush($newPushTime, $this->getUser()->getId());
-            $em = $this->getDoctrine()->getManager();
+            if (isset($group)) {
+                $push->setGroup($group);
+            }
+
             $em->persist($push);
             $em->flush();
             return $this->redirect($this->generateUrl('spiketeam_button_button_index'));

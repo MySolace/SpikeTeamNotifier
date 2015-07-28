@@ -10,8 +10,8 @@
         <div id="button-box-inner">
             <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
                 {% if canPush %}
-                    <a href="/goteamgo">
-                        <button class="button-image" /></button>
+                    <a href="{{ goUrl }}">
+                        <button id="{{ next }}" class="button-image" /></button>
                     </a>
                 {% else %}
                     <button class="button-image" /></button>
@@ -23,18 +23,17 @@
         <div class="group-select">
             Send Alert to Group: 
             <select>
+                <option value="all">All</option>
                 {% for id in ids %}
                     <option value="{{ id }}"
-                        {% if id == nextGroup %}selected="selected"{% endif %}
-                        {% if mostRecentGroup.id is defined and id == mostRecentGroup.id %}disabled="disabled"{% endif %}>{{ id }}</option>
+                        {% if id == next %}selected="selected"{% endif %}
+                        {% if mostRecent.group.id is defined and id == mostRecent.group.id %}disabled="disabled"{% endif %}>{{ id }}</option>
                 {% endfor %}
             </select>
         </div>
-        {% if mostRecentGroup.id is defined %}
         <div class="latest">
-            (Latest: Group {{ mostRecentGroup.id }} on -----)
+            Latest: {% if mostRecent.group.id is defined %}Group {{ mostRecent.group.id }}{% else %}All Spikers{% endif %} at {{ mostRecent.pushTime|date('G:i, m/d/y') }}
         </div>
-        {% endif %}
     </div>
 {% endblock %}
 
