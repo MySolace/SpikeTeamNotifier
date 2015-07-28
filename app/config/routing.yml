@@ -21,6 +21,9 @@ spike_team_user:
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
 spike_team_rest:
     type: rest
     prefix: /api

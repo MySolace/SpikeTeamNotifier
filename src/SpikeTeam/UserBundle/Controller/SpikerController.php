@@ -14,7 +14,7 @@ use SpikeTeam\UserBundle\Entity\Spiker;
 /**
  * Spiker controller.
  *
- * @Route("/spikers")
+ * @Route("/spikers", options={"expose"=true})
  */
 class SpikerController extends Controller
 {
@@ -38,7 +38,7 @@ class SpikerController extends Controller
     public function spikersAllAction(Request $request)
     {
         $spikers = $this->repo->findAll();
-        $recentGroup = $this->gRepo->findMostRecentAlerted()->getId();
+        // $recentGroup = $this->gRepo->findMostRecentAlerted()->getId();
 
         $existing = false;
         $newSpiker = new Spiker();
@@ -106,6 +106,7 @@ class SpikerController extends Controller
             $this->em->persist($spiker);
         }
         $this->em->flush();
+
         return $this->redirect($this->generateUrl('spikers'));
     }
 

@@ -1,16 +1,22 @@
-{% extends '::base.html.twig' %}
+{% extends 'admin.spikers.html.twig' %}
 
-{% block body -%}
-    <h1>SpikerGroup edit</h1>
+{% block body %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            &bull;&nbsp;&nbsp;Edit Group&nbsp;&nbsp;&bull;
+        </div>
+    </div>
+    <div class="page">
 
-    {{ form(edit_form) }}
+        {{ form(edit_form) }}
 
         <ul class="record_actions">
-    <li>
-        <a href="{{ path('spikers') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+            <li>
+                <a href="{{ path('spikers') }}">
+                    Back to the list
+                </a>
+            </li>
+            <li>{{ form(delete_form) }}</li>
+        </ul>
+    </div>
 {% endblock %}

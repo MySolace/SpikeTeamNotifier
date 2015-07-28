@@ -26,84 +26,33 @@ class SpikerGroupController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new SpikerGroup();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('group_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a form to create a SpikerGroup entity.
-     *
-     * @param SpikerGroup $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(SpikerGroup $entity)
-    {
-        $form = $this->createForm(new SpikerGroupType(), $entity, array(
-            'action' => $this->generateUrl('group_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
+        $this->makeNewGroup();
+        return $this->redirect($this->generateUrl('spikers'));
     }
 
     /**
      * Displays a form to create a new SpikerGroup entity.
      *
-     * @Route("/new", name="group_new")
+     * @Route("/new", name="group_new", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new SpikerGroup();
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+        $this->makeNewGroup();
+        return $this->redirect($this->generateUrl('spikers'));
     }
 
-    /**
-     * Finds and displays a SpikerGroup entity.
-     *
-     * @Route("/{id}", name="group_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
+    private function makeNewGroup()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find SpikerGroup entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
+        $entity = new SpikerGroup();
+        $em->persist($entity);
+        $em->flush();
+        $entity->setName('Group '.strval($entity->getId()));
+        $em->persist($entity);
+        $em->flush();
     }
 
     /**
@@ -203,7 +152,13 @@ class SpikerGroupController extends Controller
                 throw $this->createNotFoundException('Unable to find SpikerGroup entity.');
             }
 
+            // Checking and resetting Spikers to other groups if already assigned to this one
+            $spikers = $em->getRepository('SpikeTeamUserBundle:Spiker')->findByGroup($entity);
             $em->remove($entity);
+            foreach($spikers as $spiker) {
+                $spiker->setGroup($em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findEmptiest());
+                $em->persist($spiker);
+            }
             $em->flush();
         }
 

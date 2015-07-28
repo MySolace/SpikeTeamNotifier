@@ -11,7 +11,16 @@
         {% if existing %}
             <div class="alert">Sorry! A spiker by this phone number or email address already exists. Please fix the record and try again.</div>
         {% endif %}
-        <table class="table">
+        <div class="groups">
+            <button class="all btn btn-primary">All Spikers</button>
+            {% for group_id in group_ids %}
+                <button id="group-{{ group_id }}" class="group btn btn-default">Group {{ group_id }}</button>
+            {% endfor %}
+            {% if is_granted("ROLE_SUPER_ADMIN") %}
+                <button class="add btn btn-default">Add Group</button>
+            {% endif %}
+        </div>
+        <table class="table spikers">
             <tr>
                 <th>Enabled</th>
                 <th>Sup</th>
@@ -24,7 +33,7 @@
             </tr>
             <form class="form" action="/spikers/enabler" method="post" id="enabler">
                 {% for spiker in spikers %}
-                    <tr>
+                    <tr class="spiker group-{{ spiker.group.id }}">
                         <td class="center">
                             <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %} />
                             <!-- {% if spiker.isEnabled %}
