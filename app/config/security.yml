@@ -16,7 +16,7 @@ security:
             security: false
 
         wsse_secured:
-            pattern: ^/api/.*
+            pattern: ^/api/v1.*
             wsse:
                 realm: "Secured API"
                 profile: "UsernameToken"
@@ -36,7 +36,8 @@ security:
 
     access_control:
         - { path: ^/twilio, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/stats, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
-        - { path: ^/, roles: ROLE_ADMIN, requires_channel: http }
-        - { path: ^/api, roles: ROLE_API, requires_channel: http }
+        - { path: ^/api/v2, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
+        - { path: ^/, roles: ROLE_ADMIN, requires_channel: https }
+        - { path: ^/api/v1, roles: ROLE_API, requires_channel: http }

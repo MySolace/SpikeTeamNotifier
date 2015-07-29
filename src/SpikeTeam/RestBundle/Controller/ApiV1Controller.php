@@ -15,7 +15,6 @@ use SpikeTeam\UserBundle\Entity\Spiker;
 
 class ApiV1Controller extends FOSRestController
 {
-
     protected $container;
     protected $em;
     protected $repo;

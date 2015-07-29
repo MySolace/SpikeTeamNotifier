@@ -154,6 +154,9 @@ class AdminController extends Controller
                 if ($processedNumber) {
                     $admin->setPhoneNumber($processedNumber);
                 }
+                if (!$admin->getPhoneNumber()) {
+                    $admin->setIsEnabled(false);
+                }
 
                 $this->em->persist($admin);
                 $this->em->flush();
