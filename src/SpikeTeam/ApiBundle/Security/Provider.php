@@ -1,6 +1,6 @@
 <?php
  
-namespace SpikeTeam\RestBundle\Security;
+namespace SpikeTeam\ApiBundle\Security;
  
 use Escape\WSSEAuthenticationBundle\Security\Core\Authentication\Provider\Provider as BaseProvider;
  

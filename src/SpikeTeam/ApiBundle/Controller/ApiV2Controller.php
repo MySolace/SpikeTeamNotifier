@@ -1,6 +1,6 @@
 <?php
 
-namespace SpikeTeam\RestBundle\Controller;
+namespace SpikeTeam\ApiBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +21,7 @@ class ApiV2Controller extends Controller
     {
         $pushRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
         if ($request->request->get('api_key') === $this->container->getParameter('api_key')) {
+        // if (true) {
 
             // parse any parameters to specify push being sought
             $param = $request->request->get('param');

@@ -7,5 +7,5 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-    spiketeam.restbundle.util.inflector:
-        class: SpikeTeam\RestBundle\Util\Inflector\NoPluralInflector
+    spiketeam.apibundle.util.inflector:
+        class: SpikeTeam\ApiBundle\Util\Inflector\NoPluralInflector

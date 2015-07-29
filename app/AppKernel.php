@@ -24,7 +24,7 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Escape\WSSEAuthenticationBundle\EscapeWSSEAuthenticationBundle(),
             new SpikeTeam\UserBundle\SpikeTeamUserBundle(),
-            new SpikeTeam\RestBundle\SpikeTeamRestBundle(),
+            new SpikeTeam\ApiBundle\SpikeTeamApiBundle(),
             new SpikeTeam\ButtonBundle\SpikeTeamButtonBundle(),
             new SpikeTeam\AlertBundle\SpikeTeamAlertBundle(),
             new SpikeTeam\SettingBundle\SpikeTeamSettingBundle(),

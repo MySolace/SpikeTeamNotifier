@@ -24,10 +24,10 @@ fos_user:
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
-spike_team_rest:
+spike_team_api:
     type: rest
     prefix: /api
-    resource: "@SpikeTeamRestBundle/Resources/config/routing.yml"
+    resource: "@SpikeTeamApiBundle/Resources/config/routing.yml"
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
