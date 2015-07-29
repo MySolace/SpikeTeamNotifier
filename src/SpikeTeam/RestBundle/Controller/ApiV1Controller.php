@@ -24,7 +24,6 @@ class ApiV1Controller extends FOSRestController
         $this->container = $container;
         $this->em = $this->getDoctrine()->getManager();
         $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
-        $this->repo->setContainer($container);
     }
 
     /**
@@ -47,10 +46,10 @@ class ApiV1Controller extends FOSRestController
      */
     public function getSpikersAllAction(Request $request)
     {
-        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->generateJsonResponse(401);
 
         $spikers = $this->repo->findAll();
-        return $this->repo->generateJsonResponse(200, $spikers);
+        return $this->generateJsonResponse(200, $spikers);
     }
 
     /**
@@ -79,14 +78,14 @@ class ApiV1Controller extends FOSRestController
      */
     public function getSpikersAction(Request $request, $phoneNumber)
     {
-        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->generateJsonResponse(401);
 
         $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
         if (!$spiker) {
             // If no Spiker is found by that ID
-            return $this->repo->generateJsonResponse(404);
+            return $this->generateJsonResponse(404);
         }
-        return $this->repo->generateJsonResponse(200, $spiker);
+        return $this->generateJsonResponse(200, $spiker);
     }
 
     /**
@@ -114,29 +113,29 @@ class ApiV1Controller extends FOSRestController
      */
     public function postSpikersAddAction(Request $request)
     {
-        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->generateJsonResponse(401);
 
         if ($data = json_decode($request->getContent(), true)) {
 
             // If Spiker exists by that phone number, return error
             $existing = $this->repo->findOneByPhoneNumber($data['phone_number']);
             if ($existing) {
-                return $this->repo->generateJsonResponse(400);
+                return $this->generateJsonResponse(400);
             } else {
             // Otherwise, continue on.
                 $data['is_enabled'] = true;
                 $spiker = new Spiker();
-                $spiker = $this->repo->setSpikerInfo($spiker, $data);
+                $spiker = $this->setSpikerInfo($spiker, $data);
                 $responseRoute = 'spikers';
                 if ($spiker) {
-                    return $this->repo->generateJsonResponse(201, null, $responseRoute);
+                    return $this->generateJsonResponse(201, null, $responseRoute);
                 } else {
-                    return $this->repo->generateJsonResponse(418);  // This is a joke, replace it eventually
+                    return $this->generateJsonResponse(418);  // This is a joke, replace it eventually
                 }
 
             }
         } else {
-            return $this->repo->generateJsonResponse(400);
+            return $this->generateJsonResponse(400);
         }
     }
 
@@ -172,19 +171,19 @@ class ApiV1Controller extends FOSRestController
      */
     public function putSpikersEditAction(Request $request, $phoneNumber)
     {
-        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->generateJsonResponse(401);
 
         $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
 
         if (isset($spiker) && $data = json_decode($request->getContent(), true)) {
-            $spiker = $this->repo->setSpikerInfo($spiker, $data);
+            $spiker = $this->setSpikerInfo($spiker, $data);
             if ($spiker) {
-                return $this->repo->generateJsonResponse(204);
+                return $this->generateJsonResponse(204);
             } else {
-                return $this->repo->generateJsonResponse(418);  // This is a joke, replace it eventually
+                return $this->generateJsonResponse(418);  // This is a joke, replace it eventually
             }
         } else {
-            return $this->repo->generateJsonResponse(400);
+            return $this->generateJsonResponse(400);
         }
     }
 
@@ -214,7 +213,7 @@ class ApiV1Controller extends FOSRestController
      */
     public function deleteSpikersDeleteAction(Request $request, $phoneNumber)
     {
-        if (!$this->testForWsse($request)) return $this->repo->generateJsonResponse(401);
+        if (!$this->testForWsse($request)) return $this->generateJsonResponse(401);
 
         $spiker = $this->repo->findOneByPhoneNumber($phoneNumber);
 
@@ -222,14 +221,75 @@ class ApiV1Controller extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $em->remove($spiker);
             $em->flush();
-            return $this->repo->generateJsonResponse(204);
+            return $this->generateJsonResponse(204);
         } else {
-            return $this->repo->generateJsonResponse(400);
+            return $this->generateJsonResponse(400);
         }
     }
 
     public function testForWsse($request) {
         return ($request->headers->get('X-WSSE')) ? true : false;
+    }
+
+    /**
+     * Common method for setting Spiker info. Returns false if phone number can't be formatted correctly.
+     * @param Spiker $spiker
+     * @param $data
+     * @return Spiker $spiker
+     */
+    private function setSpikerInfo(Spiker $spiker, $data)
+    {
+        $phoneNumber = $this->get('spike_team.user_helper')->processNumber($data['phone_number']);
+        if ($phoneNumber) {
+            $em = $this->getManager();
+            $spiker->setPhoneNumber($phoneNumber);
+            if (isset($data['first_name'])) {
+                $spiker->setFirstName($data['first_name']);                
+            }
+            if (isset($data['last_name'])) {
+                $spiker->setLastName($data['last_name']);                
+            }
+            if (isset($data['is_enabled'])) {
+                $spiker->setIsEnabled($data['is_enabled']);
+            }
+            $em->persist($spiker);
+            $em->flush();
+
+            return $spiker;            
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Common method for setting Response to send
+     * @param $statusCode
+     * @param $routeName
+     * @param $phoneNumber
+     * @return Response $response
+     */
+    private function generateJsonResponse($statusCode, $data = null, $routeName = null)
+    {
+        $response = new Response();
+        $response->setStatusCode($statusCode);
+        if (isset($data)) {
+            $serialized = $this->container->get('serializer')->serialize($data, 'json');
+            $response->setContent($serialized);
+        } else {
+            // set the `Location` header only when creating new resources
+            if (201 === $statusCode) {
+                if (NULL === $routeName) {
+                    $routeName = 'spikers';
+                }
+                $response->headers->set('Location',
+                    $this->container->get('router')->generate(
+                        $routeName, array(), true // absolute
+                    )
+                );
+            }
+        }
+
+        return $response;
     }
 
 }

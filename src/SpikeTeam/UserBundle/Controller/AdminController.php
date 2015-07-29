@@ -16,6 +16,7 @@ class AdminController extends Controller
     protected $container;
     protected $em;
     protected $repo;
+
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -89,6 +90,15 @@ class AdminController extends Controller
                     ->add('password', 'password', array(
                         'required' => false,
                     ))
+                    ->add('phoneNumber', 'text', array(
+                        'data' => $admin->getPhoneNumber(),
+                        'required' => false,
+                    ))
+                    ->add('isEnabled', 'checkbox', array(
+                        'data' => $admin->getIsEnabled(),
+                        'label' => 'Opt-in to alert texts?',
+                        'required' => false,
+                    ))
                     ->add('superadmin', 'checkbox', array(      // This shouldn't work this way, but it totally does. WTF.
                         'data' => $admin->hasRole('ROLE_SUPER_ADMIN'),
                         'required' => false,
@@ -112,6 +122,15 @@ class AdminController extends Controller
                     ->add('password', 'password', array(
                         'required' => false,
                     ))
+                    ->add('phoneNumber', 'text', array(
+                        'data' => $admin->getPhoneNumber(),
+                        'required' => false,
+                    ))
+                    ->add('isEnabled', 'checkbox', array(
+                        'data' => $admin->getIsEnabled(),
+                        'label' => 'Opt-in to alert texts?',
+                        'required' => false,
+                    ))
                     ->add('save', 'submit')
                     ->getForm();
             }
@@ -128,6 +147,14 @@ class AdminController extends Controller
                     // else, set password using same password
                     $admin->setPassword($existingPassword);
                 }
+
+                // Process number to remove extra characters and add '1' country code
+                $processedNumber = $this->get('spike_team.user_helper')
+                    ->processNumber($request->request->get($form->getName())['phoneNumber']);
+                if ($processedNumber) {
+                    $admin->setPhoneNumber($processedNumber);
+                }
+
                 $this->em->persist($admin);
                 $this->em->flush();
                 return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));

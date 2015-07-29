@@ -23,7 +23,7 @@
         <table class="table spikers">
             <tr>
                 <th>Enabled</th>
-                <th>Sup</th>
+                <th>Super</th>
                 <th>Group</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -67,8 +67,11 @@
                 {% endfor %}
 
                 <tr>
-                    <td colspan="8">
+                    <td colspan="2" class="center">
                         <input type="submit" name="enabler" value="Save Status" class="btn btn-default" />
+                    </td>
+                    <td colspan="6">
+                        <div class="spiker-numbers"><span class="group">{{ spikers|length }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers</div>
                     </td>
                 </tr>
             </form>

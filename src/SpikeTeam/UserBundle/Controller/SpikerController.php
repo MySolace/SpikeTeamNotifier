@@ -23,12 +23,15 @@ class SpikerController extends Controller
     protected $em;
     protected $repo;
     protected $gRepo;
+    protected $userHelper;
+
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
         $this->em = $this->getDoctrine()->getManager();
         $this->repo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker');
         $this->gRepo = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup');
+        $this->userHelper = $this->get('spike_team.user_helper');
     }
 
     /**
@@ -58,7 +61,7 @@ class SpikerController extends Controller
 
         if ($form->isValid()) {
             // Process number to remove extra characters and add '1' country code
-            $processedNumber = $this->repo->processNumber($newSpiker->getPhoneNumber());
+            $processedNumber = $this->userHelper->processNumber($newSpiker->getPhoneNumber());
 
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
             if ($processedNumber) {
@@ -129,7 +132,7 @@ class SpikerController extends Controller
         $allUrl = $this->generateUrl('spikers');
         $editUrl = $this->generateUrl('spikers_edit', array('input' => $input));
 
-        $processedNumber = $this->repo->processNumber($input);
+        $processedNumber = $this->userHelper->processNumber($input);
         if ($processedNumber) {
             $deleteUrl = $this->generateUrl('spikers_delete', array('input' => $processedNumber));
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
@@ -169,7 +172,7 @@ class SpikerController extends Controller
 
             if ($form->isValid()) {
                 // Process number to remove extra characters and add '1' country code
-                $processedNumber = $this->repo->processNumber($spiker->getPhoneNumber());
+                $processedNumber = $this->userHelper->processNumber($spiker->getPhoneNumber());
 
                 // If it's valid, go ahead and save. Otherwise, redirect back to edit page again.
                 if ($processedNumber) {
@@ -199,7 +202,7 @@ class SpikerController extends Controller
      */
     public function spikerDeleteAction($input)
     {
-        $processedNumber = $this->repo->processNumber($input);
+        $processedNumber = $this->userHelper->processNumber($input);
         if ($processedNumber) {
             $spiker = $this->repo->findOneByPhoneNumber($input);
             $this->em->remove($spiker);

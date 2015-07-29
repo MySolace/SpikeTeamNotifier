@@ -10,6 +10,7 @@
     <div class="page table-responsive">
         <table class="table">
             <tr>
+                <th>Texts</th>
                 <th>Superadmin</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -26,6 +27,13 @@
                 {% endfor %}
 
                 <tr>
+                    <td class="center">
+                        {% if admin.getIsEnabled() %}
+                            <i class="fa fa-check-square"></i>
+                        {% else %}
+                            <i class="fa fa-square-o"></i>
+                        {% endif %}
+                    </td>
                     <td class="center">
                         {% if super_admin_bool %}
                             <i class="fa fa-check-square"></i>
@@ -54,7 +62,8 @@
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <tr>
                     {{ form_start(form, {'attr': {'class': 'form-inline'} }) }}
-                        <td class="center"><i class="fa fa-check-square"></i></td>
+                        <td class="center"><i class="fa fa-square-o"></i></td>
+                        <td class="center"><i class="fa fa-square-o"></i></td>
                         <td>{{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}</td>
                         <td>{{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}</td>
                         <td>{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}</td>

@@ -76,6 +76,12 @@ td.center {
   width: 100%;
   text-align: center; }
 
+.spiker-numbers {
+  font-size: 14px;
+  font-style: italic;
+  color: gray;
+  padding-top: .5em; }
+
 body.anon #inner #fos-user {
   margin: 150px auto;
   width: 300px; }

@@ -21,9 +21,7 @@
     width: $button-box-width;
     margin: 0 auto;
     .latest {
-        font-size: 14px;
-        font-style: italic;
-        color: gray;
+        @include sub-italic;
     }
     select:hover {
         cursor: pointer;

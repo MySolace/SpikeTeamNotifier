@@ -39,3 +39,8 @@ td.center {
     width: 100%;
     text-align: center;
 }
+
+.spiker-numbers {
+    @include sub-italic;
+    padding-top: .5em;
+}

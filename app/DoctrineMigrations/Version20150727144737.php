@@ -22,6 +22,7 @@ class Version20150727144737 extends AbstractMigration
         $this->addSql('ALTER TABLE button_push ADD group_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE button_push ADD CONSTRAINT FK_7D371E3EFE54D947 FOREIGN KEY (group_id) REFERENCES spiker_group (id)');
         $this->addSql('CREATE INDEX IDX_7D371E3EFE54D947 ON button_push (group_id)');
+        $this->addSql('ALTER TABLE fos_user ADD phone_number VARCHAR(11) DEFAULT NULL, ADD is_enabled TINYINT(1) NOT NULL');
         $this->addSql('INSERT into spiker_group VALUES (null, "Group 1"), (null, "Group 2"), (null, "Group 3")');
         $this->addSql('SET foreign_key_checks = 0');
         $this->addSql('UPDATE spiker SET group_id=(MOD(id-1, 3)+1) WHERE id IS NOT NULL');
@@ -40,5 +41,6 @@ class Version20150727144737 extends AbstractMigration
         $this->addSql('ALTER TABLE button_push DROP group_id');
         $this->addSql('DROP INDEX IDX_618B2DB9FE54D947 ON spiker');
         $this->addSql('ALTER TABLE spiker DROP group_id');
+        $this->addSql('ALTER TABLE fos_user DROP phone_number, DROP is_enabled');
     }
 }

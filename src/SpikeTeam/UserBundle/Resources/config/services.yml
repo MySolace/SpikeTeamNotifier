@@ -1,0 +1,3 @@
+services:
+    spike_team.user_helper:
+        class: SpikeTeam\UserBundle\Helper\UserHelper

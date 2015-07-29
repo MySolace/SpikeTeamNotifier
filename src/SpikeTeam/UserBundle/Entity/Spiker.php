@@ -10,7 +10,7 @@ use SpikeTeam\UserBundle\Entity\SpikerGroup;
  * Spiker
  *
  * @ORM\Table(name="spiker")
- * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\SpikerRepository")
+ * @ORM\Entity()
  */
 class Spiker
 {
