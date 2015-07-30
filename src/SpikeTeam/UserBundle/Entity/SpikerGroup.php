@@ -41,9 +41,15 @@ class SpikerGroup
      */
     private $pushes;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" = 1})
+     */
+    private $enabled = true;
+
     public function __construct()
     {
         $this->spikers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pushes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -150,6 +156,29 @@ class SpikerGroup
     public function __toString()
     {
         return strval($this->id);
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param string $enabled
+     * @return SpikerGroup
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return string 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 
 }

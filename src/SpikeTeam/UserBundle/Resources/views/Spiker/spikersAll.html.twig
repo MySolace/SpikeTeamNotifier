@@ -19,6 +19,15 @@
             {% if is_granted("ROLE_SUPER_ADMIN") %}
                 <button class="add btn btn-default">Add Group</button>
             {% endif %}
+
+            <div class="onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+                <label class="onoffswitch-label" for="myonoffswitch">
+                    <span class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                </label>
+            </div>
+
         </div>
         <table class="table spikers">
             <tr>

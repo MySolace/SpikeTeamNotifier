@@ -15,7 +15,7 @@ class Version20150727144737 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE spiker_group (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE spiker_group (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) DEFAULT NULL, enabled TINYINT(1) DEFAULT \'1\' NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE spiker ADD group_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE spiker ADD CONSTRAINT FK_618B2DB9FE54D947 FOREIGN KEY (group_id) REFERENCES spiker_group (id)');
         $this->addSql('CREATE INDEX IDX_618B2DB9FE54D947 ON spiker (group_id)');
