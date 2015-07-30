@@ -12,13 +12,15 @@
             <div class="alert">Sorry! A spiker by this phone number or email address already exists. Please fix the record and try again.</div>
         {% endif %}
         <div class="groups">
-            <button class="all btn btn-primary">All Spikers</button>
-            {% for group_id in group_ids %}
-                <button id="group-{{ group_id }}" class="group btn btn-default">Group {{ group_id }}</button>
-            {% endfor %}
-            {% if is_granted("ROLE_SUPER_ADMIN") %}
-                <button class="add btn btn-default">Add Group</button>
-            {% endif %}
+            <div class="buttons">
+                <button class="all btn btn-primary">All Spikers</button>
+                {% for group_id in group_ids %}
+                    <button id="group-{{ group_id }}" class="group btn btn-default">Group {{ group_id }}</button>
+                {% endfor %}
+                {% if is_granted("ROLE_SUPER_ADMIN") %}
+                    <button class="add btn btn-default">Add Group</button>
+                {% endif %}
+            </div>
 
             <div class="onoffswitch">
                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>

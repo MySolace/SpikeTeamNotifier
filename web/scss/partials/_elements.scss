@@ -21,7 +21,14 @@
 }
 
 .groups {
-    margin-bottom: 20px;
+    overflow: hidden;
+    .buttons {
+        button {
+            margin-bottom: 20px;
+        }
+        width: calc(100% - 80px);
+        float: left;
+    }
 }
 
 .token-para {

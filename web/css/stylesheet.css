@@ -61,7 +61,12 @@ body {
   box-shadow: 0 8px 6px -6px black; }
 
 .groups {
-  margin-bottom: 20px; }
+  overflow: hidden; }
+  .groups .buttons {
+    width: calc(100% - 80px);
+    float: left; }
+    .groups .buttons button {
+      margin-bottom: 20px; }
 
 .token-para {
   margin-top: 1em; }
