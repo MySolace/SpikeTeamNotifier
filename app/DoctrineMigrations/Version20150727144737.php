@@ -27,6 +27,7 @@ class Version20150727144737 extends AbstractMigration
         $this->addSql('SET foreign_key_checks = 0');
         $this->addSql('UPDATE spiker SET group_id=(MOD(id-1, 3)+1) WHERE id IS NOT NULL');
         $this->addSql('SET foreign_key_checks = 1');
+        $this->addSql('DELETE from setting WHERE name="token_usage"');
     }
 
     public function down(Schema $schema)
@@ -42,5 +43,6 @@ class Version20150727144737 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_618B2DB9FE54D947 ON spiker');
         $this->addSql('ALTER TABLE spiker DROP group_id');
         $this->addSql('ALTER TABLE fos_user DROP phone_number, DROP is_enabled');
+        $this->addSql('INSERT into setting VALUES (null, "token_usage", "Use this username-token pair to generate a X-WSSE header with each request to the API, as per the instructions at http://bit.ly/1uBiS5z. More info about WSSE at http://en.wikipedia.org/wiki/WS-Security, and JavaScript generator at http://www.teria.com/~koseki/tools/wssegen/.")');
     }
 }

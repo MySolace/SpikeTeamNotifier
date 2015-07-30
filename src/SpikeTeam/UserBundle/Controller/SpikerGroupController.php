@@ -44,6 +44,9 @@ class SpikerGroupController extends Controller
 
     private function makeNewGroup()
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            return;
+        }
         $em = $this->getDoctrine()->getManager();
 
         $entity = new SpikerGroup();
@@ -63,6 +66,9 @@ class SpikerGroupController extends Controller
      */
     public function editAction($id)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            return;
+        }
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
@@ -140,6 +146,9 @@ class SpikerGroupController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            return;
+        }
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
