@@ -26,7 +26,7 @@ class Version20150731101633 extends AbstractMigration
         $this->addSql('INSERT into spiker_group VALUES (null, "Group 1", 1), (null, "Group 2", 1), (null, "Group 3", 1), (null, "Group 4", 0)');
         $this->addSql('SET foreign_key_checks = 0');
         $this->addSql('UPDATE spiker SET group_id=(MOD(id-1, 3)+1) WHERE id IS NOT NULL');
-        $this->addSql('UPDATE spiker SET group_id=4 WHERE first_name LIKE "%(%)"');
+        $this->addSql('UPDATE spiker SET group_id=4 WHERE first_name LIKE "(%)"');
         $this->addSql('SET foreign_key_checks = 1');
         $this->addSql('DELETE from setting WHERE name="token_usage"');
     }
