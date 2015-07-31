@@ -14,15 +14,6 @@ var Button = {
                 alert("Sorry, you cannot alert the Spike Team yet.");            
             }
         });
-        $("button.token-button").click(function(){
-            $(".token-para").toggle();
-            $(this).toggleClass("token-showing");
-            if ($(this).hasClass("token-showing")) {
-                $(this).find(".replace").text("hide");
-            } else {
-                $(this).find(".replace").text("view");
-            }
-        });
     },
 
     goCallback: function(id) {

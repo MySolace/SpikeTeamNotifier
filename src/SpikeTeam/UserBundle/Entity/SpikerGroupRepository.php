@@ -37,11 +37,18 @@ class SpikerGroupRepository extends EntityRepository
      */
     public function getAllIds()
     {
-        $stmt = $this->_em->getConnection()->prepare("SELECT GROUP_CONCAT(id) from spiker_group");
+        $stmt = $this->_em->getConnection()->prepare("SELECT GROUP_CONCAT(id), GROUP_CONCAT(enabled) from spiker_group");
         $stmt->execute();
+        $result = $stmt->fetchAll();
+        $return = array();
+        $ids = explode(',', $result[0]['GROUP_CONCAT(id)']);
+        $enableds = explode(',', $result[0]['GROUP_CONCAT(enabled)']);
+        foreach ($ids as $key => $id) {
+            $return[$id] = $enableds[$key];
+        }
 
         try {
-            return explode(',', $stmt->fetchAll()[0]['GROUP_CONCAT(id)']);
+            return $return;
         }  catch(\Doctrine\ORM\NoResultException $e) {
             return false;
         }

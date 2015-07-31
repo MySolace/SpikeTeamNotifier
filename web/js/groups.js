@@ -9,6 +9,10 @@ var Groups = {
         Groups.$table = $('table.spikers');
 
         Groups.list();
+
+        $('.onoffswitch-checkbox').change(function(){
+            console.log($(this).is(':checked'));
+        });
     },
 
     list: function() {

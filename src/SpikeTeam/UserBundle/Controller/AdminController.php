@@ -71,7 +71,6 @@ class AdminController extends Controller
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
             $deleteUrl = $this->generateUrl('spiketeam_user_admin_admindelete', array('email' => $email));
-            $message = $this->em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('token_usage')->getSetting();
 
             if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form = $this->createFormBuilder($admin)
@@ -166,7 +165,6 @@ class AdminController extends Controller
             return $this->render('SpikeTeamUserBundle:Admin:adminForm.html.twig', array(
                 'admin' => $admin,
                 'form' => $form->createView(),
-                'message' => $message,
                 'cancel' => $allUrl,
                 'remove' => $deleteUrl
             ));

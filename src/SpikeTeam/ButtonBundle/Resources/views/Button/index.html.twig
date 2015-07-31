@@ -24,10 +24,10 @@
             Send Alert to Group: 
             <select>
                 <option value="all">All</option>
-                {% for id in ids %}
+                {% for id, enabled in ids %}
                     <option value="{{ id }}"
                         {% if id == next %}selected="selected"{% endif %}
-                        {% if mostRecent.group.id is defined and id == mostRecent.group.id %}disabled="disabled"{% endif %}>{{ id }}</option>
+                        {% if (mostRecent.group.id is defined and id == mostRecent.group.id) or not enabled %}disabled="disabled"{% endif %}>{{ id }}</option>
                 {% endfor %}
             </select>
         </div>

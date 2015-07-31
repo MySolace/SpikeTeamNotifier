@@ -49,7 +49,7 @@ class ButtonController extends Controller
             // Dispatch alert event, to appropriate group if specified
             switch($gid) {
                 case 'all':
-                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findAll();
+                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findByEnabledGroup();
                     break;
                 default:
                     $group = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($gid);
