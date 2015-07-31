@@ -32,6 +32,7 @@
             </select>
         </div>
         <div class="latest">
+            {% if mostRecent != false %}
             Latest:
                 <span class="latest-group">
                     {% if mostRecent.group.id is defined %}
@@ -43,6 +44,7 @@
                 <span class="latest-time">
                     {{ mostRecent.pushTime|date('G:i, m/d/y') }}
                 </span>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

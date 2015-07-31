@@ -19,7 +19,7 @@ class ButtonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
-        $group = $mostRecent->getGroup();
+        $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
         $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
         $next = 1;
 
