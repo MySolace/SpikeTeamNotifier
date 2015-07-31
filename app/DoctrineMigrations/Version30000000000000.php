@@ -13,7 +13,7 @@ use SpikeTeam\UserBundle\Entity\Admin;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150128133450 extends AbstractMigration implements ContainerAwareInterface
+class Version30000000000000 extends AbstractMigration implements ContainerAwareInterface
 {
 
     private $container;
@@ -26,23 +26,35 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $em = $this->container->get('doctrine.orm.entity_manager');
+        $manager = $this->container->get('doctrine.orm.entity_manager');
+
+        // Get rid of the old migration - this is the new one
+        $sql = "SELECT version FROM migration_versions WHERE version = :version";
+        $params['version'] = 20150128133450;
+        $stmt = $manager->getConnection()->prepare($sql);
+        $stmt->execute($params);
+
+        $result = $stmt->fetchAll();
+        if (!(!isset($result) || $result == null)) {
+            $this->addSql('DELETE FROM migration_versions WHERE version="'.$params['version'].'"');
+            return;
+        }
+
         $settingsToSet = array(
             'alert_timeout' => '24 hours',
             'twilio_sid' => 'Your Twilio SID',
             'twilio_token' => 'Your Twilio token',
             'twilio_number' => 'Your Twilio number',
             'twilio_message' => 'Default message',
-            'twilio_response' => 'Default response',
-            'token_usage' => 'Use this username-token pair to generate a X-WSSE header with each request to the API, as per the instructions at http://bit.ly/1uBiS5z. More info about WSSE at http://en.wikipedia.org/wiki/WS-Security, and JavaScript generator at http://www.teria.com/~koseki/tools/wssegen/.'
+            'twilio_response' => 'Default response'
         );
 
         foreach ($settingsToSet as $key => $value) {
             $setting = new Setting();
             $setting->setName($key);
             $setting->setSetting($value);
-            $em->persist($setting);
-            $em->flush();
+            $manager->persist($setting);
+            $manager->flush();
         }
 
         $admin = new Admin();
@@ -50,35 +62,36 @@ class Version20150128133450 extends AbstractMigration implements ContainerAwareI
         $admin->setFirstName('Admin');
         $admin->setLastName('User');
         $admin->setEmail('admin@sample.com');
+        $admin->setFirstName('Admin');
+        $admin->setLastName('User');
         $admin->setPlainPassword('admin');
         $admin->setEnabled('true');
         $admin->addRole('ROLE_SUPER_ADMIN');
-        $em->persist($admin);
-        $em->flush();
+        $manager->persist($admin);
+        $manager->flush();
     }
 
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $em = $this->container->get('doctrine.orm.entity_manager');
+        $manager = $this->container->get('doctrine.orm.entity_manager');
         $settingsToErase = array(
             'alert_timeout',
             'twilio_sid',
             'twilio_token',
             'twilio_number',
             'twilio_message',
-            'twilio_response',
-            'token_usage'
+            'twilio_response'
         );
 
         foreach ($settingsToErase as $name) {
-            $setting = $em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName($name);
-            $em->remove($setting);
-            $em->flush();
+            $setting = $manager->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName($name);
+            $manager->remove($setting);
+            $manager->flush();
         }
 
-        $admin = $em->getRepository('SpikeTeamUserBundle:Admin')->findOneByUsername('admin');
-        $em->remove($admin);
-        $em->flush();
+        $admin = $manager->getRepository('SpikeTeamUserBundle:Admin')->findOneByUsername('admin');
+        $manager->remove($admin);
+        $manager->flush();
     }
 }
