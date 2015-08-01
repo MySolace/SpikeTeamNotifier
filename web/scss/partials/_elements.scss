@@ -31,6 +31,17 @@
     }
 }
 
+table.spikers {
+    tr.disabled {
+        font-style: italic;
+        color: $color-gray;
+        select, .edit {
+            font-style: normal;
+            color: black;
+        }
+    }
+}
+
 .token-para {
     margin-top: 1em;
 }

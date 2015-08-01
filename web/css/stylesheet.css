@@ -68,6 +68,13 @@ body {
     .groups .buttons button {
       margin-bottom: 20px; }
 
+table.spikers tr.disabled {
+  font-style: italic;
+  color: gray; }
+  table.spikers tr.disabled select, table.spikers tr.disabled .edit {
+    font-style: normal;
+    color: black; }
+
 .token-para {
   margin-top: 1em; }
 
@@ -174,7 +181,8 @@ body.anon #inner #fos-user {
 .onoffswitch-inner {
   display: block;
   width: 200%;
-  margin-left: -100%; }
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s; }
 
 .onoffswitch-inner:before, .onoffswitch-inner:after {
   display: block;
@@ -212,7 +220,8 @@ body.anon #inner #fos-user {
   bottom: 0;
   right: 35px;
   border: 2px solid #FFFFFF;
-  border-radius: 20px; }
+  border-radius: 20px;
+  transition: all 0.3s ease-in 0s; }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
   margin-left: 0; }
