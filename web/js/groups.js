@@ -23,8 +23,8 @@ var Groups = {
             }
         });
 
-        Groups.$table.find('tr.spiker').show();
-        Groups.$buttons.all.removeClass('btn-default').addClass('btn-primary');
+        // Groups.$table.find('tr.spiker').show();
+        // Groups.$buttons.all.removeClass('btn-default').addClass('btn-primary');
 
         Groups.$buttons.all.click(function() {
             Groups.$table.find('tr.spiker').show();

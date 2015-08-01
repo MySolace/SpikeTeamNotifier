@@ -38,8 +38,8 @@
             </div>
 
             {{ form_widget(form.save, { 'label': 'Save Spiker!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
-            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
-            <a href="{{ remove }}"><button class="btn pull-right">Remove</button></a>
+            <a href="{{ path('spikers') }}"><button class="btn">Cancel</button></a>
+            <a href="{{ path('spikers_delete', {'input': spiker.phoneNumber}) }}"><button class="btn pull-right">Remove</button></a>
         {{ form_end(form) }}
     </div>
 {% endblock %}

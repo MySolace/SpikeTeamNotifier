@@ -36,9 +36,9 @@ class SpikerController extends Controller
 
     /**
      * Showing all spikers here
-     * @Route("/", name="spikers")
+     * @Route("/{group}", name="spikers", requirements={"group": "\d+"})
      */
-    public function spikersAllAction(Request $request)
+    public function spikersAllAction(Request $request, $group = null)
     {
         $spikers = $this->repo->findAll();
 
@@ -89,12 +89,23 @@ class SpikerController extends Controller
             }
         });
 
+        $groupEnabled = true;
+        if (isset($group)) {
+            $groupEnabled = $this->gRepo->find($group)->getEnabled();
+            $count = count($this->repo->findByGroup($group));
+        } else {
+            $count = count($spikers);
+        }
+
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
             'spikers' => $spikers,
             'form' => $form->createView(),
             'existing' => $existing,
             'group_ids' => $this->gRepo->getAllIds(),
+            'group' => $group,
+            'group_enabled' => $groupEnabled,
+            'count' => $count,
         ));
     }
 
@@ -120,12 +131,14 @@ class SpikerController extends Controller
         }
         $this->em->flush();
 
-        return $this->redirect($this->generateUrl('spikers'));
+        $returnGroup = (isset($data['group'])) ? $data['group']: null;
+
+        return $this->redirect($this->generateUrl('spikers', array('group' => $returnGroup)));
     }
 
     /**
      * Showing individual spiker here
-     * @Route("/{input}/edit", name="spikers_edit")
+     * @Route("/edit/{input}", name="spikers_edit")
      */
     public function spikerEditAction($input, Request $request)
     {
@@ -134,7 +147,6 @@ class SpikerController extends Controller
 
         $processedNumber = $this->userHelper->processNumber($input);
         if ($processedNumber) {
-            $deleteUrl = $this->generateUrl('spikers_delete', array('input' => $processedNumber));
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
@@ -187,9 +199,7 @@ class SpikerController extends Controller
 
             return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
                 'spiker' => $spiker,
-                'form' => $form->createView(),
-                'cancel' => $allUrl,
-                'remove' => $deleteUrl
+                'form' => $form->createView()
             ));
         } else {    // Show individual Spiker
             return $this->redirect($allUrl);
@@ -198,7 +208,7 @@ class SpikerController extends Controller
 
     /**
      * Delete individual spiker here
-     * @Route("/{input}/delete", name="spikers_delete")
+     * @Route("/delete/{input}", name="spikers_delete")
      */
     public function spikerDeleteAction($input)
     {

@@ -40,8 +40,8 @@
             {% endif %}
 
             {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
-            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ remove }}">
+            <a href="{{ path('admin') }}"><button class="btn">Cancel</button></a>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ path('admin_delete', {'email': admin.email}) }}">
                 <button class="btn pull-right">Remove</button></a>
             {% endif %}
         {{ form_end(form) }}

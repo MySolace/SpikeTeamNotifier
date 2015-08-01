@@ -53,7 +53,7 @@
                     <td></td>
                     <td class="center">
                         {% if is_granted('ROLE_SUPER_ADMIN') or app.user.email == admin.email %}
-                            <a href="/admin/{{ admin.email }}/edit">Edit</a>
+                            <a href="{{ path('admin_edit', {'email': admin.email}) }}">Edit</a>
                         {% else %}
                         {% endif %}
                     </td>
