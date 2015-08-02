@@ -30,7 +30,12 @@ var Groups = {
             Groups.$buttons.onoff.hide();
             Groups.$table.find('tr.spiker').show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.spiker').length);
+            $.get(Routing.generate('group_emptiest_check'), function (data) {
+                $('select#form_group').val(data.emptiest);
+            })
+            history.pushState({}, 'Spike Team Notifier', Routing.generate('spikers'));
         });
+
         Groups.$buttons.groups.click(function() {
             var id = $(this).attr('id').replace('group-','');
             $.get(Routing.generate('group_status_check', {id:id}), function (data) {
@@ -48,7 +53,10 @@ var Groups = {
             Groups.$table.find('tr.spiker').hide();
             Groups.$table.find('tr.group-'+id.toString()).show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.group-'+id.toString()).length);
+            $('select#form_group').val(id);
+            history.pushState({}, 'Spike Team Notifier', Routing.generate('spikers', {group:id}));
         });
+
         Groups.$buttons.add.click(function() {
             if (confirm("Are you sure you want to add another group?\nYou will not be able to remove it once it is created.") == true) {
                 window.location.replace(Routing.generate('group_new'));
@@ -59,16 +67,19 @@ var Groups = {
     statusToggle: function($onoffbox, id) {
         var nextStatus = ($onoffbox.prop('checked')) ? 0 : 1;
         $onoffbox.change(function() {
-            $.get(Routing.generate('group_status_set', {id:id, status:nextStatus} ));
+            $.get(Routing.generate('group_status_set', {id:id, status:nextStatus} ), function (data) {
+                var $rows = Groups.$table.find('tr.group-'+id.toString());
+                var $options = Groups.$table.find('tr option[value="'+id+'"]');
+                if (nextStatus) {
+                    $rows.removeClass('disabled');
+                    $options.removeClass('disabled');
+                } else {
+                    $rows.addClass('disabled');
+                    $options.addClass('disabled');
+                }
+            });
             $onoffbox.unbind();
             Groups.statusToggle($onoffbox, id);
-            if (nextStatus) {
-                Groups.$table.find('tr.group-'+id.toString()+' input').prop('disabled', false);
-                Groups.$table.find('tr.group-'+id.toString()).removeClass('disabled');
-            } else {
-                Groups.$table.find('tr.group-'+id.toString()+' input').prop('disabled', true);
-                Groups.$table.find('tr.group-'+id.toString()).addClass('disabled');
-            }
         })
     }
 };

@@ -36,7 +36,7 @@ class SpikerController extends Controller
 
     /**
      * Showing all spikers here
-     * @Route("/{group}", name="spikers", requirements={"group": "\d+"})
+     * @Route("/{group}", name="spikers", requirements={"group": "\d+"}, options={"expose":true})
      */
     public function spikersAllAction(Request $request, $group = null)
     {
@@ -47,7 +47,7 @@ class SpikerController extends Controller
         $form = $this->createFormBuilder($newSpiker)
             ->add('group', 'entity', array(
                 'class' => 'SpikeTeamUserBundle:SpikerGroup',
-                'data' => $this->gRepo->findEmptiest()
+                'data' => ($group == null) ? $this->gRepo->findEmptiest() : $this->gRepo->find($group)
             ))
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))

@@ -192,6 +192,20 @@ class SpikerGroupController extends Controller
     }
 
     /**
+     * AJAX query, returns JSON response of emptiest group's ID
+     *
+     * @Route("/emptiest", name="group_emptiest_check", options={"expose"=true})
+     */
+    public function checkEmptiestAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        return new JsonResponse(array(
+            'emptiest' => $em->getRepository('SpikeTeamUserBundle:SpikerGroup')
+                            ->findEmptiest()->getId()
+        ));
+    }
+
+    /**
      * AJAX query, returns JSON response if group is enabled or not
      *
      * @Route("/status/{id}", name="group_status_check", options={"expose"=true})

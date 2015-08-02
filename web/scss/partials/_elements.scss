@@ -32,7 +32,7 @@
 }
 
 table.spikers {
-    tr.disabled {
+    tr.disabled, option.disabled {
         font-style: italic;
         color: $color-gray;
         select, .edit {

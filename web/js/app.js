@@ -5,8 +5,5 @@ var App = {
         $("body.section-admin").find("li.admin").addClass("active");
         $("body.section-settings").find("li.settings").addClass("active");
         $("body.section-stats").find("li.stats").addClass("active");
-
-        Button.init();
-        Groups.init();
     }
 }
