@@ -15,9 +15,13 @@ class ButtonPushRepository extends EntityRepository
     /**
      * Returns most recent Button Push
      */
-    public function findMostRecent()
+    public function findMostRecent($currentId = null)
     {
         $qb = $this->createQueryBuilder('p');
+        if ($currentId != null) {
+            $qb->where('p.id < :id')
+                ->setParameter('id', $currentId);
+        }
         $qb->orderBy('p.pushTime', 'DESC')
             ->setMaxResults(1);
 

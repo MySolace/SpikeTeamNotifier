@@ -21,12 +21,9 @@ class ButtonController extends Controller
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
         $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
-        $next = 1;
 
-        if ($group && $group->getId() != null) {
-            $modulo = ($group->getId() + 1) % count($ids);
-            $next = ($modulo) ? $modulo : count($ids);
-        }
+        $next = 1;
+        $next = $this->getNextGroup();
 
         $canPush = ($this->checkPrevPushes()) ? true : false;
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
@@ -68,15 +65,55 @@ class ButtonController extends Controller
             $em->persist($push);
             $em->flush();
 
+            $next = $this->getNextGroup();
+
             // Send back latest push info
             $id = ($push->getGroup() == null) ? 'All Spikers' : 'Group '.$push->getGroup()->getId();
             return new JsonResponse(array(
                 'id' => $id,
-                'time' => $push->getPushTime()->format('G:i, m/d/y')
+                'time' => $push->getPushTime()->format('G:i, m/d/y'),
+                'next' => $next
             ));
         } else {
             return new Response('No can do!');      
         }
+    }
+
+    /**
+     * Returns next group to send alert to. Takes into account disabled groups
+     * @param integer $id
+     * @return integer $next
+     */
+    private function getNextGroup($id = null)
+    {
+        $buttonRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
+        $current = $buttonRepo->findMostRecent();
+
+        // In case $id is not supplied
+        if ($id == null && isset($current) && $current->getGroup() != null) {
+            $id = $current->getGroup()->getId();
+        }
+
+        // Advancing to the next group only if it exists and is enabled
+        if (isset($id) && gettype($id) == 'integer') {
+            $next = $id + 1;
+            $groupIds = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
+            while (!isset($groupIds[$next]) || $groupIds[$next] == null || !$groupIds[$next]) {
+                $next++;
+                if ($next > max(array_keys($groupIds)) ) {
+                    $next = 1;
+                }
+            }
+        } else {
+            // Dealing w/ 'all's. If all, go back one and see if we can do something with it. If not, default = 1
+            $previous = $buttonRepo->findMostRecent($current->getId());
+            if ($previous->getGroup() != null) {
+                return $this->getNextGroup($previous->getGroup()->getId());
+            } else {
+                $next = 1;
+            }
+        }
+        return $next;
     }
 
     /**
