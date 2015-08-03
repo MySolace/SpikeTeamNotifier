@@ -12,12 +12,12 @@ var Stats = {
     },
 
     setup: function () {
-        this.data = this.data.split("\n").slice(0, -1).reverse();
+        this.data = this.data.split("\n").slice(0, -1);
         for (var i = 0; i < this.data.length; i++) {
             this.data[i] = this.data[i].split(",");
             var $option = $('<option>');
             $option.attr({'value': i}).text(this.data[i][0]);
-            $('div.date-select select').prepend($option);
+            $('div.date-select select').append($option);
         }
 
         $("select").change(function(){
