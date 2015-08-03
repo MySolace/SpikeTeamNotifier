@@ -27,7 +27,6 @@ In order to get started, you'll need to do the following:
 * Update the database you specified above with the Doctrine schema:
     ```
     php app/console doctrine:database:create
-    php app/console doctrine:schema:update --force
     php app/console doctrine:migrations:migrate
     ```
 
