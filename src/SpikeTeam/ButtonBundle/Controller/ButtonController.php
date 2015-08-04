@@ -72,7 +72,8 @@ class ButtonController extends Controller
             return new JsonResponse(array(
                 'id' => $id,
                 'time' => $push->getPushTime()->format('G:i, m/d/y'),
-                'next' => $next
+                'next' => $next,
+                'enabled' => $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds()
             ));
         } else {
             return new Response('No can do!');      

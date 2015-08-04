@@ -21,6 +21,12 @@ var Button = {
             var $select = $('.group-select select');
             $select.find('option').removeAttr('disabled');
             $select.find('option[value="' + id + '"]').attr('disabled', 'disabled');
+            $.each(data.enabled, function (group_id, group_enabled) {
+                var $option = $select.find('option[value="' + group_id + '"]');
+                if (!parseInt(group_enabled)) {
+                    $option.not(':disabled').attr('disabled', 'disabled');
+                }
+            });
             $select.val(data.next);
             $('.latest .latest-group').html(data.id);
             $('.latest .latest-time').html(data.time);
