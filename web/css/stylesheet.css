@@ -128,8 +128,14 @@ body.anon #inner #fos-user {
     font-size: 14px;
     font-style: italic;
     color: gray; }
-  .section-button .page select:hover {
-    cursor: pointer; }
+  .section-button .page select {
+    text-align: center; }
+    .section-button .page select:hover {
+      cursor: pointer; }
+    .section-button .page select option:disabled {
+      font-style: italic; }
+      .section-button .page select option:disabled:before, .section-button .page select option:disabled:after {
+        content: '-'; }
 
 #button-box-inner {
   width: 225px;

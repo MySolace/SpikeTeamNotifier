@@ -210,12 +210,16 @@ class SpikerGroupController extends Controller
      *
      * @Route("/status/{id}", name="group_status_check", options={"expose"=true})
      */
-    public function checkStatusAction($id)
+    public function checkStatusAction($id = null)
     {
         $em = $this->getDoctrine()->getManager();
+        if ($id != null) {
+            $return = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id)->getEnabled();
+        } else {
+            $return = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
+        }
         return new JsonResponse(array(
-            'enabled' => $em->getRepository('SpikeTeamUserBundle:SpikerGroup')
-                            ->find($id)->getEnabled(),
+            'enabled' => $return
         ));
     }
 

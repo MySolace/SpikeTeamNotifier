@@ -66,7 +66,8 @@
                             <select name="{{ spiker.id }}-group" form="enabler">
                                 {% for group_id, enabled in group_ids %}
                                     <option value="{{ group_id }}"
-                                        {% if spiker.group is not null and group_id == spiker.group.id %}   selected="selected"
+                                        {% if spiker.group is not null and group_id == spiker.group.id %}
+                                            selected="selected"
                                         {% endif %}
                                         {% if not enabled %}
                                             class="disabled"

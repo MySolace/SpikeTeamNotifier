@@ -23,8 +23,17 @@
     .latest {
         @include sub-italic;
     }
-    select:hover {
-        cursor: pointer;
+    select {
+        text-align: center;
+        &:hover {
+            cursor: pointer;
+        }
+        option:disabled {
+            font-style: italic;
+            &:before, &:after {
+                content: '-';
+            }
+        }
     }
 }
 

@@ -15,6 +15,17 @@ var Groups = {
             Groups.statusToggle($onoffbox, id);
         }
 
+        $.get(Routing.generate('group_status_check'), function (data) {
+            if (data.enabled) {
+                $.each($('select#form_group option'), function (index, e) {
+                    var val = $(e).val();
+                    if (!parseInt(data.enabled[val])) {
+                        $('select#form_group option[value="'+val+'"]').addClass('disabled');
+                    }
+                });
+            }
+        });
+
         Groups.list();
     },
 
