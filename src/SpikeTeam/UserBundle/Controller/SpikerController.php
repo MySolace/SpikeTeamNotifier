@@ -54,6 +54,9 @@ class SpikerController extends Controller
             ->add('phoneNumber', 'text', array('required' => true))
             ->add('isSupervisor', 'checkbox', array('required' => false))
             ->add('isEnabled', 'hidden', array('data' => true))
+            ->add('cohort', 'text', array(
+                'attr' => array('size' => '1'),
+            ))
             ->add('email')
             ->add('Add', 'submit')
             ->getForm();
@@ -76,6 +79,8 @@ class SpikerController extends Controller
                     return $this->redirect($this->generateUrl('spikers'));
                 }
             }
+
+            $newSpiker->setCohort(intval($newSpiker->getCohort()));
         }
 
         // Sorting by group, then first name
@@ -166,9 +171,14 @@ class SpikerController extends Controller
                     'data' => $spiker->getEmail(),
                     'required' => false,
                 ))
+                ->add('cohort', 'text', array(
+                    'data' => $spiker->getCohort(),
+                    'required' => false,
+                    'attr' => array('size' => '1'),
+                ))
                 ->add('group', 'entity', array(
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
-                    'required' => true
+                    'required' => true,
                 ))
                 ->add('isSupervisor', 'checkbox', array(
                     'data' => $spiker->getIsSupervisor(),
@@ -195,6 +205,7 @@ class SpikerController extends Controller
                 } else {
                     return $this->redirect($editUrl);
                 }
+                $newSpiker->setCohort(intval($newSpiker->getCohort()));
             }
 
             return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(

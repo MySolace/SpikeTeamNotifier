@@ -90,6 +90,10 @@ class ButtonController extends Controller
         $buttonRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
         $current = $buttonRepo->findMostRecent();
 
+        if (!$current) {
+            return 1;
+        }
+
         // In case $id is not supplied
         if ($id == null && isset($current) && $current->getGroup() != null) {
             $id = $current->getGroup()->getId();

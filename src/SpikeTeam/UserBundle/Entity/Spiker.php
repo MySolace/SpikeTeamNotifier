@@ -52,6 +52,13 @@ class Spiker
     private $email;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="cohort", type="integer", nullable=true)
+     */
+    private $cohort;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SpikerGroup", inversedBy="spikers", cascade={"persist"})
      */
     private $group;
@@ -170,6 +177,30 @@ class Spiker
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set cohort
+     *
+     * @param integer $cohort
+     *
+     * @return Spiker
+     */
+    public function setCohort($cohort = null)
+    {
+        $this->cohort = $cohort;
+
+        return $this;
+    }
+
+    /**
+     * Get cohort
+     *
+     * @return SpikerGroup
+     */
+    public function getCohort()
+    {
+        return $this->cohort;
     }
 
     /**
