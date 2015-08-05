@@ -1,3 +1,13 @@
 {% extends 'admin.html.twig' %}
 
 {% block bodySection %}logged-in section-spikers{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+	    window.onload = function() {
+            App.init();
+	       Groups.init();
+	    };
+	</script>
+{% endblock %}

@@ -16,6 +16,7 @@ class AdminController extends Controller
     protected $container;
     protected $em;
     protected $repo;
+
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -25,7 +26,7 @@ class AdminController extends Controller
 
     /**
      * Showing all admin users here
-     * @Route("/admin")
+     * @Route("/admin", name="admin")
      */
     public function adminAllAction(Request $request)
     {
@@ -48,7 +49,7 @@ class AdminController extends Controller
             $this->em->persist($newAdmin);
             $this->em->flush();
 
-            return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
+            return $this->redirect($this->generateUrl('admin'));
         }
 
         // send to template
@@ -60,17 +61,15 @@ class AdminController extends Controller
 
     /**
      * Showing indiv admin user here
-     * @Route("/admin/{email}/edit")
+     * @Route("/admin/edit/{email}", name="admin_edit")
      */
     public function adminEditAction($email, Request $request)
     {
         $securityContext = $this->get('security.context');
         $currentUser = $securityContext->getToken()->getUser();
-        $allUrl = $this->generateUrl('spiketeam_user_admin_adminall');
+        $allUrl = $this->generateUrl('admin');
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
-            $deleteUrl = $this->generateUrl('spiketeam_user_admin_admindelete', array('email' => $email));
-            $message = $this->em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('token_usage')->getSetting();
 
             if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form = $this->createFormBuilder($admin)
@@ -87,6 +86,15 @@ class AdminController extends Controller
                         'required' => true,
                     ))
                     ->add('password', 'password', array(
+                        'required' => false,
+                    ))
+                    ->add('phoneNumber', 'text', array(
+                        'data' => $admin->getPhoneNumber(),
+                        'required' => false,
+                    ))
+                    ->add('isEnabled', 'checkbox', array(
+                        'data' => $admin->getIsEnabled(),
+                        'label' => 'Opt-in to alert texts?',
                         'required' => false,
                     ))
                     ->add('superadmin', 'checkbox', array(      // This shouldn't work this way, but it totally does. WTF.
@@ -112,6 +120,15 @@ class AdminController extends Controller
                     ->add('password', 'password', array(
                         'required' => false,
                     ))
+                    ->add('phoneNumber', 'text', array(
+                        'data' => $admin->getPhoneNumber(),
+                        'required' => false,
+                    ))
+                    ->add('isEnabled', 'checkbox', array(
+                        'data' => $admin->getIsEnabled(),
+                        'label' => 'Opt-in to alert texts?',
+                        'required' => false,
+                    ))
                     ->add('save', 'submit')
                     ->getForm();
             }
@@ -128,17 +145,25 @@ class AdminController extends Controller
                     // else, set password using same password
                     $admin->setPassword($existingPassword);
                 }
+
+                // Process number to remove extra characters and add '1' country code
+                $processedNumber = $this->get('spike_team.user_helper')
+                    ->processNumber($request->request->get($form->getName())['phoneNumber']);
+                if ($processedNumber) {
+                    $admin->setPhoneNumber($processedNumber);
+                }
+                if (!$admin->getPhoneNumber()) {
+                    $admin->setIsEnabled(false);
+                }
+
                 $this->em->persist($admin);
                 $this->em->flush();
-                return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
+                return $this->redirect($this->generateUrl('admin'));
             }
 
             return $this->render('SpikeTeamUserBundle:Admin:adminForm.html.twig', array(
                 'admin' => $admin,
                 'form' => $form->createView(),
-                'message' => $message,
-                'cancel' => $allUrl,
-                'remove' => $deleteUrl
             ));
         } else {    // If not sufficient authorization, go back to see all admins.
             return $this->render($allUrl);
@@ -147,7 +172,7 @@ class AdminController extends Controller
 
     /**
      * Delete individual admin here
-     * @Route("/admin/{email}/delete")
+     * @Route("/admin/delete/{email}", name="admin_delete")
      */
     public function adminDeleteAction($email)
     {
@@ -155,7 +180,7 @@ class AdminController extends Controller
         $this->em->remove($admin);
         $this->em->flush();
 
-        return $this->redirect($this->generateUrl('spiketeam_user_admin_adminall'));
+        return $this->redirect($this->generateUrl('admin'));
     }
 
 }

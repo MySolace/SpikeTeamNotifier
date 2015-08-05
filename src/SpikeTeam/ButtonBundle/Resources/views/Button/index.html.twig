@@ -10,13 +10,41 @@
         <div id="button-box-inner">
             <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
                 {% if canPush %}
-                    <a href="/goteamgo">
+                    <a href="{{ goUrl }}">
                         <button class="button-image" /></button>
                     </a>
                 {% else %}
                     <button class="button-image" /></button>
                 {% endif %}
             </div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="group-select">
+            Send Alert to Group: 
+            <select>
+                <option value="all">All</option>
+                {% for id, enabled in ids %}
+                    <option value="{{ id }}"
+                        {% if id == next %}selected="selected"{% endif %}
+                        {% if (mostRecent.group.id is defined and id == mostRecent.group.id) or not enabled %}disabled="disabled"{% endif %}>{{ id }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="latest">
+            {% if mostRecent != false %}
+            Latest:
+                <span class="latest-group">
+                    {% if mostRecent.group.id is defined %}
+                        Group {{ mostRecent.group.id }}
+                    {% else %}
+                        All Spikers
+                    {% endif %}
+                </span> at
+                <span class="latest-time">
+                    {{ mostRecent.pushTime|date('G:i, m/d/y') }}
+                </span>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

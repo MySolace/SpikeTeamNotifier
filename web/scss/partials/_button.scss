@@ -1,8 +1,9 @@
 #button-box {
+    clear: both;
     text-align: center;
     width: $button-box-width;
     height: $button-box-height;
-    margin: 0 auto;
+    margin: 30px auto;
     background: repeating-linear-gradient(
         -45deg,
         black,
@@ -14,6 +15,28 @@
     @include drops;
 }
 
+.section-button .page {
+    text-align: center;
+    min-width: 10px !important;
+    width: $button-box-width;
+    margin: 0 auto;
+    .latest {
+        @include sub-italic;
+    }
+    select {
+        text-align: center;
+        &:hover {
+            cursor: pointer;
+        }
+        option:disabled {
+            font-style: italic;
+            &:before, &:after {
+                content: '-';
+            }
+        }
+    }
+}
+
 $button-inner-width: $button-box-width * $button-inner-scale;
 $button-inner-height: $button-box-height * $button-inner-scale;
 
@@ -22,6 +45,7 @@ $button-inner-height: $button-box-height * $button-inner-scale;
     height: $button-inner-height;
     margin: ($button-box-height - $button-inner-height)/2 ($button-box-width - $button-inner-width)/2;
     background-color: $color-background;
+
     #button {
         width: 100%;
         height: 100%;

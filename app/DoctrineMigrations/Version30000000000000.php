@@ -59,9 +59,9 @@ class Version30000000000000 extends AbstractMigration implements ContainerAwareI
 
         $admin = new Admin();
         $admin->setUsername('admin');
-        $admin->setEmail('admin@sample.com');
         $admin->setFirstName('Admin');
         $admin->setLastName('User');
+        $admin->setEmail('admin@sample.com');
         $admin->setPlainPassword('admin');
         $admin->setEnabled('true');
         $admin->addRole('ROLE_SUPER_ADMIN');

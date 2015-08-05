@@ -107,10 +107,10 @@ fos_rest:
             - { path: ^/, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: false }
     disable_csrf_role: ROLE_API
     service:
-        inflector: spiketeam.restbundle.util.inflector  # Addresses pluralization issue with FOSRestBundle
+        inflector: spiketeam.apibundle.util.inflector  # Addresses pluralization issue with FOSRestBundle
 
 escape_wsse_authentication:
-    authentication_provider_class: SpikeTeam\RestBundle\Security\Provider
+    authentication_provider_class: SpikeTeam\ApiBundle\Security\Provider
 
 # Nelmio API Doc Configuration
 nelmio_api_doc: ~

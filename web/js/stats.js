@@ -1,5 +1,5 @@
 var Stats = {
-    initialize: function () {
+    init: function () {
         $.ajax({
             type: "GET",
             url: "/data/stats.csv",

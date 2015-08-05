@@ -44,12 +44,17 @@ class SettingController extends Controller
     public function settingEditAction($name, Request $request)
     {
         $allUrl = $this->generateUrl('spiketeam_setting_setting_settingsall');
+        if ($name != 'twilio_message' && !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            return $this->redirect($allUrl);
+        }
+
         $setting = $this->repo->findOneByName($name);
 
         $form = $this->createFormBuilder($setting)
             ->add('name', 'text', array(
                 'data' => $setting->getName(),
                 'required' => true,
+                'disabled' => true
             ))
             ->add('setting', 'textarea', array(
                 'data' => $setting->getSetting(),

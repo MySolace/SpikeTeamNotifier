@@ -1,6 +1,6 @@
 <?php
 
-namespace SpikeTeam\RestBundle\Util\Inflector;
+namespace SpikeTeam\ApiBundle\Util\Inflector;
 
 use FOS\RestBundle\Util\Inflector\InflectorInterface;
 

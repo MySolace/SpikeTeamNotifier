@@ -21,7 +21,12 @@
         {% block javascripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+            <script src="{{ asset('js/libraries/sorttable.js') }}"></script>
             <script src="{{ asset('js/app.js') }}"></script>
+            <script src="{{ asset('js/button.js') }}"></script>
+            <script src="{{ asset('js/groups.js') }}"></script>
             <script src="{{ asset('js/stats.js') }}"></script>
         {% endblock %}
     </body>

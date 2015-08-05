@@ -55,9 +55,25 @@ body {
   color: black;
   padding: 1.5em 2em;
   min-width: 520px;
+  margin-bottom: 20px;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black; }
+
+.groups {
+  overflow: hidden; }
+  .groups .buttons {
+    width: calc(100% - 80px);
+    float: left; }
+    .groups .buttons button {
+      margin-bottom: 20px; }
+
+table.spikers tr.disabled, table.spikers option.disabled {
+  font-style: italic;
+  color: gray; }
+  table.spikers tr.disabled select, table.spikers tr.disabled .edit, table.spikers option.disabled select, table.spikers option.disabled .edit {
+    font-style: normal;
+    color: black; }
 
 .token-para {
   margin-top: 1em; }
@@ -71,6 +87,12 @@ td.center {
   margin: 0 auto;
   width: 100%;
   text-align: center; }
+
+.spiker-numbers {
+  font-size: 14px;
+  font-style: italic;
+  color: gray;
+  padding-top: .5em; }
 
 body.anon #inner #fos-user {
   margin: 150px auto;
@@ -86,15 +108,34 @@ body.anon #inner #fos-user {
     width: 300px; }
 
 #button-box {
+  clear: both;
   text-align: center;
   width: 300px;
   height: 300px;
-  margin: 0 auto;
+  margin: 30px auto;
   background: repeating-linear-gradient(-45deg, black, black 16px, yellow 16px, yellow 32px);
   overflow: hidden;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black; }
+
+.section-button .page {
+  text-align: center;
+  min-width: 10px !important;
+  width: 300px;
+  margin: 0 auto; }
+  .section-button .page .latest {
+    font-size: 14px;
+    font-style: italic;
+    color: gray; }
+  .section-button .page select {
+    text-align: center; }
+    .section-button .page select:hover {
+      cursor: pointer; }
+    .section-button .page select option:disabled {
+      font-style: italic; }
+      .section-button .page select option:disabled:before, .section-button .page select option:disabled:after {
+        content: '-'; }
 
 #button-box-inner {
   width: 225px;
@@ -119,6 +160,80 @@ body.anon #inner #fos-user {
       background-position: 0 -200px; }
     #button-box-inner #button.disabled button.button-image {
       opacity: .6; }
+
+/**
+ * CSS for On/Off button from https://proto.io/freebies/onoff/
+ */
+.onoffswitch {
+  margin-top: 3px;
+  float: right;
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none; }
+
+.onoffswitch-checkbox {
+  display: none; }
+
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #FFFFFF;
+  border-radius: 50px; }
+
+.onoffswitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s; }
+
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 25px;
+  padding: 0;
+  line-height: 25px;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+  box-sizing: border-box; }
+
+.onoffswitch-inner:before {
+  content: "ON";
+  padding-left: 10px;
+  background-color: #337AB7;
+  color: #FFFFFF; }
+
+.onoffswitch-inner:after {
+  content: "OFF";
+  padding-right: 10px;
+  background-color: #EEEEEE;
+  color: #999999;
+  text-align: right; }
+
+.onoffswitch-switch {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 5px;
+  background: #FFFFFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 35px;
+  border: 2px solid #FFFFFF;
+  border-radius: 20px;
+  transition: all 0.3s ease-in 0s; }
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0; }
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 0px; }
 
 div.stats-container {
   padding: 10px;

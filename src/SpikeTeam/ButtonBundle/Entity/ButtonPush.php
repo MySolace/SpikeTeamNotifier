@@ -4,11 +4,13 @@ namespace SpikeTeam\ButtonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use SpikeTeam\UserBundle\Entity\SpikerGroup;
+
 /**
  * ButtonPush
  *
  * @ORM\Table(name="button_push")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SpikeTeam\ButtonBundle\Entity\ButtonPushRepository")
  */
 class ButtonPush
 {
@@ -33,6 +35,11 @@ class ButtonPush
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SpikeTeam\UserBundle\Entity\SpikerGroup", inversedBy="pushes", cascade={"persist"})
+     */
+    private $group;
 
     /**
      * Construct with $pushTime and $userId
@@ -95,10 +102,34 @@ class ButtonPush
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * Set group
+     *
+     * @param SpikerGroup $group
+     *
+     * @return ButtonPush
+     */
+    public function setGroup(SpikerGroup $group = null)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return SpikerGroup
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 }

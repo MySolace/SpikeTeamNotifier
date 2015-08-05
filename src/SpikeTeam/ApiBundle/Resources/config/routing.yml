@@ -1,0 +1,9 @@
+spiker_api_v1:
+    type: rest
+    prefix: /v1
+    resource: "SpikeTeam\ApiBundle\Controller\ApiV1Controller"
+    name_prefix:  api_v1_
+
+spiker_api_v2:
+    prefix: /v2
+    resource: "SpikeTeam\ApiBundle\Controller\ApiV2Controller"

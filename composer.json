@@ -25,7 +25,8 @@
         "friendsofsymfony/rest-bundle": "~1.4",
         "jms/serializer-bundle": "0.13.*",
         "nelmio/api-doc-bundle": "@dev",
-        "escapestudios/wsse-authentication-bundle": "2.3.x-dev"
+        "escapestudios/wsse-authentication-bundle": "2.3.x-dev",
+        "friendsofsymfony/jsrouting-bundle": "~1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

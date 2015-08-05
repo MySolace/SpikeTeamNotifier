@@ -16,7 +16,30 @@
     color: black;
     padding: $page-padding-y $page-padding-x;
     min-width: 520px;
+    margin-bottom: 20px;
     @include drops;
+}
+
+.groups {
+    overflow: hidden;
+    .buttons {
+        button {
+            margin-bottom: 20px;
+        }
+        width: calc(100% - 80px);
+        float: left;
+    }
+}
+
+table.spikers {
+    tr.disabled, option.disabled {
+        font-style: italic;
+        color: $color-gray;
+        select, .edit {
+            font-style: normal;
+            color: black;
+        }
+    }
 }
 
 .token-para {
@@ -33,4 +56,9 @@ td.center {
     margin: 0 auto;
     width: 100%;
     text-align: center;
+}
+
+.spiker-numbers {
+    @include sub-italic;
+    padding-top: .5em;
 }

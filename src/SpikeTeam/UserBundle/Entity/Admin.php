@@ -42,6 +42,20 @@ class Admin extends BaseUser
     private $lastName;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=11, nullable=true)
+     */
+    private $phoneNumber;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_enabled", type="boolean", options={"default" = 0})
+     */
+    private $isEnabled = 0;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -123,4 +137,49 @@ class Admin extends BaseUser
         return parent::setEmailCanonical($emailCanonical);
     }
 
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     * @return Spiker
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * Set isEnabled
+     *
+     * @param boolean $isEnabled
+     * @return Spiker
+     */
+    public function setIsEnabled($isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnabled
+     *
+     * @return boolean
+     */
+    public function getIsEnabled()
+    {
+        return $this->isEnabled;
+    }
 }

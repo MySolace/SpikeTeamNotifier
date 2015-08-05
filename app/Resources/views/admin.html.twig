@@ -32,3 +32,12 @@
       </div><!-- /.container-fluid -->
     </nav>
 {% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript">
+      window.onload = function() {
+          App.init();
+      };
+  </script>
+{% endblock %}

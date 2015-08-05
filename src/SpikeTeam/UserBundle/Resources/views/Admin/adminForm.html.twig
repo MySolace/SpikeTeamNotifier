@@ -24,6 +24,14 @@
                 {{ form_label(form.password) }}
                 {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}
             </div>
+            <div class="form-group">
+                {{ form_label(form.phoneNumber) }}
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_widget(form.isEnabled, {'attr': {'class': 'inlineCheckbox'} }) }}
+                {{ form_label(form.isEnabled, 'Opt-in to alert texts?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+            </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="form-group">
                     {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
@@ -32,15 +40,10 @@
             {% endif %}
 
             {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
-            <a href="{{ cancel }}"><button class="btn">Cancel</button></a>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ remove }}">
+            <a href="{{ path('admin') }}"><button class="btn">Cancel</button></a>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ path('admin_delete', {'email': admin.email}) }}">
                 <button class="btn pull-right">Remove</button></a>
             {% endif %}
         {{ form_end(form) }}
-
-        <hr/>
-
-        <button class="token-button btn">Click here to <span class="replace">view</span> token</button>
-        <div class="token-para" style="display: none;"><strong>Username:</strong> {{ admin.email }}<br /><strong>Token:</strong> {{ admin.password }}<br />{{ message }}</div>
     </div>
 {% endblock %}
