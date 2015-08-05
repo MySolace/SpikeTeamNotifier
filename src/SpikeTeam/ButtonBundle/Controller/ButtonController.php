@@ -22,10 +22,9 @@ class ButtonController extends Controller
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
         $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
 
-        $next = 1;
         $next = $this->getNextGroup();
-
         $canPush = ($this->checkPrevPushes()) ? true : false;
+
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
             'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),
             'canPush' => $canPush,
@@ -89,9 +88,10 @@ class ButtonController extends Controller
     {
         $buttonRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
         $current = $buttonRepo->findMostRecent();
+        $next = 1;
 
         if (!$current) {
-            return 1;
+            return $next;
         }
 
         // In case $id is not supplied
@@ -113,9 +113,7 @@ class ButtonController extends Controller
             // Dealing w/ 'all's. If all, go back one and see if we can do something with it. If not, default = 1
             $previous = $buttonRepo->findMostRecent($current->getId());
             if ($previous->getGroup() != null) {
-                return $this->getNextGroup($previous->getGroup()->getId());
-            } else {
-                $next = 1;
+                $next = $this->getNextGroup($previous->getGroup()->getId());
             }
         }
         return $next;
