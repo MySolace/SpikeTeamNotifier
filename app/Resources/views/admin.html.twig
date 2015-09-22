@@ -25,7 +25,7 @@
             <li class="settings"><a href="/settings">Settings</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="user"><a href="/admin/{{ app.user.email }}/edit">{{ app.user.email }}</a></li>
+            <li class="user"><a href="{{ path('admin_edit', {'email': app.user.email}) }}">{{ app.user.email }}</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
