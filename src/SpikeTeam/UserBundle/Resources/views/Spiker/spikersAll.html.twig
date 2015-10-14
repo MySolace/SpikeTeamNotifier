@@ -32,9 +32,11 @@
                 </label>
             </div>
 
-            <div style="text-align:right;">
-                <a href="{{ path('spikers_export') }}">CSV</a>
-            </div>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <div style="text-align:right;">
+                    <a href="{{ path('spikers_export') }}">CSV</a>
+                </div>
+            {% endif %}
         </div>
 
         <table class="table spikers sortable">
