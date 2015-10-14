@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
@@ -232,4 +233,46 @@ class SpikerController extends Controller
         return $this->redirect($this->generateUrl('spikers'));
     }
 
+    /**
+     * CSV Export spikers here
+     * @Route("/export", name="spikers_export")
+     */
+    public function spikerExportAction()
+    {
+        $response = new StreamedResponse();
+        $response->setCallback(function() {
+
+            $handle = fopen('php://output', 'w+');
+            fputcsv($handle, array(
+                'First Name',
+                'Last Name',
+                'Phone',
+                'Email',
+                'Group',
+                'Cohort',
+                'Enabled?',
+                'Supervisor?',
+            ),',');
+            $spikers = $this->repo->findAll();
+            foreach ($spikers as $spiker) {
+                fputcsv($handle, array(
+                    $spiker->getFirstName(),
+                    $spiker->getLastName(),
+                    $spiker->getPhoneNumber(),
+                    $spiker->getEmail(),
+                    $spiker->getGroup(),
+                    $spiker->getCohort(),
+                    ($spiker->getIsEnabled()) ? 'Yes' : 'No',
+                    ($spiker->getIsSupervisor()) ? 'Yes' : 'No',
+                ),',');
+            }
+            fclose($handle);
+        });
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition','attachment; filename="spikers.csv"');
+
+        return $response;
+    }
 }
