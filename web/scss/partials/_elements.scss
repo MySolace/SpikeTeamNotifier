@@ -24,10 +24,24 @@
     overflow: hidden;
     .buttons {
         button {
-            margin-bottom: 20px;
+            margin-bottom: 1em;
         }
         width: calc(100% - 80px);
         float: left;
+    }
+}
+
+.meta {
+    position: relative;
+    width: 100%;
+    .spiker-numbers {
+        @include sub-italic;
+        float: left;
+        padding-left: .5em;
+    }
+    .export-button {
+        float: right;
+        padding-right: 1em;
     }
 }
 
@@ -56,9 +70,4 @@ td.center {
     margin: 0 auto;
     width: 100%;
     text-align: center;
-}
-
-.spiker-numbers {
-    @include sub-italic;
-    padding-top: .5em;
 }

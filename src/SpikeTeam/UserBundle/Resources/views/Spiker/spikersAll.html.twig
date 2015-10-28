@@ -32,14 +32,20 @@
                 </label>
             </div>
 
+        </div>
+
+        <div class="meta">
+            <div class="spiker-numbers">
+                <span class="group">{{ count }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers
+            </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div style="text-align:right;">
-                    <a href="{{ path('spikers_export') }}">CSV</a>
+                <div class="export-button">
+                    <a href="{{ path('spikers_export', {gid: group}) }}">CSV</a>
                 </div>
             {% endif %}
         </div>
 
-        <table class="table spikers sortable">
+        <table class="table spikers">
             <thead><tr>
                 <th>Enabled</th>
                 <th>Super</th>
@@ -103,7 +109,7 @@
                             <input type="submit" name="enabler" value="Save Status" class="btn btn-default" />
                         </td>
                         <td colspan="7">
-                            <div class="spiker-numbers"><span class="group">{{ count }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers</div>
+                            {#  #}
                         </td>
                     </tr>
                     {% if group is not null %}

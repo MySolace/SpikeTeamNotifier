@@ -41,6 +41,7 @@ var Groups = {
             Groups.$buttons.onoff.hide();
             Groups.$table.find('tr.spiker').show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.spiker').length);
+            $('.export-button a').attr('href', Routing.generate('spikers_export'));
             $.get(Routing.generate('group_emptiest_check'), function (data) {
                 $('select#form_group').val(data.emptiest);
             })
@@ -65,6 +66,7 @@ var Groups = {
             Groups.$table.find('tr.group-'+id.toString()).show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.group-'+id.toString()).length);
             $('select#form_group').val(id);
+            $('.export-button a').attr('href', Routing.generate('spikers_export', {gid: id}));
             history.pushState({}, 'Spike Team Notifier', Routing.generate('spikers', {group:id}));
         });
 

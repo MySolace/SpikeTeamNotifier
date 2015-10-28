@@ -235,12 +235,14 @@ class SpikerController extends Controller
 
     /**
      * CSV Export spikers here
-     * @Route("/export", name="spikers_export")
+     * @Route("/export/{gid}", name="spikers_export", options={"expose":true})
+     * 
+     * @param int $group
      */
-    public function spikerExportAction()
+    public function spikerExportAction($gid = null)
     {
         $response = new StreamedResponse();
-        $response->setCallback(function() {
+        $response->setCallback(function() use ($gid) {
 
             $handle = fopen('php://output', 'w+');
             fputcsv($handle, array(
@@ -249,22 +251,26 @@ class SpikerController extends Controller
                 'Phone',
                 'Email',
                 'Group',
+                'Captain?',
                 'Cohort',
                 'Enabled?',
                 'Supervisor?',
             ),',');
             $spikers = $this->repo->findAll();
             foreach ($spikers as $spiker) {
-                fputcsv($handle, array(
-                    $spiker->getFirstName(),
-                    $spiker->getLastName(),
-                    $spiker->getPhoneNumber(),
-                    $spiker->getEmail(),
-                    $spiker->getGroup(),
-                    $spiker->getCohort(),
-                    ($spiker->getIsEnabled()) ? 'Yes' : 'No',
-                    ($spiker->getIsSupervisor()) ? 'Yes' : 'No',
-                ),',');
+                if ($spiker->getGroup() == $gid || $gid == null) {
+                    fputcsv($handle, array(
+                        $spiker->getFirstName(),
+                        $spiker->getLastName(),
+                        $spiker->getPhoneNumber(),
+                        $spiker->getEmail(),
+                        $spiker->getGroup(),
+                        ($spiker->getIsCaptain()) ? 'Yes' : 'No',
+                        $spiker->getCohort(),
+                        ($spiker->getIsEnabled()) ? 'Yes' : 'No',
+                        ($spiker->getIsSupervisor()) ? 'Yes' : 'No',
+                    ),',');
+                }
             }
             fclose($handle);
         });
