@@ -1,11 +1,12 @@
 var Groups = {
     init: function() {
         Groups.$buttons = {
-            buttons: $('.groups button'),
+            buttons: $('.groups button').not('.shuffle'),
             groups: $('.groups button.group'),
             all: $('.groups button.all'),
             add: $('.groups button.add'),
-            onoff: $('.groups .onoffswitch')
+            onoff: $('.groups .onoffswitch'),
+            shuffle: $('.groups button.shuffle'),
         };
         Groups.$table = $('table.spikers');
 
@@ -39,6 +40,7 @@ var Groups = {
 
         Groups.$buttons.all.click(function() {
             Groups.$buttons.onoff.hide();
+            Groups.$buttons.shuffle.show();
             Groups.$table.find('tr.spiker').show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.spiker').length);
             $('.export-button a').attr('href', Routing.generate('spikers_export'));
@@ -62,6 +64,7 @@ var Groups = {
                 }
             });
             Groups.$buttons.onoff.show();
+            Groups.$buttons.shuffle.hide();
             Groups.$table.find('tr.spiker').hide();
             Groups.$table.find('tr.group-'+id.toString()).show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.group-'+id.toString()).length);
@@ -73,6 +76,18 @@ var Groups = {
         Groups.$buttons.add.click(function() {
             if (confirm("Are you sure you want to add another group?\nYou will not be able to remove it once it is created.") == true) {
                 window.location.replace(Routing.generate('group_new'));
+            }
+        });
+
+        Groups.$buttons.shuffle.click(function() {
+            if (confirm("Are you sure you want to shuffle all spikers?") == true) {
+                if (confirm("Are you sure you sure you are sure? No turning back now!") == true) {
+                    $.get(Routing.generate('spikers_shuffle'), function (data) {
+                        if (data) {
+                            console.log('shuffled!');
+                        }
+                    });
+                }
             }
         });
     },

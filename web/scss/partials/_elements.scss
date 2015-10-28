@@ -29,6 +29,10 @@
         width: calc(100% - 80px);
         float: left;
     }
+    .group-right {
+        float: right;
+        display: inline-block;
+    }
 }
 
 .meta {
@@ -53,6 +57,9 @@ table.spikers {
             font-style: normal;
             color: black;
         }
+    }
+    tr.captain {
+        background-color: $color-captain;
     }
 }
 

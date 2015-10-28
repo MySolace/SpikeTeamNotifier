@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -84,14 +85,20 @@ class SpikerController extends Controller
             $newSpiker->setCohort(intval($newSpiker->getCohort()));
         }
 
-        // Sorting by group, then first name
+        // Sorting by group, then captain, then first name
         usort($spikers, function($a, $b) {
-            $aid = $a->getGroup()->getId();
-            $bid = $b->getGroup()->getId();
-            if ($aid == $bid) {
-                return $a->getFirstName() >= $b->getFirstName();
+            $aGid = $a->getGroup()->getId();
+            $bGid = $b->getGroup()->getId();
+            if ($aGid == $bGid) {
+                if ($a->getIsCaptain()) {
+                    return false;
+                } else if ($b->getIsCaptain()) {
+                    return true;
+                } else {
+                    return $a->getFirstName() >= $b->getFirstName();
+                }
             } else {
-                return $aid > $bid;
+                return $aGid > $bGid;
             }
         });
 
@@ -239,7 +246,7 @@ class SpikerController extends Controller
      * 
      * @param int $group
      */
-    public function spikerExportAction($gid = null)
+    public function spikersExportAction($gid = null)
     {
         $response = new StreamedResponse();
         $response->setCallback(function() use ($gid) {
@@ -280,5 +287,14 @@ class SpikerController extends Controller
         $response->headers->set('Content-Disposition','attachment; filename="spikers.csv"');
 
         return $response;
+    }
+    /**
+     * Shuffle Spikers randomizedly into Groups
+     * @Route("/shuffle", name="spikers_shuffle", options={"expose":true})
+     */
+    public function spikersShuffleAction()
+    {
+        // Do the stuff to shuffle everybody here
+        return new JsonResponse(true);
     }
 }
