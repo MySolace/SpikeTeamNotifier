@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
+use SpikeTeam\UserBundle\Entity\Spiker;
 use SpikeTeam\UserBundle\Form\SpikerGroupType;
 
 /**
@@ -239,4 +240,44 @@ class SpikerGroupController extends Controller
         return new JsonResponse();
     }
 
+    /**
+     * AJAX query, set captain for group
+     *
+     * @Route("/captain/{id}/{cid}", name="group_captain_set", options={"expose"=true})
+     */
+    public function setCaptainAction($id, $cid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $group = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
+        $captain = $em->getRepository('SpikeTeamUserBundle:Spiker')->find($cid);
+
+        $oldCaptain = $group->getCaptain();
+        if (isset($oldCaptain)) {
+            if ($oldCaptain->getId() !== $cid) {
+                $oldCaptain->setIsCaptain(false);
+                $em->persist($oldCaptain);
+            } else {
+                return new JsonResponse(true);
+            }
+        }
+
+        $oldGroup = $captain->getGroup();
+        if (isset($oldGroup) && $oldGroup !== $group) {
+            if ($oldGroup->getCaptain() == $captain) {
+                $oldGroup->setCaptain();
+                $em->persist($oldGroup);
+                $em->flush();
+            }
+            $captain->setGroup($group);
+        }
+
+        $group->setCaptain($captain);
+        $captain->setIsCaptain(true);
+
+        $em->persist($group);
+        $em->persist($captain);
+        $em->flush();
+
+        return new JsonResponse(true);
+    }
 }
