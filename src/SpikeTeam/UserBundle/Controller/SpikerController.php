@@ -132,6 +132,9 @@ class SpikerController extends Controller
         $spikers = $this->repo->findAll();
         $data = $request->request->all();
         foreach ($spikers as $spiker) {
+            if ($spiker->getIsCaptain()) {
+                continue;
+            }
             $sid = $spiker->getId();
             if (isset($data[$sid.'-enabled']) && $data[$sid.'-enabled'] == '1') {
                 $spiker->setIsEnabled(true);
