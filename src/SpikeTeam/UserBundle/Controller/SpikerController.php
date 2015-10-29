@@ -297,24 +297,24 @@ class SpikerController extends Controller
         $spikers = $this->repo->findNonCaptain();
         $groupIds = $this->gRepo->getAllIds();
         $limits = json_decode($this->get('config')->get('group_limits', '{"low":60,"high":80}'));
-
-        foreach($spikers as $spiker) {
-            $spiker->setGroup();
-            while($spiker->getGroup() == null) {
-                $randId = rand(1, max(array_keys($groupIds)));
-                // Checking for if group id actually in the list, and is enabled
-                if (isset($groupIds[$randId]) && $groupIds[$randId]) {
-                    $group = $this->gRepo->find($randId);
-                    // Checking for if group is currently below limit and isn't the largest one
-                    if (count($group->getSpikers()) < $limits->low
-                        && $this->gRepo->findEmptiest(false) !== $group) {
-                        $spiker->setGroup($group);
-                    }
-                }
-            }
-            $this->em->persist($spiker);
+        for ($i = 0; $i < 3; $i++) {
+            shuffle($spikers);
         }
-        $this->em->flush();
+
+        array_walk($spikers, function(&$spiker) {
+            $spiker->setGroup();
+        });
+
+        $assigned = 0;
+        while ($assigned < count($spikers)) {
+            $spiker = $spikers[array_rand($spikers)];
+            if ($spiker->getGroup() == null) {
+                $spiker->setGroup($this->gRepo->findEmptiest());
+                $this->em->persist($spiker);
+                $this->em->flush();
+                $assigned++;
+            }
+        }
 
         return new JsonResponse(true);
     }
