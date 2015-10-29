@@ -294,7 +294,28 @@ class SpikerController extends Controller
      */
     public function spikersShuffleAction()
     {
-        // Do the stuff to shuffle everybody here
+        $spikers = $this->repo->findNonCaptain();
+        $groupIds = $this->gRepo->getAllIds();
+        $limits = json_decode($this->get('config')->get('group_limits', '{"low":60,"high":80}'));
+
+        foreach($spikers as $spiker) {
+            $spiker->setGroup();
+            while($spiker->getGroup() == null) {
+                $randId = rand(1, max(array_keys($groupIds)));
+                // Checking for if group id actually in the list, and is enabled
+                if (isset($groupIds[$randId]) && $groupIds[$randId]) {
+                    $group = $this->gRepo->find($randId);
+                    // Checking for if group is currently below limit and isn't the largest one
+                    if (count($group->getSpikers()) < $limits->low
+                        && $this->gRepo->findEmptiest(false) !== $group) {
+                        $spiker->setGroup($group);
+                    }
+                }
+            }
+            $this->em->persist($spiker);
+        }
+        $this->em->flush();
+
         return new JsonResponse(true);
     }
 }

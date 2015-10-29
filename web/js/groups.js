@@ -27,10 +27,10 @@ var Groups = {
             }
         });
 
-        Groups.list();
+        Groups.bindClicks();
     },
 
-    list: function() {
+    bindClicks: function() {
         Groups.$buttons.buttons.click(function () {
             if (!$(this).hasClass('add')) {
                 Groups.$buttons.buttons.removeClass('btn-primary').addClass('btn-default');

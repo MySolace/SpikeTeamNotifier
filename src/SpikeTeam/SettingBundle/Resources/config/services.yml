@@ -1,0 +1,4 @@
+services:
+    config:
+        class: SpikeTeam\SettingBundle\Service\Config
+        arguments:  ["@doctrine.orm.entity_manager"]

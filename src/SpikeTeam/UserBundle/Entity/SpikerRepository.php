@@ -28,4 +28,18 @@ class SpikerRepository extends EntityRepository
         }
     }
 
+    /**
+     * Returns Spikers from enabled groups
+     */
+    public function findNonCaptain()
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.isCaptain is null OR s.isCaptain <> 1');
+
+        try {
+            return $qb->getQuery()->getResult();
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
 }
