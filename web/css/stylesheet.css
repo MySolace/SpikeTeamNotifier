@@ -31,7 +31,7 @@ body {
   height: 100%;
   background-color: #FFF; }
   body #inner {
-    width: 75%;
+    width: 85%;
     margin: 0 auto; }
 
 #body {
@@ -58,7 +58,18 @@ body {
   margin-bottom: 20px;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
-  box-shadow: 0 8px 6px -6px black; }
+  box-shadow: 0 8px 6px -6px black;
+  position: relative;
+  overflow: hidden; }
+  .page .form-left, .page .form-right {
+    width: 47.5%; }
+  .page .form-left {
+    float: left; }
+  .page .form-right {
+    float: right; }
+  .page .form-bottom {
+    padding-top: .5em;
+    clear: both; }
 
 .groups {
   overflow: hidden; }
@@ -93,9 +104,6 @@ table.spikers tr.disabled, table.spikers option.disabled {
 table.spikers tr.captain {
   background-color: #FFFFE8; }
 
-.token-para {
-  margin-top: 1em; }
-
 td.center {
   text-align: center; }
 
@@ -105,6 +113,11 @@ td.center {
   margin: 0 auto;
   width: 100%;
   text-align: center; }
+
+.spiker-edit-captain {
+  padding-left: .75em; }
+  .spiker-edit-captain .checkbox-inline {
+    padding-left: .25em; }
 
 body.anon #inner #fos-user {
   margin: 150px auto;

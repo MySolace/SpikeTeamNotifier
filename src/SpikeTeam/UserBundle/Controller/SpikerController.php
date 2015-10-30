@@ -164,6 +164,7 @@ class SpikerController extends Controller
         $processedNumber = $this->userHelper->processNumber($input);
         if ($processedNumber) {
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
+            $oldGroup = $spiker->getGroup();
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
@@ -191,6 +192,10 @@ class SpikerController extends Controller
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
                     'required' => true,
                 ))
+                ->add('isCaptain', 'checkbox', array(
+                    'data' => $spiker->getIsCaptain(),
+                    'required' => false,
+                ))
                 ->add('isSupervisor', 'checkbox', array(
                     'data' => $spiker->getIsSupervisor(),
                     'required' => false,
@@ -204,6 +209,15 @@ class SpikerController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                if ($spiker->getIsCaptain()) {
+                    // Keep spiker from changing groups if captain
+                    if ($spiker->getGroup() !== $oldGroup) {
+                        $spiker->setGroup($oldGroup);
+                        $this->em->persist($spiker);
+                    }
+                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup(), $oldGroup);
+                }
+
                 // Process number to remove extra characters and add '1' country code
                 $processedNumber = $this->userHelper->processNumber($spiker->getPhoneNumber());
 
@@ -216,7 +230,6 @@ class SpikerController extends Controller
                 } else {
                     return $this->redirect($editUrl);
                 }
-                $newSpiker->setCohort(intval($newSpiker->getCohort()));
             }
 
             return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(

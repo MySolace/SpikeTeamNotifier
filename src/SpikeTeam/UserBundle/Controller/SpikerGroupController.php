@@ -251,33 +251,12 @@ class SpikerGroupController extends Controller
         $group = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
         $captain = $em->getRepository('SpikeTeamUserBundle:Spiker')->find($cid);
 
-        $oldCaptain = $group->getCaptain();
-        if (isset($oldCaptain)) {
-            if ($oldCaptain->getId() !== $cid) {
-                $oldCaptain->setIsCaptain(false);
-                $em->persist($oldCaptain);
-            } else {
-                return new JsonResponse(true);
-            }
+        if ($captain->getGroup() == $group) {
+            $this->get('spike_team.user_helper')->setCaptain($captain, $group);
+            $return = true;
+        } else {
+            $return = false;
         }
-
-        $oldGroup = $captain->getGroup();
-        if (isset($oldGroup) && $oldGroup !== $group) {
-            if ($oldGroup->getCaptain() == $captain) {
-                $oldGroup->setCaptain();
-                $em->persist($oldGroup);
-                $em->flush();
-            }
-            $captain->setGroup($group);
-        }
-
-        $group->setCaptain($captain);
-        $captain->setIsCaptain(true);
-
-        $em->persist($group);
-        $em->persist($captain);
-        $em->flush();
-
-        return new JsonResponse(true);
+        return new JsonResponse($return);
     }
 }

@@ -84,7 +84,7 @@ var Groups = {
                 if (confirm("Are you sure you sure you are sure? No turning back now!") == true) {
                     $.get(Routing.generate('spikers_shuffle'), function (data) {
                         if (data) {
-                            console.log('shuffled!');
+                            location.reload();
                         }
                     });
                 }

@@ -18,6 +18,21 @@
     min-width: 520px;
     margin-bottom: 20px;
     @include drops;
+    position: relative;
+    overflow: hidden;
+    .form-left, .form-right {
+        width: 47.5%;
+    }
+    .form-left {
+        float: left;
+    }
+    .form-right {
+        float: right;
+    }
+    .form-bottom {
+        padding-top: .5em;
+        clear: both;
+    }
 }
 
 .groups {
@@ -63,10 +78,6 @@ table.spikers {
     }
 }
 
-.token-para {
-    margin-top: 1em;
-}
-
 td.center {
     text-align: center;
 }
@@ -77,4 +88,11 @@ td.center {
     margin: 0 auto;
     width: 100%;
     text-align: center;
+}
+
+.spiker-edit-captain {
+    padding-left: .75em;
+    .checkbox-inline {
+        padding-left: .25em;
+    }
 }
