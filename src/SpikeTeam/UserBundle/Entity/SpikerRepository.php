@@ -31,7 +31,7 @@ class SpikerRepository extends EntityRepository
     /**
      * Returns Spikers from enabled groups
      */
-    public function findNonCaptain()
+    public function findAllNonCaptain()
     {
         $qb = $this->createQueryBuilder('s')
             ->where('s.isCaptain is null OR s.isCaptain <> 1');

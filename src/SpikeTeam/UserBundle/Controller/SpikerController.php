@@ -129,12 +129,9 @@ class SpikerController extends Controller
     public function spikerEnablerAction(Request $request)
     {
         // AJAX request/fire event here, instead of HTML redirect?
-        $spikers = $this->repo->findAll();
+        $spikers = $this->repo->findAllNonCaptain();
         $data = $request->request->all();
         foreach ($spikers as $spiker) {
-            if ($spiker->getIsCaptain()) {
-                continue;
-            }
             $sid = $spiker->getId();
             if (isset($data[$sid.'-enabled']) && $data[$sid.'-enabled'] == '1') {
                 $spiker->setIsEnabled(true);
@@ -310,7 +307,7 @@ class SpikerController extends Controller
      */
     public function spikersShuffleAction()
     {
-        $spikers = $this->repo->findNonCaptain();
+        $spikers = $this->repo->findAllNonCaptain();
         $groupIds = $this->gRepo->getAllIds();
         $limits = json_decode($this->get('config')->get('group_limits', '{"low":60,"high":80}'));
         for ($i = 0; $i < 3; $i++) {
