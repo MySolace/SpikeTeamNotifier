@@ -78,6 +78,13 @@ class Spiker
     private $isEnabled;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_captain", type="boolean", nullable=true)
+     */
+    private $isCaptain;
+
+    /**
      * Get id
      *
      * @return integer
@@ -271,5 +278,28 @@ class Spiker
     public function getIsEnabled()
     {
         return $this->isEnabled;
+    }
+
+    /**
+     * Set isCaptain
+     *
+     * @param boolean $isCaptain
+     * @return Spiker
+     */
+    public function setIsCaptain($isCaptain)
+    {
+        $this->isCaptain = $isCaptain;
+
+        return $this;
+    }
+
+    /**
+     * Get isCaptain
+     *
+     * @return boolean
+     */
+    public function getIsCaptain()
+    {
+        return $this->isCaptain;
     }
 }

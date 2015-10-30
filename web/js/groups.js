@@ -1,11 +1,12 @@
 var Groups = {
     init: function() {
         Groups.$buttons = {
-            buttons: $('.groups button'),
+            buttons: $('.groups button').not('.shuffle'),
             groups: $('.groups button.group'),
             all: $('.groups button.all'),
             add: $('.groups button.add'),
-            onoff: $('.groups .onoffswitch')
+            onoff: $('.groups .onoffswitch'),
+            shuffle: $('.groups button.shuffle'),
         };
         Groups.$table = $('table.spikers');
 
@@ -26,10 +27,10 @@ var Groups = {
             }
         });
 
-        Groups.list();
+        Groups.bindClicks();
     },
 
-    list: function() {
+    bindClicks: function() {
         Groups.$buttons.buttons.click(function () {
             if (!$(this).hasClass('add')) {
                 Groups.$buttons.buttons.removeClass('btn-primary').addClass('btn-default');
@@ -39,8 +40,10 @@ var Groups = {
 
         Groups.$buttons.all.click(function() {
             Groups.$buttons.onoff.hide();
+            Groups.$buttons.shuffle.show();
             Groups.$table.find('tr.spiker').show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.spiker').length);
+            $('.export-button a').attr('href', Routing.generate('spikers_export'));
             $.get(Routing.generate('group_emptiest_check'), function (data) {
                 $('select#form_group').val(data.emptiest);
             })
@@ -61,16 +64,30 @@ var Groups = {
                 }
             });
             Groups.$buttons.onoff.show();
+            Groups.$buttons.shuffle.hide();
             Groups.$table.find('tr.spiker').hide();
             Groups.$table.find('tr.group-'+id.toString()).show();
             $('.spiker-numbers .group').html(Groups.$table.find('tr.group-'+id.toString()).length);
             $('select#form_group').val(id);
+            $('.export-button a').attr('href', Routing.generate('spikers_export', {gid: id}));
             history.pushState({}, 'Spike Team Notifier', Routing.generate('spikers', {group:id}));
         });
 
         Groups.$buttons.add.click(function() {
             if (confirm("Are you sure you want to add another group?\nYou will not be able to remove it once it is created.") == true) {
                 window.location.replace(Routing.generate('group_new'));
+            }
+        });
+
+        Groups.$buttons.shuffle.click(function() {
+            if (confirm("Are you sure you want to shuffle all spikers?") == true) {
+                if (confirm("Are you sure you sure you are sure? No turning back now!") == true) {
+                    $.get(Routing.generate('spikers_shuffle'), function (data) {
+                        if (data) {
+                            location.reload();
+                        }
+                    });
+                }
             }
         });
     },

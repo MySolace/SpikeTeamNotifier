@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
+use SpikeTeam\UserBundle\Entity\Spiker;
 use SpikeTeam\UserBundle\Form\SpikerGroupType;
 
 /**
@@ -239,4 +240,23 @@ class SpikerGroupController extends Controller
         return new JsonResponse();
     }
 
+    /**
+     * AJAX query, set captain for group
+     *
+     * @Route("/captain/{id}/{cid}", name="group_captain_set", options={"expose"=true})
+     */
+    public function setCaptainAction($id, $cid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $group = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
+        $captain = $em->getRepository('SpikeTeamUserBundle:Spiker')->find($cid);
+
+        if ($captain->getGroup() == $group) {
+            $this->get('spike_team.user_helper')->setCaptain($captain, $group);
+            $return = true;
+        } else {
+            $return = false;
+        }
+        return new JsonResponse($return);
+    }
 }

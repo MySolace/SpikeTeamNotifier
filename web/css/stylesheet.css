@@ -31,7 +31,7 @@ body {
   height: 100%;
   background-color: #FFF; }
   body #inner {
-    width: 75%;
+    width: 85%;
     margin: 0 auto; }
 
 #body {
@@ -58,7 +58,18 @@ body {
   margin-bottom: 20px;
   -webkit-box-shadow: 0 8px 6px -6px black;
   -moz-box-shadow: 0 8px 6px -6px black;
-  box-shadow: 0 8px 6px -6px black; }
+  box-shadow: 0 8px 6px -6px black;
+  position: relative;
+  overflow: hidden; }
+  .page .form-left, .page .form-right {
+    width: 47.5%; }
+  .page .form-left {
+    float: left; }
+  .page .form-right {
+    float: right; }
+  .page .form-bottom {
+    padding-top: .5em;
+    clear: both; }
 
 .groups {
   overflow: hidden; }
@@ -66,7 +77,23 @@ body {
     width: calc(100% - 80px);
     float: left; }
     .groups .buttons button {
-      margin-bottom: 20px; }
+      margin-bottom: 1em; }
+  .groups .group-right {
+    float: right;
+    display: inline-block; }
+
+.meta {
+  position: relative;
+  width: 100%; }
+  .meta .spiker-numbers {
+    font-size: 14px;
+    font-style: italic;
+    color: gray;
+    float: left;
+    padding-left: .5em; }
+  .meta .export-button {
+    float: right;
+    padding-right: 1em; }
 
 table.spikers tr.disabled, table.spikers option.disabled {
   font-style: italic;
@@ -74,9 +101,8 @@ table.spikers tr.disabled, table.spikers option.disabled {
   table.spikers tr.disabled select, table.spikers tr.disabled .edit, table.spikers option.disabled select, table.spikers option.disabled .edit {
     font-style: normal;
     color: black; }
-
-.token-para {
-  margin-top: 1em; }
+table.spikers tr.captain {
+  background-color: #FFFFE8; }
 
 td.center {
   text-align: center; }
@@ -88,11 +114,10 @@ td.center {
   width: 100%;
   text-align: center; }
 
-.spiker-numbers {
-  font-size: 14px;
-  font-style: italic;
-  color: gray;
-  padding-top: .5em; }
+.spiker-edit-captain {
+  padding-left: .75em; }
+  .spiker-edit-captain .checkbox-inline {
+    padding-left: .25em; }
 
 body.anon #inner #fos-user {
   margin: 150px auto;
@@ -166,10 +191,8 @@ body.anon #inner #fos-user {
  */
 .onoffswitch {
   margin-top: 3px;
-  float: right;
-  display: inline-block;
-  position: relative;
   width: 64px;
+  position: relative;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none; }

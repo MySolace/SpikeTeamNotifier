@@ -1,3 +1,4 @@
 services:
     spike_team.user_helper:
         class: SpikeTeam\UserBundle\Helper\UserHelper
+        arguments: ["@doctrine.orm.entity_manager"]

@@ -18,16 +18,49 @@
     min-width: 520px;
     margin-bottom: 20px;
     @include drops;
+    position: relative;
+    overflow: hidden;
+    .form-left, .form-right {
+        width: 47.5%;
+    }
+    .form-left {
+        float: left;
+    }
+    .form-right {
+        float: right;
+    }
+    .form-bottom {
+        padding-top: .5em;
+        clear: both;
+    }
 }
 
 .groups {
     overflow: hidden;
     .buttons {
         button {
-            margin-bottom: 20px;
+            margin-bottom: 1em;
         }
         width: calc(100% - 80px);
         float: left;
+    }
+    .group-right {
+        float: right;
+        display: inline-block;
+    }
+}
+
+.meta {
+    position: relative;
+    width: 100%;
+    .spiker-numbers {
+        @include sub-italic;
+        float: left;
+        padding-left: .5em;
+    }
+    .export-button {
+        float: right;
+        padding-right: 1em;
     }
 }
 
@@ -40,10 +73,9 @@ table.spikers {
             color: black;
         }
     }
-}
-
-.token-para {
-    margin-top: 1em;
+    tr.captain {
+        background-color: $color-captain;
+    }
 }
 
 td.center {
@@ -58,7 +90,9 @@ td.center {
     text-align: center;
 }
 
-.spiker-numbers {
-    @include sub-italic;
-    padding-top: .5em;
+.spiker-edit-captain {
+    padding-left: .75em;
+    .checkbox-inline {
+        padding-left: .25em;
+    }
 }

@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -84,14 +85,20 @@ class SpikerController extends Controller
             $newSpiker->setCohort(intval($newSpiker->getCohort()));
         }
 
-        // Sorting by group, then first name
+        // Sorting by group, then captain, then first name
         usort($spikers, function($a, $b) {
-            $aid = $a->getGroup()->getId();
-            $bid = $b->getGroup()->getId();
-            if ($aid == $bid) {
-                return $a->getFirstName() >= $b->getFirstName();
+            $aGid = $a->getGroup()->getId();
+            $bGid = $b->getGroup()->getId();
+            if ($aGid == $bGid) {
+                if ($a->getIsCaptain()) {
+                    return false;
+                } else if ($b->getIsCaptain()) {
+                    return true;
+                } else {
+                    return $a->getFirstName() >= $b->getFirstName();
+                }
             } else {
-                return $aid > $bid;
+                return $aGid > $bGid;
             }
         });
 
@@ -122,7 +129,7 @@ class SpikerController extends Controller
     public function spikerEnablerAction(Request $request)
     {
         // AJAX request/fire event here, instead of HTML redirect?
-        $spikers = $this->repo->findAll();
+        $spikers = $this->repo->findAllNonCaptain();
         $data = $request->request->all();
         foreach ($spikers as $spiker) {
             $sid = $spiker->getId();
@@ -154,6 +161,7 @@ class SpikerController extends Controller
         $processedNumber = $this->userHelper->processNumber($input);
         if ($processedNumber) {
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
+            $oldGroup = $spiker->getGroup();
             // refactor code so this form lines up externally with one above
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
@@ -181,6 +189,10 @@ class SpikerController extends Controller
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
                     'required' => true,
                 ))
+                ->add('isCaptain', 'checkbox', array(
+                    'data' => $spiker->getIsCaptain(),
+                    'required' => false,
+                ))
                 ->add('isSupervisor', 'checkbox', array(
                     'data' => $spiker->getIsSupervisor(),
                     'required' => false,
@@ -194,6 +206,15 @@ class SpikerController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                if ($spiker->getIsCaptain()) {
+                    // Keep spiker from changing groups if captain
+                    if ($spiker->getGroup() !== $oldGroup) {
+                        $spiker->setGroup($oldGroup);
+                        $this->em->persist($spiker);
+                    }
+                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup(), $oldGroup);
+                }
+
                 // Process number to remove extra characters and add '1' country code
                 $processedNumber = $this->userHelper->processNumber($spiker->getPhoneNumber());
 
@@ -206,7 +227,6 @@ class SpikerController extends Controller
                 } else {
                     return $this->redirect($editUrl);
                 }
-                $newSpiker->setCohort(intval($newSpiker->getCohort()));
             }
 
             return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
@@ -235,12 +255,14 @@ class SpikerController extends Controller
 
     /**
      * CSV Export spikers here
-     * @Route("/export", name="spikers_export")
+     * @Route("/export/{gid}", name="spikers_export", options={"expose":true})
+     * 
+     * @param int $group
      */
-    public function spikerExportAction()
+    public function spikersExportAction($gid = null)
     {
         $response = new StreamedResponse();
-        $response->setCallback(function() {
+        $response->setCallback(function() use ($gid) {
 
             $handle = fopen('php://output', 'w+');
             fputcsv($handle, array(
@@ -249,22 +271,26 @@ class SpikerController extends Controller
                 'Phone',
                 'Email',
                 'Group',
+                'Captain?',
                 'Cohort',
                 'Enabled?',
                 'Supervisor?',
             ),',');
             $spikers = $this->repo->findAll();
             foreach ($spikers as $spiker) {
-                fputcsv($handle, array(
-                    $spiker->getFirstName(),
-                    $spiker->getLastName(),
-                    $spiker->getPhoneNumber(),
-                    $spiker->getEmail(),
-                    $spiker->getGroup(),
-                    $spiker->getCohort(),
-                    ($spiker->getIsEnabled()) ? 'Yes' : 'No',
-                    ($spiker->getIsSupervisor()) ? 'Yes' : 'No',
-                ),',');
+                if ($spiker->getGroup() == $gid || $gid == null) {
+                    fputcsv($handle, array(
+                        $spiker->getFirstName(),
+                        $spiker->getLastName(),
+                        $spiker->getPhoneNumber(),
+                        $spiker->getEmail(),
+                        $spiker->getGroup(),
+                        ($spiker->getIsCaptain()) ? 'Yes' : 'No',
+                        $spiker->getCohort(),
+                        ($spiker->getIsEnabled()) ? 'Yes' : 'No',
+                        ($spiker->getIsSupervisor()) ? 'Yes' : 'No',
+                    ),',');
+                }
             }
             fclose($handle);
         });
@@ -274,5 +300,35 @@ class SpikerController extends Controller
         $response->headers->set('Content-Disposition','attachment; filename="spikers.csv"');
 
         return $response;
+    }
+    /**
+     * Shuffle Spikers randomizedly into Groups
+     * @Route("/shuffle", name="spikers_shuffle", options={"expose":true})
+     */
+    public function spikersShuffleAction()
+    {
+        $spikers = $this->repo->findAllNonCaptain();
+        $groupIds = $this->gRepo->getAllIds();
+        $limits = json_decode($this->get('config')->get('group_limits', '{"low":60,"high":80}'));
+        for ($i = 0; $i < 3; $i++) {
+            shuffle($spikers);
+        }
+
+        array_walk($spikers, function(&$spiker) {
+            $spiker->setGroup();
+        });
+
+        $assigned = 0;
+        while ($assigned < count($spikers)) {
+            $spiker = $spikers[array_rand($spikers)];
+            if ($spiker->getGroup() == null) {
+                $spiker->setGroup($this->gRepo->findEmptiest());
+                $this->em->persist($spiker);
+                $this->em->flush();
+                $assigned++;
+            }
+        }
+
+        return new JsonResponse(true);
     }
 }

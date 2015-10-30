@@ -8,6 +8,7 @@
     </div>
     <div class="page">
         {{ form_start(form) }}
+        <div class="form-left">
             <div class="form-group">
                 {{ form_label(form.firstName) }}
                 {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}
@@ -24,6 +25,9 @@
                 {{ form_label(form.password) }}
                 {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'} }) }}
             </div>
+        </div>
+
+        <div class="form-right">
             <div class="form-group">
                 {{ form_label(form.phoneNumber) }}
                 {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}
@@ -38,12 +42,15 @@
                     {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
                 </div>
             {% endif %}
+        </div>
 
+        <div class="form-bottom">
             {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
             <a href="{{ path('admin') }}"><button class="btn">Cancel</button></a>
             {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ path('admin_delete', {'email': admin.email}) }}">
                 <button class="btn pull-right">Remove</button></a>
             {% endif %}
+        </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}

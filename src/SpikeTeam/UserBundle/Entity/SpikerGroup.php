@@ -42,6 +42,11 @@ class SpikerGroup
     private $pushes;
 
     /**
+     * @ORM\OneToOne(targetEntity="Spiker")
+     */
+    private $captain;
+
+    /**
      * @ORM\Column(type="boolean", options={"default" = 1})
      */
     private $enabled = true;
@@ -181,4 +186,26 @@ class SpikerGroup
         return $this->enabled;
     }
 
+    /**
+     * Set captain
+     *
+     * @param Spiker $captain
+     * @return SpikerGroup
+     */
+    public function setCaptain(Spiker $captain = null)
+    {
+        $this->captain = $captain;
+
+        return $this;
+    }
+
+    /**
+     * Get captain
+     *
+     * @return Spiker 
+     */
+    public function getCaptain()
+    {
+        return $this->captain;
+    }
 }

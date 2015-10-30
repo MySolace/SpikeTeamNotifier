@@ -24,29 +24,43 @@
                 {% endif %}
             </div>
 
-            <div class="onoffswitch" {% if group is null %}style="display:none;"{% endif %}>
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="onoff-{{ group }}" {% if group_enabled %}checked="checked"{% endif %}>
-                <label class="onoffswitch-label" for="onoff-{{ group }}">
-                    <span class="onoffswitch-inner"></span>
-                    <span class="onoffswitch-switch"></span>
-                </label>
+            <div class="group-right">
+                {% if is_granted("ROLE_SUPER_ADMIN") %}
+                    <div class="shufflebutton">
+                        <button id="shuffle" class="shuffle btn" {% if group is not null %}style="display:none;"{% endif %}>Shuffle</button>
+                    </div>
+                {% endif %}
+
+                <div class="onoffswitch" {% if group is null %}style="display:none;"{% endif %}>
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="onoff-{{ group }}" {% if group_enabled %}checked="checked"{% endif %}>
+                    <label class="onoffswitch-label" for="onoff-{{ group }}">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
             </div>
 
+        </div>
+
+        <div class="meta">
+            <div class="spiker-numbers">
+                <span class="group">{{ count }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers
+            </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div style="text-align:right;">
-                    <a href="{{ path('spikers_export') }}">CSV</a>
+                <div class="export-button">
+                    <a href="{{ path('spikers_export', {gid: group}) }}">CSV</a>
                 </div>
             {% endif %}
         </div>
 
-        <table class="table spikers sortable">
+        <table class="table spikers">
             <thead><tr>
                 <th>Enabled</th>
                 <th>Super</th>
                 <th>Group</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone Number</th>
+                <th>First</th>
+                <th>Last</th>
+                <th>Phone</th>
                 <th>Email</th>
                 <th>Cohort</th>
                 <th></th>
@@ -54,14 +68,9 @@
             <form class="form" action="{{ path('spikers_enable') }}" method="post" id="enabler">
                 <tbody>
                 {% for spiker in spikers %}
-                    <tr class="spiker group-{{ spiker.group.id }} {% if not spiker.group.enabled %}disabled{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
+                    <tr class="spiker group-{{ spiker.group.id }}{% if not spiker.group.enabled %} disabled{% endif %}{% if spiker.isCaptain %} captain{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
                         <td class="center">
-                            <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %}/>
-                            <!-- {% if spiker.isEnabled %}
-                                <i class="fa fa-check-square"></i>
-                            {% else %}
-                                <i class="fa fa-square-o"></i>
-                            {% endif %} -->
+                            <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %}{% if spiker.isCaptain %} disabled{% endif %}/>
                         </td>
                         <td class="center">
                             {% if spiker.isSupervisor %}
@@ -71,7 +80,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <select name="{{ spiker.id }}-group" form="enabler">
+                            <select name="{{ spiker.id }}-group" form="enabler"{% if spiker.isCaptain %} disabled{% endif %}>
                                 {% for group_id, enabled in group_ids %}
                                     <option value="{{ group_id }}"
                                         {% if spiker.group is not null and group_id == spiker.group.id %}
@@ -103,7 +112,6 @@
                             <input type="submit" name="enabler" value="Save Status" class="btn btn-default" />
                         </td>
                         <td colspan="7">
-                            <div class="spiker-numbers"><span class="group">{{ count }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers</div>
                         </td>
                     </tr>
                     {% if group is not null %}

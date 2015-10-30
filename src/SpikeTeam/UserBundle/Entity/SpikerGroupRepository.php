@@ -19,9 +19,8 @@ class SpikerGroupRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('g');
         $qb->addSelect('COUNT(s) AS HIDDEN spikerCount')
-            ->join('g.spikers', 's')
-            ->where('s.isEnabled = 1')
-            ->andWhere('g.enabled = 1')
+            ->leftJoin('g.spikers', 's')
+            ->where('g.enabled = 1')
             ->groupBy('g')
             ->orderBy('spikerCount', 'ASC')
             ->setMaxResults(1);
