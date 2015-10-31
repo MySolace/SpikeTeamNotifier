@@ -10,6 +10,8 @@ var Groups = {
         };
         Groups.$table = $('table.spikers');
 
+        if (!Groups.$buttons.buttons.length) return false;
+
         var $onoffbox = Groups.$buttons.onoff.find('input');
         var id = $onoffbox.attr('id').replace('onoff-','');
         if (id != null) {

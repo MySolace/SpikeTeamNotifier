@@ -52,7 +52,7 @@ class UserHelper
      * @param SpikerGroup $group
      * @return boolean
      */
-    public function setCaptain(Spiker $captain, SpikerGroup $group, SpikerGroup $oldGroup = null)
+    public function setCaptain(Spiker $captain, SpikerGroup $group)
     {
         // flush out old captain for group
         $oldCaptain = $group->getCaptain();
@@ -65,19 +65,21 @@ class UserHelper
             }
         }
 
-        // remove captain status from previously captained group, if so
-        if ($oldGroup == null) {
-            $oldGroup = $captain->getGroup();
-        }
-        if (isset($oldGroup) && $oldGroup !== $group) {
-            if ($oldGroup->getCaptain() == $captain) {
+        // remove captain status from previously captained group(s), if so
+        $gRepo = $this->em->getRepository('SpikeTeamUserBundle:SpikerGroup');
+        $oldGroups = $gRepo->findByCaptain($captain);
+        foreach($oldGroups as $oldGroup) {
+            if ($oldGroup !== $group
+                && $oldGroup->getCaptain() == $captain) {
                 $oldGroup->setCaptain();
                 $this->em->persist($oldGroup);
                 $this->em->flush();
             }
-            $captain->setGroup($group);
         }
 
+        if ($captain->getGroup() !== $group) {
+            $captain->setGroup($group);
+        }
         $group->setCaptain($captain);
         $captain->setIsCaptain(true);
 

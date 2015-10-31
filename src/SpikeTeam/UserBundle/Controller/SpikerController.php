@@ -162,7 +162,8 @@ class SpikerController extends Controller
         if ($processedNumber) {
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             $oldGroup = $spiker->getGroup();
-            // refactor code so this form lines up externally with one above
+            $oldIsCaptain = $spiker->getIsCaptain();
+
             $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
@@ -208,13 +209,18 @@ class SpikerController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                // Deal w/ disabled group select / keep spiker from changing groups if previously captain
+                if ($spiker->getGroup() == null
+                    || ($oldIsCaptain && $spiker->getGroup() !== $oldGroup)) {
+                    $spiker->setGroup($oldGroup);
+                }
+
                 if ($spiker->getIsCaptain()) {
-                    // Keep spiker from changing groups if captain
-                    if ($spiker->getGroup() !== $oldGroup) {
-                        $spiker->setGroup($oldGroup);
-                        $this->em->persist($spiker);
+                    if (!$spiker->getIsEnabled()) {
+                        $spiker->setIsEnabled(true);
                     }
-                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup(), $oldGroup);
+                    $this->em->persist($spiker);
+                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup());
                 }
 
                 // Process number to remove extra characters and add '1' country code
