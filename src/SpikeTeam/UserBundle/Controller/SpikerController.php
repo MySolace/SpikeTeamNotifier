@@ -163,6 +163,7 @@ class SpikerController extends Controller
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             $oldGroup = $spiker->getGroup();
             // refactor code so this form lines up externally with one above
+            $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
                     'data' => $spiker->getFirstName(),
@@ -188,6 +189,7 @@ class SpikerController extends Controller
                 ->add('group', 'entity', array(
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
                     'required' => true,
+                    'attr' => $groupEditAttr
                 ))
                 ->add('isCaptain', 'checkbox', array(
                     'data' => $spiker->getIsCaptain(),
@@ -301,6 +303,7 @@ class SpikerController extends Controller
 
         return $response;
     }
+
     /**
      * Shuffle Spikers randomizedly into Groups
      * @Route("/shuffle", name="spikers_shuffle", options={"expose":true})
