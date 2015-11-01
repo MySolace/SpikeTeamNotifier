@@ -51,8 +51,8 @@ class SpikerController extends Controller
                 'class' => 'SpikeTeamUserBundle:SpikerGroup',
                 'data' => ($group == null) ? $this->gRepo->findEmptiest() : $this->gRepo->find($group)
             ))
-            ->add('firstName', 'text', array('required' => true))
-            ->add('lastName', 'text', array('required' => true))
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
             ->add('phoneNumber', 'text', array('required' => true))
             ->add('isSupervisor', 'checkbox', array('required' => false))
             ->add('isEnabled', 'hidden', array('data' => true))
@@ -168,11 +168,11 @@ class SpikerController extends Controller
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
                     'data' => $spiker->getFirstName(),
-                    'required' => true,
+                    'required' => false,
                 ))
                 ->add('lastName', 'text', array(
                     'data' => $spiker->getLastName(),
-                    'required' => true,
+                    'required' => false,
                 ))
                 ->add('phoneNumber', 'text', array(
                     'data' => $spiker->getPhoneNumber(),
@@ -338,12 +338,15 @@ class SpikerController extends Controller
                 for ($i = 1; $i < $lastNameKey; $i++) {
                     $firstName .= ' '.$name[$i];
                 }
+                $lastName = ($lastNameKey > 0) ? $name[$lastNameKey] : null;
 
                 $spiker = new Spiker();
                 $spiker->setPhoneNumber($values['phone']);
-                $spiker->setEmail($values['email']);
+                if (strpos($values['email'], '@')) {
+                    $spiker->setEmail($values['email']);
+                }
                 $spiker->setFirstName($firstName);
-                $spiker->setLastName($name[$lastNameKey]);
+                $spiker->setLastName($lastName);
                 $spiker->setIsEnabled(true);
                 $spiker->setIsSupervisor(false);
                 $spiker->setGroup($this->gRepo->findEmptiest());
