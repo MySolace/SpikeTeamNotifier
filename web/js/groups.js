@@ -92,6 +92,19 @@ var Groups = {
                 }
             }
         });
+
+        $('.import-link').click(function() {
+            if (confirm("Are you sure you would like to import the new Spikers from the URL specified in the settings?") == true) {
+                $.get(Routing.generate('spikers_import'), function (data) {
+                    if (data) {
+                        alert('Congratulations, you just imported ' + data + ' new Spikers!');
+                        location.reload();
+                    } else {
+                        alert('Unfortunately, no Spikers were imported.');
+                    }
+                });
+            }
+        });
     },
 
     statusToggle: function($onoffbox, id) {

@@ -119,6 +119,9 @@ td.center {
   .spiker-edit-captain .checkbox-inline {
     padding-left: .25em; }
 
+.import-link {
+  cursor: pointer; }
+
 body.anon #inner #fos-user {
   margin: 150px auto;
   width: 300px; }

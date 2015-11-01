@@ -49,6 +49,7 @@
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="export-button">
                     <a href="{{ path('spikers_export', {gid: group}) }}">CSV</a>
+                    (<a class="import-link">import</a>)
                 </div>
             {% endif %}
         </div>

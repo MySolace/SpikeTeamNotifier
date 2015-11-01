@@ -5,6 +5,10 @@ namespace SpikeTeam\UserBundle\Helper;
 use SpikeTeam\UserBundle\Entity\Spiker;
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
 
+
+/**
+ * UserHelper, in container as spike_team.user_helper
+ */
 class UserHelper
 {
     /**

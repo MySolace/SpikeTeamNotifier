@@ -265,7 +265,7 @@ class SpikerController extends Controller
      * CSV Export spikers here
      * @Route("/export/{gid}", name="spikers_export", options={"expose":true})
      * 
-     * @param int $group
+     * @param int $gid
      */
     public function spikersExportAction($gid = null)
     {
@@ -308,6 +308,52 @@ class SpikerController extends Controller
         $response->headers->set('Content-Disposition','attachment; filename="spikers.csv"');
 
         return $response;
+    }
+
+    /**
+     * CSV Import spikers here
+     * @Route("/import", name="spikers_import", options={"expose":true})
+     */
+    public function spikersImportAction()
+    {
+        $url = $this->get('config')->get('csv_import_url', '');
+        if (!strlen($url)) return new JsonResponse(false);
+        $csvData = file_get_contents($url);
+        if (!$csvData) return new JsonResponse(false);
+        $lines = explode(PHP_EOL, $csvData);
+        array_shift($lines);
+
+        $head = array('timestamp', 'name', 'email', 'phone', 'street1', 'street2', 'city', 'state', 'zip');
+        $imported = 0;
+        foreach ($lines as $line) {
+            $values = array_combine($head, str_getcsv($line));
+            $values['phone'] = $this->get('spike_team.user_helper')->processNumber($values['phone']);
+            if ($values['phone']
+                && !$this->repo->checkByPhoneNumber($values['phone'])
+                && !$this->repo->checkByEmail($values['email'])
+            ){
+                $name = explode(' ', ucwords(strtolower(trim($values['name']))));
+                $lastNameKey = max(array_keys($name));
+                $firstName = $name[0];
+                for ($i = 1; $i < $lastNameKey; $i++) {
+                    $firstName .= ' '.$name[$i];
+                }
+
+                $spiker = new Spiker();
+                $spiker->setPhoneNumber($values['phone']);
+                $spiker->setEmail($values['email']);
+                $spiker->setFirstName($firstName);
+                $spiker->setLastName($name[$lastNameKey]);
+                $spiker->setIsEnabled(true);
+                $spiker->setIsSupervisor(false);
+                $spiker->setGroup($this->gRepo->findEmptiest());
+
+                $this->em->persist($spiker);
+                $this->em->flush();
+                $imported++;
+            }
+        }
+        return new JsonResponse($imported);
     }
 
     /**
