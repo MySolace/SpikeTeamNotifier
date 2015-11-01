@@ -84,7 +84,9 @@ var Groups = {
         Groups.$buttons.shuffle.click(function() {
             if (confirm("Are you sure you want to shuffle all spikers?") == true) {
                 if (confirm("Are you sure you sure you are sure? No turning back now!") == true) {
+                    App.blockerAdd('Shuffling...');
                     $.get(Routing.generate('spikers_shuffle'), function (data) {
+                        App.blockerRemove();
                         if (data) {
                             alert('All non-captain Spikers shuffled!');
                             location.reload();
@@ -96,7 +98,9 @@ var Groups = {
 
         $('.import-link').click(function() {
             if (confirm("Are you sure you would like to import the new Spikers from the URL specified in the settings?") == true) {
+                App.blockerAdd('Importing...');
                 $.get(Routing.generate('spikers_import'), function (data) {
+                    App.blockerRemove();
                     if (data) {
                         alert('Congratulations, you just imported ' + data + ' new Spikers!');
                         location.reload();
