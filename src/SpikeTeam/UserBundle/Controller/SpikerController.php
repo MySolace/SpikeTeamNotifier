@@ -51,8 +51,8 @@ class SpikerController extends Controller
                 'class' => 'SpikeTeamUserBundle:SpikerGroup',
                 'data' => ($group == null) ? $this->gRepo->findEmptiest() : $this->gRepo->find($group)
             ))
-            ->add('firstName', 'text', array('required' => true))
-            ->add('lastName', 'text', array('required' => true))
+            ->add('firstName', 'text', array('required' => false))
+            ->add('lastName', 'text', array('required' => false))
             ->add('phoneNumber', 'text', array('required' => true))
             ->add('isSupervisor', 'checkbox', array('required' => false))
             ->add('isEnabled', 'hidden', array('data' => true))
@@ -162,15 +162,17 @@ class SpikerController extends Controller
         if ($processedNumber) {
             $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
             $oldGroup = $spiker->getGroup();
-            // refactor code so this form lines up externally with one above
+            $oldIsCaptain = $spiker->getIsCaptain();
+
+            $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
             $form = $this->createFormBuilder($spiker)
                 ->add('firstName', 'text', array(
                     'data' => $spiker->getFirstName(),
-                    'required' => true,
+                    'required' => false,
                 ))
                 ->add('lastName', 'text', array(
                     'data' => $spiker->getLastName(),
-                    'required' => true,
+                    'required' => false,
                 ))
                 ->add('phoneNumber', 'text', array(
                     'data' => $spiker->getPhoneNumber(),
@@ -188,6 +190,7 @@ class SpikerController extends Controller
                 ->add('group', 'entity', array(
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
                     'required' => true,
+                    'attr' => $groupEditAttr
                 ))
                 ->add('isCaptain', 'checkbox', array(
                     'data' => $spiker->getIsCaptain(),
@@ -206,13 +209,18 @@ class SpikerController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                // Deal w/ disabled group select / keep spiker from changing groups if previously captain
+                if ($spiker->getGroup() == null
+                    || ($oldIsCaptain && $spiker->getGroup() !== $oldGroup)) {
+                    $spiker->setGroup($oldGroup);
+                }
+
                 if ($spiker->getIsCaptain()) {
-                    // Keep spiker from changing groups if captain
-                    if ($spiker->getGroup() !== $oldGroup) {
-                        $spiker->setGroup($oldGroup);
-                        $this->em->persist($spiker);
+                    if (!$spiker->getIsEnabled()) {
+                        $spiker->setIsEnabled(true);
                     }
-                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup(), $oldGroup);
+                    $this->em->persist($spiker);
+                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup());
                 }
 
                 // Process number to remove extra characters and add '1' country code
@@ -257,7 +265,7 @@ class SpikerController extends Controller
      * CSV Export spikers here
      * @Route("/export/{gid}", name="spikers_export", options={"expose":true})
      * 
-     * @param int $group
+     * @param int $gid
      */
     public function spikersExportAction($gid = null)
     {
@@ -301,6 +309,56 @@ class SpikerController extends Controller
 
         return $response;
     }
+
+    /**
+     * CSV Import spikers here
+     * @Route("/import", name="spikers_import", options={"expose":true})
+     */
+    public function spikersImportAction()
+    {
+        $url = $this->get('config')->get('csv_import_url', '');
+        if (!strlen($url)) return new JsonResponse(false);
+        $csvData = file_get_contents($url);
+        if (!$csvData) return new JsonResponse(false);
+        $lines = explode(PHP_EOL, $csvData);
+        array_shift($lines);
+
+        $head = array('timestamp', 'name', 'email', 'phone', 'street1', 'street2', 'city', 'state', 'zip');
+        $imported = 0;
+        foreach ($lines as $line) {
+            $values = array_combine($head, str_getcsv($line));
+            $values['phone'] = $this->get('spike_team.user_helper')->processNumber($values['phone']);
+            if ($values['phone']
+                && !$this->repo->phoneNumberExists($values['phone'])
+                && !$this->repo->emailExists($values['email'])
+            ){
+                $name = explode(' ', ucwords(strtolower(trim($values['name']))));
+                $lastNameKey = max(array_keys($name));
+                $firstName = $name[0];
+                for ($i = 1; $i < $lastNameKey; $i++) {
+                    $firstName .= ' '.$name[$i];
+                }
+                $lastName = ($lastNameKey > 0) ? $name[$lastNameKey] : null;
+
+                $spiker = new Spiker();
+                $spiker->setPhoneNumber($values['phone']);
+                if (strpos($values['email'], '@')) {
+                    $spiker->setEmail($values['email']);
+                }
+                $spiker->setFirstName($firstName);
+                $spiker->setLastName($lastName);
+                $spiker->setIsEnabled(true);
+                $spiker->setIsSupervisor(false);
+                $spiker->setGroup($this->gRepo->findEmptiest());
+
+                $this->em->persist($spiker);
+                $this->em->flush();
+                $imported++;
+            }
+        }
+        return new JsonResponse($imported);
+    }
+
     /**
      * Shuffle Spikers randomizedly into Groups
      * @Route("/shuffle", name="spikers_shuffle", options={"expose":true})

@@ -26,14 +26,14 @@ class Spiker
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=60)
+     * @ORM\Column(name="first_name", type="string", length=60, nullable=true)
      */
     private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=60)
+     * @ORM\Column(name="last_name", type="string", length=60, nullable=true)
      */
     private $lastName;
 

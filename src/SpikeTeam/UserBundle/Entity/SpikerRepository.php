@@ -17,8 +17,8 @@ class SpikerRepository extends EntityRepository
      */
     public function findByEnabledGroup()
     {
-        $qb = $this->createQueryBuilder('s');
-        $qb->join('s.group', 'g')
+        $qb = $this->createQueryBuilder('s')
+            ->join('s.group', 'g')
             ->where('g.enabled = 1');
 
         try {
@@ -38,6 +38,40 @@ class SpikerRepository extends EntityRepository
 
         try {
             return $qb->getQuery()->getResult();
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if spiker by the number exists
+     */
+    public function phoneNumberExists($phone)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.phoneNumber = :phone')
+            ->setParameter('phone', $phone);
+
+        try {
+            return ($qb->getQuery()->getSingleScalarResult()) ? true : false;
+        }  catch(\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if spiker by that email exists
+     */
+    public function emailExists($email)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->where('s.email = :email')
+            ->setParameter('email', $email);
+
+        try {
+            return ($qb->getQuery()->getSingleScalarResult()) ? true : false;
         }  catch(\Doctrine\ORM\NoResultException $e) {
             return false;
         }

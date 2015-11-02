@@ -12,10 +12,12 @@
         <link tyep="text/css" href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
     </head>
     <body class ="{% block bodySection %}anon{% endblock %}">
-        {% block navbar %}{% endblock %}
-        <div id="body">
-            <div id="inner">
-                {% block body %}{% endblock %}
+        <div id="body-wrapper">
+            {% block navbar %}{% endblock %}
+            <div id="body">
+                <div id="inner">
+                    {% block body %}{% endblock %}
+                </div>
             </div>
         </div>
         {% block javascripts %}
