@@ -115,9 +115,8 @@ body {
     color: gray;
     float: left;
     padding-left: .5em; }
-  .meta .export-button {
-    float: right;
-    padding-right: 1em; }
+  .meta .import-export {
+    float: right; }
 
 table.spikers tr.disabled, table.spikers option.disabled {
   font-style: italic;

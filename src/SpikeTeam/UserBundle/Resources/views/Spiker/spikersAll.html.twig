@@ -47,9 +47,8 @@
                 <span class="group">{{ count }}</span> of <span class="total">{{ spikers|length }}</span> total Spikers
             </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div class="export-button">
-                    <a href="{{ path('spikers_export', {gid: group}) }}">CSV</a>
-                    (<a class="import-link">import</a>)
+                <div class="import-export">
+                    <a class="import-link">Import</a> | <a href="{{ path('spikers_export', {gid: group}) }}">Export</a>
                 </div>
             {% endif %}
         </div>
