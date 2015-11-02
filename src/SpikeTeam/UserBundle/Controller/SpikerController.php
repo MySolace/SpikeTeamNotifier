@@ -329,8 +329,8 @@ class SpikerController extends Controller
             $values = array_combine($head, str_getcsv($line));
             $values['phone'] = $this->get('spike_team.user_helper')->processNumber($values['phone']);
             if ($values['phone']
-                && !$this->repo->checkByPhoneNumber($values['phone'])
-                && !$this->repo->checkByEmail($values['email'])
+                && !$this->repo->phoneNumberExists($values['phone'])
+                && !$this->repo->emailExists($values['email'])
             ){
                 $name = explode(' ', ucwords(strtolower(trim($values['name']))));
                 $lastNameKey = max(array_keys($name));

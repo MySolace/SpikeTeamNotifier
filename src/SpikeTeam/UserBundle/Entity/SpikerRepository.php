@@ -46,7 +46,7 @@ class SpikerRepository extends EntityRepository
     /**
      * Checks if spiker by the number exists
      */
-    public function checkByPhoneNumber($phone)
+    public function phoneNumberExists($phone)
     {
         $qb = $this->createQueryBuilder('s')
             ->select('count(s.id)')
@@ -63,7 +63,7 @@ class SpikerRepository extends EntityRepository
     /**
      * Checks if spiker by that email exists
      */
-    public function checkByEmail($email)
+    public function emailExists($email)
     {
         $qb = $this->createQueryBuilder('s')
             ->select('count(s.id)')
