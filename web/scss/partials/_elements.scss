@@ -40,6 +40,18 @@
     .buttons {
         button {
             margin-bottom: 1em;
+            // &.day {
+            //     background-color: $color-day;
+            // }
+            // &.night {
+            //     background-color: $color-night;
+            // }
+            // &:hover {
+            //     background-color: #e6e6e6;
+            // }
+            // &.btn-primary {
+            //     background-color: #337ab7;
+            // }
         }
         width: calc(100% - 80px);
         float: left;

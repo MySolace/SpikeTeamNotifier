@@ -115,7 +115,7 @@ class SpikerController extends Controller
             'spikers' => $spikers,
             'form' => $form->createView(),
             'existing' => $existing,
-            'group_ids' => $this->gRepo->getAllIds(),
+            'groupList' => $this->em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findAll(),
             'group' => $group,
             'group_enabled' => $groupEnabled,
             'count' => $count,
@@ -195,6 +195,15 @@ class SpikerController extends Controller
                 ->add('isCaptain', 'checkbox', array(
                     'data' => $spiker->getIsCaptain(),
                     'required' => false,
+                ))
+                ->add('preferredTime', 'choice', array(
+                    'choices' => array(
+                        'day' => 'Day',
+                        'night' => 'Night',
+                    ),
+                    'required' => false,
+                    'multiple' => false,
+                    'expanded' => false,
                 ))
                 ->add('isSupervisor', 'checkbox', array(
                     'data' => $spiker->getIsSupervisor(),

@@ -20,7 +20,6 @@ class ButtonController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
-        $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
 
         $next = $this->getNextGroup();
         $canPush = ($this->checkPrevPushes()) ? true : false;
@@ -29,7 +28,7 @@ class ButtonController extends Controller
             'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),
             'canPush' => $canPush,
             'mostRecent' => $mostRecent,
-            'ids' => $ids,
+            'groupList' => $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findAll(),
             'next' => $next
         ));
     }

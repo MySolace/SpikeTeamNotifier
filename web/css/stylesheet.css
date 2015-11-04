@@ -212,6 +212,12 @@ body.anon #inner #fos-user {
     #button-box-inner #button.disabled button.button-image {
       opacity: .6; }
 
+.group-select option.day {
+  background-color: #FFFF99; }
+.group-select option.night {
+  background-color: #6666FF;
+  color: white; }
+
 /**
  * CSS for On/Off button from https://proto.io/freebies/onoff/
  */

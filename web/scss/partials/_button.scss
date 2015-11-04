@@ -71,3 +71,15 @@ $button-inner-height: $button-box-height * $button-inner-scale;
        -moz-box-shadow: inset 8px 8px 6px -6px black;
             box-shadow: inset 8px 8px 6px -6px black;
 }
+
+.group-select {
+    option {
+        &.day {
+            background-color: $color-day;
+        }
+        &.night {
+            background-color: $color-night;
+            color: white;
+        }
+    }
+}

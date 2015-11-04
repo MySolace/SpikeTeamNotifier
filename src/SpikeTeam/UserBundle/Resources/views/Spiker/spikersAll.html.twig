@@ -16,8 +16,8 @@
                 <button class="all btn {% if group is null %}btn-primary{% else %}btn-default{% endif %}">
                     All Spikers
                 </button>
-                {% for group_id, enabled in group_ids %}
-                    <button id="group-{{ group_id }}" class="group btn {% if group_id == group %}btn-primary{% else %}btn-default{% endif %}">Group {{ group_id }}</button>
+                {% for listedGroup in groupList %}
+                    <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">Group {{ listedGroup.id }}</button>
                 {% endfor %}
                 {% if is_granted("ROLE_SUPER_ADMIN") %}
                     <button class="add btn btn-default">Add Group</button>
@@ -81,15 +81,15 @@
                         </td>
                         <td>
                             <select name="{{ spiker.id }}-group" form="enabler"{% if spiker.isCaptain %} disabled{% endif %}>
-                                {% for group_id, enabled in group_ids %}
-                                    <option value="{{ group_id }}"
-                                        {% if spiker.group is not null and group_id == spiker.group.id %}
+                                {% for listedGroup in groupList %}
+                                    <option value="{{ listedGroup.id }}"
+                                        {% if spiker.group is not null and listedGroup.id == spiker.group.id %}
                                             selected="selected"
                                         {% endif %}
-                                        {% if not enabled %}
+                                        {% if not listedGroup.enabled %}
                                             class="disabled"
                                         {% endif %}>
-                                        {{ group_id }}
+                                        {{ listedGroup.id }}
                                     </option>
                                 {% endfor %}
                             </select>
