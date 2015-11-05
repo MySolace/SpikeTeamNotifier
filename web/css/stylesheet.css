@@ -230,8 +230,7 @@ body.anon #inner #fos-user {
       opacity: .6; }
 
 .group-select option {
-  background-color: white;
-  color: black; }
+  background-color: white; }
   .group-select option.day {
     background-color: #FFF9B0; }
   .group-select option.night {

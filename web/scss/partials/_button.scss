@@ -75,7 +75,6 @@ $button-inner-height: $button-box-height * $button-inner-scale;
 .group-select {
     option {
         background-color: white;
-        color: black;
         &.day {
             background-color: $color-day;
         }
