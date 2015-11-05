@@ -40,18 +40,25 @@
     .buttons {
         button {
             margin-bottom: 1em;
-            // &.day {
-            //     background-color: $color-day;
-            // }
-            // &.night {
-            //     background-color: $color-night;
-            // }
-            // &:hover {
-            //     background-color: #e6e6e6;
-            // }
-            // &.btn-primary {
-            //     background-color: #337ab7;
-            // }
+            &.day {
+                background-color: $color-day;
+                &:hover {
+                    background-color: $color-day-dark;
+                }
+            }
+            &.night {
+                color: white;
+                background-color: $color-night;
+                &:hover {
+                    background-color: $color-night-dark;
+                }
+            }
+            &.btn-primary {
+                background-color: #337ab7;
+                &:hover {
+                    background-color: #337ab7;
+                }
+            }
         }
         width: calc(100% - 80px);
         float: left;
@@ -86,7 +93,13 @@ table.spikers {
         }
     }
     tr.captain {
-        background-color: $color-captain;
+        background-color: $color-gray-light;
+        &.day {
+            background-color: $color-day-light;
+        }
+        &.night {
+            background-color: $color-night-light;
+        }
     }
 }
 

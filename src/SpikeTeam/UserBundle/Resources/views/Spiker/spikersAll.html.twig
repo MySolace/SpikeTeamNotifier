@@ -68,7 +68,7 @@
             <form class="form" action="{{ path('spikers_enable') }}" method="post" id="enabler">
                 <tbody>
                 {% for spiker in spikers %}
-                    <tr class="spiker group-{{ spiker.group.id }}{% if not spiker.group.enabled %} disabled{% endif %}{% if spiker.isCaptain %} captain{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
+                    <tr class="spiker group-{{ spiker.group.id }}{% if not spiker.group.enabled %} disabled{% endif %}{% if spiker.isCaptain %} captain{% endif %}{% if spiker.preferredTime == 'day' %} day{% elseif spiker.preferredTime == 'night' %} night{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
                         <td class="center">
                             <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %}{% if spiker.isCaptain %} disabled{% endif %}/>
                         </td>

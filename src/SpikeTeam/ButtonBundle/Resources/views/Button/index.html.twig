@@ -22,11 +22,11 @@
     <div class="page">
         <div class="group-select">
             Send Alert to Group: 
-            <select>
+            <select {% if next.getCaptain() %}class="{{ next.getCaptain().preferredTime }}"{% endif %}>
                 <option value="all">All</option>
                 {% for listedGroup in groupList %}
                     <option value="{{ listedGroup.id }}"
-                        {% if listedGroup.id == next %}selected="selected"{% endif %}
+                        {% if listedGroup.id == next.id %}selected="selected"{% endif %}
                         {% if (mostRecent.group.id is defined and listedGroup.id == mostRecent.group.id) or not listedGroup.enabled %}disabled="disabled"{% endif %}
                         {% if listedGroup.getCaptain() %}class="{{ listedGroup.getCaptain().preferredTime }}"{% endif %}>{{ listedGroup.id }}</option>
                 {% endfor %}
@@ -49,5 +49,3 @@
         </div>
     </div>
 {% endblock %}
-
-

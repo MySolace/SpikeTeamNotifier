@@ -21,7 +21,7 @@ class ButtonController extends Controller
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
 
-        $next = $this->getNextGroup();
+        $next = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($this->getNextGroup());
         $canPush = ($this->checkPrevPushes()) ? true : false;
 
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
