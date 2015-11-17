@@ -20,16 +20,15 @@ class ButtonController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
-        $ids = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
 
-        $next = $this->getNextGroup();
+        $next = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($this->getNextGroup());
         $canPush = ($this->checkPrevPushes()) ? true : false;
 
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
             'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),
             'canPush' => $canPush,
             'mostRecent' => $mostRecent,
-            'ids' => $ids,
+            'groupList' => $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findAll(),
             'next' => $next
         ));
     }

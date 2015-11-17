@@ -102,6 +102,19 @@ body {
     float: left; }
     .groups .buttons button {
       margin-bottom: 1em; }
+      .groups .buttons button.day {
+        background-color: #FFF9B0; }
+        .groups .buttons button.day:hover {
+          background-color: #EDE7A4; }
+      .groups .buttons button.night {
+        color: white;
+        background-color: #9393D8; }
+        .groups .buttons button.night:hover {
+          background-color: #7D7DB8; }
+      .groups .buttons button.btn-primary {
+        background-color: #337ab7; }
+        .groups .buttons button.btn-primary:hover {
+          background-color: #337ab7; }
   .groups .group-right {
     float: right;
     display: inline-block; }
@@ -125,7 +138,11 @@ table.spikers tr.disabled, table.spikers option.disabled {
     font-style: normal;
     color: black; }
 table.spikers tr.captain {
-  background-color: #FFFFE8; }
+  background-color: #F2F2F2; }
+  table.spikers tr.captain.day {
+    background-color: #FFFAC0; }
+  table.spikers tr.captain.night {
+    background-color: #BEBEE8; }
 
 td.center {
   text-align: center; }
@@ -211,6 +228,14 @@ body.anon #inner #fos-user {
       background-position: 0 -200px; }
     #button-box-inner #button.disabled button.button-image {
       opacity: .6; }
+
+.group-select option {
+  background-color: white; }
+  .group-select option.day {
+    background-color: #FFF9B0; }
+  .group-select option.night {
+    background-color: #9393D8;
+    color: white; }
 
 /**
  * CSS for On/Off button from https://proto.io/freebies/onoff/

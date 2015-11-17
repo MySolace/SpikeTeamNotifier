@@ -85,6 +85,13 @@ class Spiker
     private $isCaptain;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="preferred_time", type="string", nullable=true)
+     */
+    private $preferredTime;
+
+    /**
      * Get id
      *
      * @return integer
@@ -301,5 +308,28 @@ class Spiker
     public function getIsCaptain()
     {
         return $this->isCaptain;
+    }
+
+    /**
+     * Set preferredTime
+     *
+     * @param string $preferredTime
+     * @return Spiker
+     */
+    public function setPreferredTime($preferredTime)
+    {
+        $this->preferredTime = $preferredTime;
+
+        return $this;
+    }
+
+    /**
+     * Get preferredTime
+     *
+     * @return string
+     */
+    public function getPreferredTime()
+    {
+        return $this->preferredTime;
     }
 }
