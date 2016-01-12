@@ -14,7 +14,7 @@ class Version20160112135902 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('UPDATE spiker_group SET captain_id = NULL');
-        $this->addSql('DELETE from spiker');
+        $this->addSql('DELETE FROM spiker');
     }
 
     public function down(Schema $schema)

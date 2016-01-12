@@ -37,7 +37,6 @@ var Button = {
 
     goCallback: function(id) {
         $.get(Routing.generate('goteamgo', {gid:id}), function (data) {
-            var $select = $('.group-select select');
             $('.latest .latest-group').html(data.id);
             $('.latest .latest-time').html(data.time);
         });
