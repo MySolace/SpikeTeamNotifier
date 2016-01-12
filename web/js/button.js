@@ -3,7 +3,6 @@ var Button = {
         $("#button.enabled").find("button").unwrap();
         $("#button").click(function(){
             var groupId = $('.group-select select').val();
-            console.log(groupId);
             var days = {
                 1: 'Sunday',
                 2: 'Monday',
