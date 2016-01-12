@@ -115,7 +115,7 @@ class ButtonController extends Controller
                 $next = $this->getNextGroup($previous->getGroup()->getId());
             }
         }
-        return $next;
+        return $current;
     }
 
     /**

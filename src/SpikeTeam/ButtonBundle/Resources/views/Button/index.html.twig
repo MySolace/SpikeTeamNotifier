@@ -27,7 +27,7 @@
                 {% for listedGroup in groupList %}
                     <option value="{{ listedGroup.id }}"
                         {% if listedGroup.id == next.id %}selected="selected"{% endif %}
-                        {% if (mostRecent.group.id is defined and listedGroup.id == mostRecent.group.id) or not listedGroup.enabled %}disabled="disabled"{% endif %}
+                        {% if not listedGroup.enabled %}disabled="disabled"{% endif %}
                         {% if listedGroup.getCaptain() %}class="{{ listedGroup.getCaptain().preferredTime }}"{% endif %}>{{ listedGroup.id }}</option>
                 {% endfor %}
             </select>

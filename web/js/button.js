@@ -2,12 +2,31 @@ var Button = {
     init: function() {
         $("#button.enabled").find("button").unwrap();
         $("#button").click(function(){
+            var groupId = $('.group-select select').val();
+            console.log(groupId);
+            var days = {
+                1: 'Sunday',
+                2: 'Monday',
+                3: 'Tuesday',
+                4: 'Wednesday',
+                5: 'Thursday',
+                6: 'Friday',
+                7: 'Saturday'
+            };
             if ($(this).is(".enabled")) {
-                if (confirm("Are you sure you want to notify the Spike Team?") == true) {
+                if (confirm(
+                        "Are you sure you want to notify Group " + groupId + " (" + days[groupId] + ") of the Spike Team?*\n\n"
+                        + "Group 1 = Sunday\n"
+                        + "Group 2 = Monday\n"
+                        + "Group 3 = Tuesday\n"
+                        + "Group 4 = Wednesday\n"
+                        + "Group 5 = Thursday\n"
+                        + "Group 6 = Friday\n"
+                        + "Group 7 = Saturday\n\n"
+                        + "* (10pm EST till 6am EST of the following day)"
+                    ) == true) {
                     $(this).removeClass("enabled").addClass("disabled");
-                    var urlId = $(this).find('button').attr('id');
-                    urlId = $('.group-select select').val();
-                    Button.goCallback(urlId);
+                    Button.goCallback(groupId);
                 }
             }
             else if ($(this).is(".disabled")) {
@@ -19,15 +38,6 @@ var Button = {
     goCallback: function(id) {
         $.get(Routing.generate('goteamgo', {gid:id}), function (data) {
             var $select = $('.group-select select');
-            $select.find('option').removeAttr('disabled');
-            $select.find('option[value="' + id + '"]').attr('disabled', 'disabled');
-            $.each(data.enabled, function (group_id, group_enabled) {
-                var $option = $select.find('option[value="' + group_id + '"]');
-                if (!parseInt(group_enabled)) {
-                    $option.not(':disabled').attr('disabled', 'disabled');
-                }
-            });
-            $select.val(data.next);
             $('.latest .latest-group').html(data.id);
             $('.latest .latest-time').html(data.time);
         });
