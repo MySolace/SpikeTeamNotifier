@@ -87,35 +87,8 @@ class ButtonController extends Controller
     {
         $buttonRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
         $current = $buttonRepo->findMostRecent();
-        $next = 1;
 
-        if (!$current) {
-            return $next;
-        }
-
-        // In case $id is not supplied
-        if ($id == null && isset($current) && $current->getGroup() != null) {
-            $id = $current->getGroup()->getId();
-        }
-
-        // Advancing to the next group only if it exists and is enabled
-        if (isset($id) && gettype($id) == 'integer') {
-            $next = $id + 1;
-            $groupIds = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
-            while (!isset($groupIds[$next]) || $groupIds[$next] == null || !$groupIds[$next]) {
-                $next++;
-                if ($next > max(array_keys($groupIds)) ) {
-                    $next = 1;
-                }
-            }
-        } else {
-            // Dealing w/ 'all's. If all, go back one and see if we can do something with it. If not, default = 1
-            $previous = $buttonRepo->findMostRecent($current->getId());
-            if ($previous->getGroup() != null) {
-                $next = $this->getNextGroup($previous->getGroup()->getId());
-            }
-        }
-        return $next;
+        return $current;
     }
 
     /**
