@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use SpikeTeam\UserBundle\Form\AdminType;
+
 use SpikeTeam\UserBundle\Entity\Admin;
 
 class AdminController extends Controller
@@ -44,7 +46,7 @@ class AdminController extends Controller
 
         if ($form->isValid()) {
             $newAdmin->setPlainPassword($newAdmin->getPassword());
-            $newAdmin->addRole('ROLE_ADMIN');
+            $newAdmin->addRole('ROLE_CAPTAIN');
             $newAdmin->setEnabled(true);
             $this->em->persist($newAdmin);
             $this->em->flush();
@@ -71,67 +73,8 @@ class AdminController extends Controller
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
 
-            if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
-                $form = $this->createFormBuilder($admin)
-                    ->add('firstName', 'text', array(
-                        'data' => $admin->getFirstName(),
-                        'required' => false,
-                    ))
-                    ->add('lastName', 'text', array(
-                        'data' => $admin->getLastName(),
-                        'required' => false,
-                    ))
-                    ->add('email', 'email', array(
-                        'data' => $admin->getEmail(),
-                        'required' => true,
-                    ))
-                    ->add('password', 'password', array(
-                        'required' => false,
-                    ))
-                    ->add('phoneNumber', 'text', array(
-                        'data' => $admin->getPhoneNumber(),
-                        'required' => false,
-                    ))
-                    ->add('isEnabled', 'checkbox', array(
-                        'data' => $admin->getIsEnabled(),
-                        'label' => 'Opt-in to alert texts?',
-                        'required' => false,
-                    ))
-                    ->add('superadmin', 'checkbox', array(      // This shouldn't work this way, but it totally does. WTF.
-                        'data' => $admin->hasRole('ROLE_SUPER_ADMIN'),
-                        'required' => false,
-                    ))
-                    ->add('save', 'submit')
-                    ->getForm();
-            } else {
-                $form = $this->createFormBuilder($admin)
-                    ->add('firstName', 'text', array(
-                        'data' => $admin->getFirstName(),
-                        'required' => false,
-                    ))
-                    ->add('lastName', 'text', array(
-                        'data' => $admin->getLastName(),
-                        'required' => false,
-                    ))
-                    ->add('email', 'email', array(
-                        'data' => $admin->getEmail(),
-                        'required' => true,
-                    ))
-                    ->add('password', 'password', array(
-                        'required' => false,
-                    ))
-                    ->add('phoneNumber', 'text', array(
-                        'data' => $admin->getPhoneNumber(),
-                        'required' => false,
-                    ))
-                    ->add('isEnabled', 'checkbox', array(
-                        'data' => $admin->getIsEnabled(),
-                        'label' => 'Opt-in to alert texts?',
-                        'required' => false,
-                    ))
-                    ->add('save', 'submit')
-                    ->getForm();
-            }
+            $form = $this->createForm(new AdminType(), $admin)
+                         ->add('save', 'submit');
 
             $existingPassword = $admin->getPassword();
 

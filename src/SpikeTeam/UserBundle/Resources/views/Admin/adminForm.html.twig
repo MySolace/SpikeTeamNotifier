@@ -38,8 +38,8 @@
             </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="form-group">
-                    {{ form_widget(form.superadmin, {'attr': {'class': 'inlineCheckbox'} }) }}
-                    {{ form_label(form.superadmin, 'Superadmin?', { 'label_attr': {'class': 'checkbox-inline'} }) }}
+                    {{ form_label(form.roles, 'Role', { 'label_attr': {'class': 'dropdown'} }) }}
+                    {{ form_widget(form.roles, {'attr': {'class': 'dropdown'} }) }}
                 </div>
             {% endif %}
         </div>
@@ -47,7 +47,8 @@
         <div class="form-bottom">
             {{ form_widget(form.save, { 'label': 'Save!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
             <a href="{{ path('admin') }}"><button class="btn">Cancel</button></a>
-            {% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ path('admin_delete', {'email': admin.email}) }}">
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a href="{{ path('admin_delete', {'email': admin.email}) }}">
                 <button class="btn pull-right">Remove</button></a>
             {% endif %}
         </div>

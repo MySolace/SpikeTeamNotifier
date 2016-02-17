@@ -58,7 +58,7 @@ class Admin extends BaseUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -181,5 +181,38 @@ class Admin extends BaseUser
     public function getIsEnabled()
     {
         return $this->isEnabled;
+    }
+
+    /**
+     * Get the highest rated role assigned to this user.
+     *
+     * @return string
+     */
+    public function getHighestRole() {
+        return $this->getRoles()[0];
+    }
+
+    /**
+     * Transform array of roles (ROLE_SUPER_ADMIN, ROLE_USER) into a single, user-friendly string
+     *
+     * @param array $role
+     * @return string|boolean
+     */
+    public function getFriendlyRoleName(){
+        //Extract the first role from the roles array, which is the highest role assigned to a user
+        $role = $this->getHighestRole();
+
+        $roleMap = array(
+            'ROLE_CAPTAIN' => 'Captain',
+            'ROLE_ADMIN' => 'Admin',
+            'ROLE_SUPER_ADMIN' => 'Super Admin',
+        );
+
+        if( isset($roleMap[$role]) ){
+            return $roleMap[$role];
+        }
+        else{
+            return false;
+        }
     }
 }
