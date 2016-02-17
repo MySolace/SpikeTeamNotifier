@@ -18,11 +18,17 @@ class ButtonController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->get('security.context');
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
         $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
 
         $next = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($this->getNextGroup());
         $canPush = ($this->checkPrevPushes()) ? true : false;
+
+
+        if (!$securityContext->isGranted('ROLE_ADMIN')) {
+            $canPush = false;
+        }
 
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
             'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),

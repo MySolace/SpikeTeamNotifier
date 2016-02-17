@@ -29,7 +29,7 @@ var Button = {
                 }
             }
             else if ($(this).is(".disabled")) {
-                alert("Sorry, you cannot alert the Spike Team yet.");            
+                alert("Sorry, you cannot alert the Spike Team yet.");
             }
         });
     },
@@ -40,7 +40,7 @@ var Button = {
             $('.latest .latest-time').html(data.time);
         });
     }
-}
+};
 
 
 
