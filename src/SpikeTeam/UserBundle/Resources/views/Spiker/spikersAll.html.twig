@@ -17,7 +17,7 @@
                     All Spikers
                 </button>
                 {% for listedGroup in groupList %}
-                    <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">Group {{ listedGroup.id }}</button>
+                    <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">{{ listedGroup.name }}</button>
                 {% endfor %}
                 {% if is_granted("ROLE_SUPER_ADMIN") %}
                     <button class="add btn btn-default">Add Group</button>
@@ -89,7 +89,7 @@
                                         {% if not listedGroup.enabled %}
                                             class="disabled"
                                         {% endif %}>
-                                        {{ listedGroup.id }}
+                                        {{ listedGroup.name }}
                                     </option>
                                 {% endfor %}
                             </select>

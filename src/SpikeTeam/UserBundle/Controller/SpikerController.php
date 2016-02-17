@@ -49,6 +49,7 @@ class SpikerController extends Controller
         $form = $this->createFormBuilder($newSpiker)
             ->add('group', 'entity', array(
                 'class' => 'SpikeTeamUserBundle:SpikerGroup',
+                'property' => 'name',
                 'data' => ($group == null) ? $this->gRepo->findEmptiest() : $this->gRepo->find($group)
             ))
             ->add('firstName', 'text', array('required' => false))
@@ -150,6 +151,14 @@ class SpikerController extends Controller
     }
 
     /**
+     * Spike team signup
+     * @Route("/signup", name="spiker_signup")
+     */
+    public function spikerSignupAction(Request $request)
+    {
+    }
+
+    /**
      * Showing individual spiker here
      * @Route("/edit/{input}", name="spikers_edit")
      */
@@ -189,6 +198,7 @@ class SpikerController extends Controller
                 ))
                 ->add('group', 'entity', array(
                     'class' => 'SpikeTeamUserBundle:SpikerGroup',
+                    'property' => 'name',
                     'required' => true,
                     'attr' => $groupEditAttr
                 ))
@@ -273,7 +283,7 @@ class SpikerController extends Controller
     /**
      * CSV Export spikers here
      * @Route("/export/{gid}", name="spikers_export", options={"expose":true})
-     * 
+     *
      * @param int $gid
      */
     public function spikersExportAction($gid = null)
