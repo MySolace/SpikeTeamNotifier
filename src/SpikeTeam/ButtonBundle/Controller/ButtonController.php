@@ -13,7 +13,7 @@ use SpikeTeam\ButtonBundle\Event\AlertEvent;
 class ButtonController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="button", options={"expose"=true})
      */
     public function indexAction()
     {
@@ -74,7 +74,7 @@ class ButtonController extends Controller
                 'enabled' => $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds()
             ));
         } else {
-            return new Response('No can do!');      
+            return new Response('No can do!');
         }
     }
 
