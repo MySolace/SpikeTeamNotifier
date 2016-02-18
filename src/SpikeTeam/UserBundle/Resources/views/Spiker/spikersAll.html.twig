@@ -30,14 +30,6 @@
                         <button id="shuffle" class="shuffle btn" {% if group is not null %}style="display:none;"{% endif %}>Shuffle</button>
                     </div>
                 {% endif %}
-
-                <div class="onoffswitch" {% if group is null %}style="display:none;"{% endif %}>
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="onoff-{{ group }}" {% if group_enabled %}checked="checked"{% endif %}>
-                    <label class="onoffswitch-label" for="onoff-{{ group }}">
-                        <span class="onoffswitch-inner"></span>
-                        <span class="onoffswitch-switch"></span>
-                    </label>
-                </div>
             </div>
 
         </div>
@@ -68,7 +60,7 @@
             <form class="form" action="{{ path('spikers_enable') }}" method="post" id="enabler">
                 <tbody>
                 {% for spiker in spikers %}
-                    <tr class="spiker group-{{ spiker.group.id }}{% if not spiker.group.enabled %} disabled{% endif %}{% if spiker.isCaptain %} captain{% endif %}{% if spiker.preferredTime == 'day' %} day{% elseif spiker.preferredTime == 'night' %} night{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
+                    <tr class="spiker group-{{ spiker.group.id }}{% if spiker.isCaptain %} captain{% endif %}{% if spiker.preferredTime == 'day' %} day{% elseif spiker.preferredTime == 'night' %} night{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
                         <td class="center">
                             <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %}{% if spiker.isCaptain %} disabled{% endif %}/>
                         </td>
