@@ -156,6 +156,46 @@ class SpikerController extends Controller
      */
     public function spikerSignupAction(Request $request)
     {
+        $newSpiker = new Spiker();
+        $form = $this->createFormBuilder($newSpiker)
+            ->add('group', 'entity', array(
+                'class' => 'SpikeTeamUserBundle:SpikerGroup',
+                'property' => 'name'
+            ))
+            ->add('firstName', 'text', array('required' => true))
+            ->add('lastName', 'text', array('required' => true))
+            ->add('phoneNumber', 'text', array('required' => true))
+            ->add('email', 'email', array('required' => true))
+            ->add('save', 'submit')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            // Process number to remove extra characters and add '1' country code
+            $processedNumber = $this->userHelper->processNumber($newSpiker->getPhoneNumber());
+
+            // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
+            if ($processedNumber) {
+                if (count($this->repo->findByEmail($newSpiker->getEmail())) ||
+                    count($this->repo->findByPhoneNumber($processedNumber))) {
+                    $existing = true;
+                } else {
+                    $newSpiker->setPhoneNumber($processedNumber);
+                    $newSpiker->setIsEnabled(true);
+                    $newSpiker->setIsSupervisor(false);
+                    $this->em->persist($newSpiker);
+                    $this->em->flush();
+                    return $this->redirect($this->generateUrl('spikers'));
+                }
+            }
+
+            return new JsonResponse($newSpiker->getId());
+        }
+
+        // send to template
+        return $this->render('SpikeTeamUserBundle:Spiker:signup.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
     /**
