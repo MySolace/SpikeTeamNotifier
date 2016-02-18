@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
 use SpikeTeam\ButtonBundle\Event\AlertEvent;
+use SpikeTeam\UserBundle\Helper\SpikerGroupHelper;
 
 class ButtonController extends Controller
 {
@@ -18,24 +19,26 @@ class ButtonController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $spikerGroupHelper = $this->get('spike_team.spiker_group_helper');
         $securityContext = $this->get('security.context');
         $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
-        $group = ($mostRecent == false) ? null : $group = $mostRecent->getGroup();
+        $currentGroupId = $spikerGroupHelper->getCurrentGroupId();
 
-        $next = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($this->getNextGroup());
-        $canPush = ($this->checkPrevPushes()) ? true : false;
+        $currentGroup = $this->getDoctrine()
+                     ->getRepository('SpikeTeamUserBundle:SpikerGroup')
+                     ->find($currentGroupId);
 
+        $canPush = $currentGroup->getRecentPushesCount() < 2;
 
         if (!$securityContext->isGranted('ROLE_ADMIN')) {
             $canPush = false;
         }
 
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
-            'goUrl' => $this->generateUrl('goteamgo', array('gid' => $next)),
+            'goUrl' => $this->generateUrl('goteamgo', array('gid' => $currentGroup)),
             'canPush' => $canPush,
             'mostRecent' => $mostRecent,
-            'groupList' => $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findAll(),
-            'next' => $next
+            'currentGroup' => $currentGroup
         ));
     }
 
@@ -45,23 +48,42 @@ class ButtonController extends Controller
     public function goAction($gid)
     {
         $em = $this->getDoctrine()->getManager();
-        $newPushTime = $this->checkPrevPushes();
-        if ($newPushTime) {
+        $securityContext = $this->get('security.context');
+        $spikerGroupHelper = $this->get('spike_team.spiker_group_helper');
+
+        if ($gid == 'all') {
+            $canPush = true;
+        } else {
+            $group = $this->getDoctrine()
+                          ->getRepository('SpikeTeamUserBundle:SpikerGroup')
+                          ->find($gid);
+
+            $canPush = $group->getRecentPushesCount() < 2;
+        }
+
+        if (!$securityContext->isGranted('ROLE_ADMIN')) {
+            $canPush = false;
+        }
+
+        if ($canPush) {
             // Dispatch alert event, to appropriate group if specified
             switch($gid) {
                 case 'all':
-                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findByEnabledGroup();
+                    $spikers = $this->getDoctrine()
+                                    ->getRepository('SpikeTeamUserBundle:Spiker')
+                                    ->findByEnabledGroup();
                     break;
                 default:
-                    $group = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($gid);
-                    $spikers = $this->getDoctrine()->getRepository('SpikeTeamUserBundle:Spiker')->findByGroup($group);
+                    $spikers = $this->getDoctrine()
+                                    ->getRepository('SpikeTeamUserBundle:Spiker')
+                                    ->findByGroup($group);
                     break;
             }
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('alert.send', new AlertEvent($spikers));
 
             // Record button push
-            $push = new ButtonPush($newPushTime, $this->getUser()->getId());
+            $push = new ButtonPush($this->getUser()->getId());
             if (isset($group)) {
                 $push->setGroup($group);
             }
@@ -69,7 +91,7 @@ class ButtonController extends Controller
             $em->persist($push);
             $em->flush();
 
-            $next = $this->getNextGroup();
+            $next = $spikerGroupHelper->getCurrentGroupId();
 
             // Send back latest push info
             $id = ($push->getGroup() == null) ? 'All Spikers' : 'Group '.$push->getGroup()->getId();
@@ -80,47 +102,7 @@ class ButtonController extends Controller
                 'enabled' => $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds()
             ));
         } else {
-            return new Response('No can do!');
+            return new JsonResponse(false);
         }
     }
-
-    /**
-     * Returns next group to send alert to. Takes into account disabled groups
-     * @param integer $id
-     * @return integer $next
-     */
-    private function getNextGroup($id = null)
-    {
-        $buttonRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
-        $current = $buttonRepo->findMostRecent();
-
-        return $current;
-    }
-
-    /**
-     * Check if we are good to go. Returns false if not, current DateTime to set as new push if so.
-     */
-    public function checkPrevPushes()
-    {
-        $return = false;
-        $pushRepo = $this->getDoctrine()->getRepository('SpikeTeamButtonBundle:ButtonPush');
-        $pushes = $pushRepo->findAll();
-        $now = new \DateTime();
-
-        if ($pushes) {  // If pushes in system, we need to check how recent they were.
-            $lastTime = end($pushes)->getPushTime();
-            // Get interval from parameters
-            $intervalString = $this->getDoctrine()->getManager()
-                ->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('alert_timeout')->getSetting();
-            $testInterval = \DateInterval::createFromDateString($intervalString);
-            $testTime = $lastTime->add($testInterval);
-            if ($now > $testTime) {  // If outside the 24 hour period, return $now
-                $return = $now;
-            }
-        } else {    // If no pushes in system, we are good to go!
-            $return = $now;
-        }
-        return $return;
-    }
-
 }

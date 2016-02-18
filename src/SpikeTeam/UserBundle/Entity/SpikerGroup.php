@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use SpikeTeam\UserBundle\Entity\Spiker;
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * SpikerGroup
@@ -60,7 +61,7 @@ class SpikerGroup
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +84,7 @@ class SpikerGroup
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -158,6 +159,21 @@ class SpikerGroup
         return $this->pushes;
     }
 
+    /**
+     * Get pushes within last 24 hours
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRecentPushesCount()
+    {
+        $date = new \DateTime();
+        $date->modify('-24 hours');
+        $criteria = Criteria::create()->where(Criteria::expr()->gt("pushTime", $date));
+        $recentPushes = $this->pushes->matching($criteria);
+
+        return $recentPushes->count();
+    }
+
     public function __toString()
     {
         return strval($this->id);
@@ -179,7 +195,7 @@ class SpikerGroup
     /**
      * Get enabled
      *
-     * @return string 
+     * @return string
      */
     public function getEnabled()
     {
@@ -202,7 +218,7 @@ class SpikerGroup
     /**
      * Get captain
      *
-     * @return Spiker 
+     * @return Spiker
      */
     public function getCaptain()
     {
