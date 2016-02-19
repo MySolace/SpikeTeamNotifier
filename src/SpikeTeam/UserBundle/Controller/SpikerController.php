@@ -148,6 +148,10 @@ class SpikerController extends Controller
             $newSpiker->setIsSupervisor(false);
             $this->em->persist($newSpiker);
             $this->em->flush();
+
+            return $this->render('SpikeTeamUserBundle:Spiker:success.html.twig', array(
+                'spiker' => $newSpiker
+            ));
         } else {
             $errors = $form->getErrors();
         }

@@ -170,6 +170,14 @@ td.center {
   -moz-box-shadow: 0 8px 6px -6px black;
   box-shadow: 0 8px 6px -6px black; }
 
+.success {
+  text-align: center;
+  background: #00cc00;
+  color: white;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
 body.anon #inner #fos-user {
   margin: 150px auto;
   width: 300px; }

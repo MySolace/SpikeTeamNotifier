@@ -132,3 +132,10 @@ td.center {
     color: white;
     @include drops;
 }
+
+.success {
+    text-align: center;
+    background: #00cc00;
+    color: white;
+    @include drops;
+}
