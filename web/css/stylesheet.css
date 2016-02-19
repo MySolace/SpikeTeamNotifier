@@ -1,5 +1,5 @@
 /* Stylesheet for CTL's Spike Team Notifier app
- * 
+ *
  * Image Credits:
  * Metal 006 - Brushed Metal: ZooBoing | TurboSquid (http://www.turbosquid.com/FullPreview/Index.cfm/ID/682619)
  * Button: http://server.ashoresystems.com/~battlepa/battleparty/assets/scripts/game/images/
@@ -162,6 +162,14 @@ td.center {
 .import-link {
   cursor: pointer; }
 
+.errors {
+  text-align: center;
+  background: #A80000;
+  color: white;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
 body.anon #inner #fos-user {
   margin: 150px auto;
   width: 300px; }
@@ -308,45 +316,6 @@ body.anon #inner #fos-user {
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px; }
-
-div.stats-container {
-  padding: 10px;
-  background: white;
-  -webkit-box-shadow: 0 8px 6px -6px black;
-  -moz-box-shadow: 0 8px 6px -6px black;
-  box-shadow: 0 8px 6px -6px black; }
-
-div.dashboard-container {
-  text-align: center; }
-
-.stats span, .issues span {
-  color: red; }
-
-.date-select {
-  text-align: center;
-  margin: 10px 0; }
-
-ul.users-list, ul.stats-list {
-  border-bottom: 1px solid black; }
-
-ul.users-list, ul.stats-list, ul.issues-list, .issues {
-  text-align: center;
-  list-style-type: none; }
-  @media screen and (max-width: 600px) {
-    ul.users-list, ul.stats-list, ul.issues-list, .issues {
-      text-align: left; } }
-
-ul.users-list, ul.stats-list {
-  padding: 10px 0; }
-
-.issues, ul.issues-list {
-  padding: 5px 0; }
-
-.issues p:last-of-type {
-  text-decoration: underline; }
-
-ul.left-list li, ul.right-list li {
-  margin: 5px; }
 
 body {
   background-image: url("../images/steel-bg.jpg"); }

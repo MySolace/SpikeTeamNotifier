@@ -164,8 +164,23 @@ class SpikerController extends Controller
             ))
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))
-            ->add('phoneNumber', 'text', array('required' => true))
-            ->add('email', 'email', array('required' => true))
+            ->add('phoneNumber', 'text', array(
+                'required' => true,
+                'error_bubbling' => true
+            ))
+            ->add('email', 'email', array(
+                'required' => true,
+                'error_bubbling' => true
+            ))
+            ->add('notificationPreference', 'choice', array(
+                'choices' => array(
+                    0 => 'Text',
+                    1 => 'Phone Call',
+                    2 => 'Both'
+                ),
+                'required' => true,
+                'multiple' => false,
+            ))
             ->add('save', 'submit')
             ->getForm();
         $form->handleRequest($request);
@@ -176,25 +191,24 @@ class SpikerController extends Controller
 
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
             if ($processedNumber) {
-                if (count($this->repo->findByEmail($newSpiker->getEmail())) ||
-                    count($this->repo->findByPhoneNumber($processedNumber))) {
-                    $existing = true;
+                if (count($this->repo->findByPhoneNumber($processedNumber))) {
+                    $errors = "ERROR: This phone number is already signed up.";
                 } else {
                     $newSpiker->setPhoneNumber($processedNumber);
                     $newSpiker->setIsEnabled(true);
                     $newSpiker->setIsSupervisor(false);
                     $this->em->persist($newSpiker);
                     $this->em->flush();
-                    return $this->redirect($this->generateUrl('spikers'));
                 }
             }
-
-            return new JsonResponse($newSpiker->getId());
+        } else {
+            $errors = $form->getErrors();
         }
 
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:signup.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'errors' => $errors
         ));
     }
 

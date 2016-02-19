@@ -5,7 +5,6 @@ var App = {
             'spikers',
             'admin',
             'settings',
-            'stats',
         ];
         $.each(sections, function (index, val) {
             $('body.section-'+val).find('li.'+val).addClass('active');
