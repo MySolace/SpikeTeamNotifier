@@ -1,6 +1,7 @@
 {% extends 'admin.spikers.html.twig' %}
 
 {% block body %}
+    {% include '_errors.html.twig' %}
     <div class="nameplate">
         <div class="nameplate-inner">
             &bull;&nbsp;&nbsp;SPIKE TEAM MEMBERS&nbsp;&nbsp;&bull;
@@ -8,9 +9,6 @@
     </div>
 
     <div class="page table-responsive">
-        {% if existing %}
-            <div class="alert">Sorry! A spiker by this phone number or email address already exists. Please fix the record and try again.</div>
-        {% endif %}
         <div class="groups">
             <div class="buttons">
                 <button class="all btn {% if group is null %}btn-primary{% else %}btn-default{% endif %}">

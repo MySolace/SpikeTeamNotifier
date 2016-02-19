@@ -5,11 +5,17 @@ namespace SpikeTeam\UserBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * User
  *
  * @ORM\Table(name="fos_user")
  * @ORM\Entity()
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="This email is already signed up."
+ * )
  */
 class Admin extends BaseUser
 {

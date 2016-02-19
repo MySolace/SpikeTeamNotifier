@@ -24,6 +24,7 @@ class AdminType extends AbstractType
             ))
             ->add('email', 'email', array(
                 'required' => true,
+                'error_bubbling' => true
             ))
             ->add('password', 'password', array(
                 'required' => false,

@@ -1,11 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if errors is not empty %}
-        <div class="errors">
-            {{ errors }}
-        </div>
-    {% endif %}
+    {% include '_errors.html.twig' %}
     <div class="nameplate">
         <div class="nameplate-inner">
             Spike Team Signup

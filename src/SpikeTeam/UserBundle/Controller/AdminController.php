@@ -45,12 +45,15 @@ class AdminController extends Controller
             $this->em->flush();
 
             return $this->redirect($this->generateUrl('admin'));
+        } else {
+            $errors = $form->getErrors();
         }
 
         // send to template
         return $this->render('SpikeTeamUserBundle:Admin:adminsAll.html.twig', array(
-            'admins' => $admins,
-            'form' => $form->createView(),
+            'admins'    => $admins,
+            'form'      => $form->createView(),
+            'errors'    => $errors
         ));
     }
 
@@ -95,11 +98,14 @@ class AdminController extends Controller
                 $this->em->persist($admin);
                 $this->em->flush();
                 return $this->redirect($this->generateUrl('admin'));
+            } else {
+                $errors = $form->getErrors();
             }
 
             return $this->render('SpikeTeamUserBundle:Admin:adminForm.html.twig', array(
-                'admin' => $admin,
-                'form' => $form->createView(),
+                'admin'     => $admin,
+                'form'      => $form->createView(),
+                'errors'    => $errors
             ));
         } else {    // If not sufficient authorization, go back to see all admins.
             return $this->render($allUrl);

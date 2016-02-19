@@ -54,13 +54,19 @@ class SpikerController extends Controller
             ))
             ->add('firstName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => false))
-            ->add('phoneNumber', 'text', array('required' => true))
+            ->add('phoneNumber', 'text', array(
+                'required' => true,
+                'error_bubbling' => true
+            ))
             ->add('isSupervisor', 'checkbox', array('required' => false))
             ->add('isEnabled', 'hidden', array('data' => true))
             ->add('cohort', 'text', array(
                 'attr' => array('size' => '1'),
             ))
-            ->add('email')
+            ->add('email', 'text', array(
+                'required' => true,
+                'error_bubbling' => true
+            ))
             ->add('Add', 'submit')
             ->getForm();
         $form->handleRequest($request);
@@ -71,10 +77,8 @@ class SpikerController extends Controller
 
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
             if ($processedNumber) {
-                if (count($this->repo->findByEmail($newSpiker->getEmail()))
-                    || count($this->repo->findByPhoneNumber($processedNumber))
-                    ) {
-                    $existing = true;
+                if (count($this->repo->findByPhoneNumber($processedNumber))) {
+                    $errors = "ERROR: This phone number is already signed up.";
                 } else {
                     $newSpiker->setPhoneNumber($processedNumber);
                     $this->em->persist($newSpiker);
@@ -84,6 +88,8 @@ class SpikerController extends Controller
             }
 
             $newSpiker->setCohort(intval($newSpiker->getCohort()));
+        } else {
+            $errors = $form->getErrors();
         }
 
         // Sorting by group, then captain, then first name
@@ -120,6 +126,7 @@ class SpikerController extends Controller
             'group' => $group,
             'group_enabled' => $groupEnabled,
             'count' => $count,
+            'errors' => $errors
         ));
     }
 
