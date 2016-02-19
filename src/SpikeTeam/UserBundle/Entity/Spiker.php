@@ -5,12 +5,21 @@ namespace SpikeTeam\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Spiker
  *
  * @ORM\Table(name="spiker")
  * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\SpikerRepository")
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="This email is already signed up."
+ * )
+ * @UniqueEntity(
+ *     fields="phoneNumber",
+ *     message="This phone number is already signed up."
+ * )
  */
 class Spiker
 {
@@ -90,6 +99,14 @@ class Spiker
      * @ORM\Column(name="preferred_time", type="string", nullable=true)
      */
     private $preferredTime;
+
+    /**
+     * @var int
+     * 0 = text, 1 = phone call, 2 = both
+     *
+     * @ORM\Column(name="notification_preference", type="integer", nullable=false, options={"default" = 0})
+     */
+    private $notificationPreference = 0;
 
     /**
      * Get id
@@ -331,5 +348,28 @@ class Spiker
     public function getPreferredTime()
     {
         return $this->preferredTime;
+    }
+
+    /**
+     * Set notificationPreference
+     *
+     * @param integer $notificationPreference
+     * @return Spiker
+     */
+    public function setNotificationPreference($notificationPreference)
+    {
+        $this->notificationPreference = $notificationPreference;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationPreference
+     *
+     * @return integer
+     */
+    public function getNotificationPreference()
+    {
+        return $this->notificationPreference;
     }
 }
