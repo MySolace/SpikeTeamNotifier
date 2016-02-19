@@ -32,8 +32,8 @@ class AdminType extends AbstractType
                 'required' => false,
             ))
             ->add('isEnabled', 'checkbox', array(
-                'label' => 'Opt-in to alert texts?',
-                'required' => false,
+                'data'      => true,
+                'required'  => true
             ));
 
             $transformer = new StringToArrayTransformer();

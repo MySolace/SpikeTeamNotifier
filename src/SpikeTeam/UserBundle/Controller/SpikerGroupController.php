@@ -207,40 +207,6 @@ class SpikerGroupController extends Controller
     }
 
     /**
-     * AJAX query, returns JSON response if group is enabled or not
-     *
-     * @Route("/status/{id}", name="group_status_check", options={"expose"=true})
-     */
-    public function checkStatusAction($id = null)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if ($id != null) {
-            $return = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id)->getEnabled();
-        } else {
-            $return = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds();
-        }
-        return new JsonResponse(array(
-            'enabled' => $return
-        ));
-    }
-
-    /**
-     * AJAX query, set enabled/disabled status of group
-     *
-     * @Route("/set/{id}/{status}", name="group_status_set", options={"expose"=true})
-     */
-    public function setStatusAction($id, $status)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $group = $em->getRepository('SpikeTeamUserBundle:SpikerGroup')->find($id);
-        $group->setEnabled($status);
-        $em->persist($group);
-        $em->flush();
-
-        return new JsonResponse();
-    }
-
-    /**
      * AJAX query, set captain for group
      *
      * @Route("/captain/{id}/{cid}", name="group_captain_set", options={"expose"=true})

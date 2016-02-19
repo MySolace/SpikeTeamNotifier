@@ -19,19 +19,7 @@
                 {% for listedGroup in groupList %}
                     <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">{{ listedGroup.name }}</button>
                 {% endfor %}
-                {% if is_granted("ROLE_SUPER_ADMIN") %}
-                    <button class="add btn btn-default">Add Group</button>
-                {% endif %}
             </div>
-
-            <div class="group-right">
-                {% if is_granted("ROLE_SUPER_ADMIN") %}
-                    <div class="shufflebutton">
-                        <button id="shuffle" class="shuffle btn" {% if group is not null %}style="display:none;"{% endif %}>Shuffle</button>
-                    </div>
-                {% endif %}
-            </div>
-
         </div>
 
         <div class="meta">
@@ -40,7 +28,7 @@
             </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="import-export">
-                    <a class="import-link">Import</a> | <a href="{{ path('spikers_export', {gid: group}) }}">Export</a>
+                    <a href="{{ path('spikers_export', {gid: group}) }}">Export</a>
                 </div>
             {% endif %}
         </div>
@@ -90,7 +78,7 @@
                         <td>{{ spiker.lastName }}</td>
                         <td>{{ spiker.phoneNumber }}</td>
                         <td>{{ spiker.email }}</td>
-                        <td>{{ spiker.cohort }}</td>
+                        <td class="center">{{ spiker.cohort }}</td>
                         <td class="center edit">
                             <a href="{{ path('spikers_edit', {'input': spiker.phoneNumber}) }}">Edit</a>
                         </td>

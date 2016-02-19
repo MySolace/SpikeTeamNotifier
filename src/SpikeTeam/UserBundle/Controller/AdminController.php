@@ -35,19 +35,12 @@ class AdminController extends Controller
         $admins = $this->repo->findAll();
 
         $newAdmin = new Admin();
-        $form = $this->createFormBuilder($newAdmin)
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('email', 'email', array('required' => true))
-            ->add('password', 'password', array('required' => true))
-            ->add('Add', 'submit')
-            ->getForm();
+        $form = $this->createForm(new AdminType(), $newAdmin)
+                     ->add('save', 'submit');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $newAdmin->setPlainPassword($newAdmin->getPassword());
-            $newAdmin->addRole('ROLE_CAPTAIN');
-            $newAdmin->setEnabled(true);
             $this->em->persist($newAdmin);
             $this->em->flush();
 
