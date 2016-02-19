@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use SpikeTeam\UserBundle\Form\SpikerType;
 use SpikeTeam\UserBundle\Entity\Spiker;
 
 /**
@@ -44,48 +45,20 @@ class SpikerController extends Controller
     {
         $spikers = $this->repo->findAll();
 
-        $existing = false;
         $newSpiker = new Spiker();
-        $form = $this->createFormBuilder($newSpiker)
-            ->add('group', 'entity', array(
-                'class' => 'SpikeTeamUserBundle:SpikerGroup',
-                'property' => 'name',
-                'data' => ($group == null) ? $this->gRepo->findEmptiest() : $this->gRepo->find($group)
-            ))
-            ->add('firstName', 'text', array('required' => false))
-            ->add('lastName', 'text', array('required' => false))
-            ->add('phoneNumber', 'text', array(
-                'required' => true,
-                'error_bubbling' => true
-            ))
-            ->add('isSupervisor', 'checkbox', array('required' => false))
-            ->add('isEnabled', 'hidden', array('data' => true))
-            ->add('cohort', 'text', array(
-                'attr' => array('size' => '1'),
-            ))
-            ->add('email', 'text', array(
-                'required' => true,
-                'error_bubbling' => true
-            ))
-            ->add('Add', 'submit')
-            ->getForm();
+        $form = $this->createForm(new SpikerType(), $newSpiker)
+                     ->remove('notificationPreference')
+                     ->remove('isCaptain')
+                     ->remove('isEnabled');
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // Process number to remove extra characters and add '1' country code
-            $processedNumber = $this->userHelper->processNumber($newSpiker->getPhoneNumber());
-
             // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
-            if ($processedNumber) {
-                if (count($this->repo->findByPhoneNumber($processedNumber))) {
-                    $errors = "ERROR: This phone number is already signed up.";
-                } else {
-                    $newSpiker->setPhoneNumber($processedNumber);
-                    $this->em->persist($newSpiker);
-                    $this->em->flush();
-                    return $this->redirect($this->generateUrl('spikers'));
-                }
-            }
+            $newSpiker->setIsEnabled(true);
+            $this->em->persist($newSpiker);
+            $this->em->flush();
+            return $this->redirect($this->generateUrl('spikers'));
 
             $newSpiker->setCohort(intval($newSpiker->getCohort()));
         } else {
@@ -121,12 +94,11 @@ class SpikerController extends Controller
         return $this->render('SpikeTeamUserBundle:Spiker:spikersAll.html.twig', array(
             'spikers' => $spikers,
             'form' => $form->createView(),
-            'existing' => $existing,
             'groupList' => $this->em->getRepository('SpikeTeamUserBundle:SpikerGroup')->findAll(),
             'group' => $group,
             'group_enabled' => $groupEnabled,
             'count' => $count,
-            'errors' => $errors
+            'errors' => (isset($errors)) ? $errors : null
         ));
     }
 
@@ -164,50 +136,18 @@ class SpikerController extends Controller
     public function spikerSignupAction(Request $request)
     {
         $newSpiker = new Spiker();
-        $form = $this->createFormBuilder($newSpiker)
-            ->add('group', 'entity', array(
-                'class' => 'SpikeTeamUserBundle:SpikerGroup',
-                'property' => 'name'
-            ))
-            ->add('firstName', 'text', array('required' => true))
-            ->add('lastName', 'text', array('required' => true))
-            ->add('phoneNumber', 'text', array(
-                'required' => true,
-                'error_bubbling' => true
-            ))
-            ->add('email', 'email', array(
-                'required' => true,
-                'error_bubbling' => true
-            ))
-            ->add('notificationPreference', 'choice', array(
-                'choices' => array(
-                    0 => 'Text',
-                    1 => 'Phone Call',
-                    2 => 'Both'
-                ),
-                'required' => true,
-                'multiple' => false,
-            ))
-            ->add('save', 'submit')
-            ->getForm();
+        $form = $this->createForm(new SpikerType(), $newSpiker)
+                     ->remove('isSupervisor')
+                     ->remove('isEnabled')
+                     ->remove('isCaptain');
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // Process number to remove extra characters and add '1' country code
-            $processedNumber = $this->userHelper->processNumber($newSpiker->getPhoneNumber());
-
-            // If it's valid, go ahead, save, and view the Spiker. Otherwise, redirect back to this form.
-            if ($processedNumber) {
-                if (count($this->repo->findByPhoneNumber($processedNumber))) {
-                    $errors = "ERROR: This phone number is already signed up.";
-                } else {
-                    $newSpiker->setPhoneNumber($processedNumber);
-                    $newSpiker->setIsEnabled(true);
-                    $newSpiker->setIsSupervisor(false);
-                    $this->em->persist($newSpiker);
-                    $this->em->flush();
-                }
-            }
+            $newSpiker->setIsEnabled(true);
+            $newSpiker->setIsSupervisor(false);
+            $this->em->persist($newSpiker);
+            $this->em->flush();
         } else {
             $errors = $form->getErrors();
         }
@@ -215,7 +155,7 @@ class SpikerController extends Controller
         // send to template
         return $this->render('SpikeTeamUserBundle:Spiker:signup.html.twig', array(
             'form' => $form->createView(),
-            'errors' => $errors
+            'errors' => (isset($errors)) ? $errors : null
         ));
     }
 
@@ -228,102 +168,42 @@ class SpikerController extends Controller
         $allUrl = $this->generateUrl('spikers');
         $editUrl = $this->generateUrl('spikers_edit', array('input' => $input));
 
-        $processedNumber = $this->userHelper->processNumber($input);
-        if ($processedNumber) {
-            $spiker = $this->repo->findOneByPhoneNumber($processedNumber);
-            $oldGroup = $spiker->getGroup();
-            $oldIsCaptain = $spiker->getIsCaptain();
+        $spiker = $this->repo->findOneByPhoneNumber($edit);
+        $oldGroup = $spiker->getGroup();
+        $oldIsCaptain = $spiker->getIsCaptain();
 
-            $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
-            $form = $this->createFormBuilder($spiker)
-                ->add('firstName', 'text', array(
-                    'data' => $spiker->getFirstName(),
-                    'required' => false,
-                ))
-                ->add('lastName', 'text', array(
-                    'data' => $spiker->getLastName(),
-                    'required' => false,
-                ))
-                ->add('phoneNumber', 'text', array(
-                    'data' => $spiker->getPhoneNumber(),
-                    'required' => true,
-                ))
-                ->add('email', 'text', array(
-                    'data' => $spiker->getEmail(),
-                    'required' => false,
-                ))
-                ->add('cohort', 'text', array(
-                    'data' => $spiker->getCohort(),
-                    'required' => false,
-                    'attr' => array('size' => '1'),
-                ))
-                ->add('group', 'entity', array(
-                    'class' => 'SpikeTeamUserBundle:SpikerGroup',
-                    'property' => 'name',
-                    'required' => true,
-                    'attr' => $groupEditAttr
-                ))
-                ->add('isCaptain', 'checkbox', array(
-                    'data' => $spiker->getIsCaptain(),
-                    'required' => false,
-                ))
-                ->add('preferredTime', 'choice', array(
-                    'choices' => array(
-                        'day' => 'Day',
-                        'night' => 'Night',
-                    ),
-                    'required' => false,
-                    'multiple' => false,
-                    'expanded' => false,
-                ))
-                ->add('isSupervisor', 'checkbox', array(
-                    'data' => $spiker->getIsSupervisor(),
-                    'required' => false,
-                ))
-                ->add('isEnabled', 'checkbox', array(
-                    'data' => $spiker->getIsEnabled(),
-                    'required' => false,
-                ))
-                ->add('save', 'submit')
-                ->getForm();
-            $form->handleRequest($request);
+        $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
+        $form = $this->createForm(new SpikerType(), $spiker);
 
-            if ($form->isValid()) {
-                // Deal w/ disabled group select / keep spiker from changing groups if previously captain
-                if ($spiker->getGroup() == null
-                    || ($oldIsCaptain && $spiker->getGroup() !== $oldGroup)) {
-                    $spiker->setGroup($oldGroup);
-                }
+        $form->handleRequest($request);
 
-                if ($spiker->getIsCaptain()) {
-                    if (!$spiker->getIsEnabled()) {
-                        $spiker->setIsEnabled(true);
-                    }
-                    $this->em->persist($spiker);
-                    $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup());
-                }
-
-                // Process number to remove extra characters and add '1' country code
-                $processedNumber = $this->userHelper->processNumber($spiker->getPhoneNumber());
-
-                // If it's valid, go ahead and save. Otherwise, redirect back to edit page again.
-                if ($processedNumber) {
-                    $spiker->setPhoneNumber($processedNumber);
-                    $this->em->persist($spiker);
-                    $this->em->flush();
-                    return $this->redirect($allUrl);
-                } else {
-                    return $this->redirect($editUrl);
-                }
+        if ($form->isValid()) {
+            // Deal w/ disabled group select / keep spiker from changing groups if previously captain
+            if ($spiker->getGroup() == null
+                || ($oldIsCaptain && $spiker->getGroup() !== $oldGroup)) {
+                $spiker->setGroup($oldGroup);
             }
 
-            return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
-                'spiker' => $spiker,
-                'form' => $form->createView()
-            ));
-        } else {    // Show individual Spiker
+            if ($spiker->getIsCaptain()) {
+                if (!$spiker->getIsEnabled()) {
+                    $spiker->setIsEnabled(true);
+                }
+                $this->em->persist($spiker);
+                $this->get('spike_team.user_helper')->setCaptain($spiker, $spiker->getGroup());
+            }
+
+            $this->em->persist($spiker);
+            $this->em->flush();
             return $this->redirect($allUrl);
+        } else {
+            $errors = $form->getErrors();
         }
+
+        return $this->render('SpikeTeamUserBundle:Spiker:spikerForm.html.twig', array(
+            'spiker' => $spiker,
+            'form' => $form->createView(),
+            'errors' => (isset($errors)) ? $errors : null
+        ));
     }
 
     /**
@@ -332,8 +212,7 @@ class SpikerController extends Controller
      */
     public function spikerDeleteAction($input)
     {
-        $processedNumber = $this->userHelper->processNumber($input);
-        if ($processedNumber) {
+        if ($input) {
             $spiker = $this->repo->findOneByPhoneNumber($input);
             $this->em->remove($spiker);
             $this->em->flush();

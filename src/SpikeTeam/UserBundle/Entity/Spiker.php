@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Spiker
@@ -34,6 +35,9 @@ class Spiker
 
     /**
      * @var string
+     * @Assert\NotBlank(
+     *      message="First name cannot be blank."
+     * )
      *
      * @ORM\Column(name="first_name", type="string", length=60, nullable=true)
      */
@@ -41,6 +45,9 @@ class Spiker
 
     /**
      * @var string
+     * @Assert\NotBlank(
+     *      message="Last name cannot be blank."
+     * )
      *
      * @ORM\Column(name="last_name", type="string", length=60, nullable=true)
      */
@@ -48,14 +55,24 @@ class Spiker
 
     /**
      * @var string
-     *
+     * @Assert\Regex(
+     *     pattern="/[0-9]/",
+     *     message="Your phone number must consist only of numbers."
+     * )
+     *  @Assert\Length(
+     *      min = 11,
+     *      max = 11,
+     *      exactMessage = "Phone number has an incorrect number of digits.",
+     * )
      * @ORM\Column(name="phone_number", type="string", length=11, unique=true)
      */
     private $phoneNumber;
 
     /**
      * @var string
-     *
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     * )
      * @ORM\Column(name="email", type="string", unique=true, nullable=true)
      */
     private $email;
@@ -172,6 +189,17 @@ class Spiker
      */
     public function setPhoneNumber($phoneNumber)
     {
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        switch (strlen($phoneNumber)) {
+            case 10:
+                $phoneNumber = '1' . $phoneNumber;
+                break;
+            case 11:
+                $phoneNumber = $phoneNumber;
+                break;
+        }
+
         $this->phoneNumber = $phoneNumber;
 
         return $this;

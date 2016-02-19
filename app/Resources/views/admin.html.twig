@@ -19,10 +19,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li class="button"><a href="{{ path('button') }}">The Button<span class="sr-only">(current)</span></a></li>
-            <li class="spikers"><a href="/spikers">Spike Team</a></li>
+            <li class="spikers"><a href="{{ path('spikers') }}">Spike Team</a></li>
             {% if is_granted('ROLE_ADMIN') %}
-              <li class="admin"><a href="/admin">Admin Users</a></li>
-              <li class="settings"><a href="/settings">Settings</a></li>
+              <li class="admin"><a href="{{ path('admin') }}">Admin Users</a></li>
+              <li class="settings"><a href="{{ path('settings') }}">Settings</a></li>
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">

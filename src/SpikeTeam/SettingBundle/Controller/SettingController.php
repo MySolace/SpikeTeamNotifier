@@ -25,7 +25,7 @@ class SettingController extends Controller
 
     /**
      * Showing all settings here
-     * @Route("/settings")
+     * @Route("/settings", name="settings")
      */
     public function settingsAllAction()
     {

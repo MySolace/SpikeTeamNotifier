@@ -21,14 +21,8 @@
             </tr>
 
             {% for admin in admins %}
-
-                {% set super_admin_bool = false %}
-                {% for role in admin.getRoles() %}
-                    {% if role == 'ROLE_SUPER_ADMIN' %}{% set super_admin_bool = true %}{% endif %}
-                {% endfor %}
-
                 <tr>
-                    <td class="center">
+                    <td>
                         {% if admin.getIsEnabled() %}
                             <i class="fa fa-check-square"></i>
                         {% else %}

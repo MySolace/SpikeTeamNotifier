@@ -17,33 +17,35 @@ class AdminType extends AbstractType
     {
         $builder
             ->add('firstName', 'text', array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('lastName', 'text', array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('email', 'email', array(
                 'required' => true,
                 'error_bubbling' => true
             ))
             ->add('password', 'password', array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('phoneNumber', 'text', array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('isEnabled', 'checkbox', array(
                 'data'      => true,
                 'required'  => true
-            ));
+            ))
+            ->add('save', 'submit')
+        ;
 
             $transformer = new StringToArrayTransformer();
             $builder->add(
                 $builder->create('roles', 'choice',  array(
                     'choices' => array(
-                        'ROLE_CAPTAIN' => 'Captain',
-                        'ROLE_ADMIN' => 'Admin',
-                        'ROLE_SUPER_ADMIN' => 'Super Admin'
+                        'ROLE_CAPTAIN'      => 'Captain',
+                        'ROLE_ADMIN'        => 'Admin',
+                        'ROLE_SUPER_ADMIN'  => 'Super Admin'
                     ),
                     'multiple' => false,
                 ))->addModelTransformer($transformer)

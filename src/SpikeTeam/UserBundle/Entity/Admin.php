@@ -6,6 +6,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -49,7 +50,15 @@ class Admin extends BaseUser
 
     /**
      * @var string
-     *
+     * @Assert\Regex(
+     *     pattern="/[0-9]/",
+     *     message="Your phone number must consist only of numbers."
+     * )
+     *  @Assert\Length(
+     *      min = 11,
+     *      max = 11,
+     *      exactMessage = "Your phone number has an incorrect number of digits.",
+     * )
      * @ORM\Column(name="phone_number", type="string", length=11, nullable=true)
      */
     private $phoneNumber;
@@ -151,6 +160,17 @@ class Admin extends BaseUser
      */
     public function setPhoneNumber($phoneNumber)
     {
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        switch (strlen($phoneNumber)) {
+            case 10:
+                $phoneNumber = '1' . $phoneNumber;
+                break;
+            case 11:
+                $phoneNumber = $phoneNumber;
+                break;
+        }
+
         $this->phoneNumber = $phoneNumber;
 
         return $this;

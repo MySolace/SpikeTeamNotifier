@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use SpikeTeam\UserBundle\Form\AdminType;
-
 use SpikeTeam\UserBundle\Entity\Admin;
 
 class AdminController extends Controller
@@ -69,8 +68,11 @@ class AdminController extends Controller
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
 
-            $form = $this->createForm(new AdminType(), $admin)
-                         ->add('save', 'submit');
+            $form = $this->createForm(new AdminType(), $admin);
+
+            if (!$securityContext->isGranted('ROLE_SUPER_ADMIN')) {
+                $form->remove('roles');
+            }
 
             $existingPassword = $admin->getPassword();
 
@@ -85,12 +87,6 @@ class AdminController extends Controller
                     $admin->setPassword($existingPassword);
                 }
 
-                // Process number to remove extra characters and add '1' country code
-                $processedNumber = $this->get('spike_team.user_helper')
-                    ->processNumber($request->request->get($form->getName())['phoneNumber']);
-                if ($processedNumber) {
-                    $admin->setPhoneNumber($processedNumber);
-                }
                 if (!$admin->getPhoneNumber()) {
                     $admin->setIsEnabled(false);
                 }
