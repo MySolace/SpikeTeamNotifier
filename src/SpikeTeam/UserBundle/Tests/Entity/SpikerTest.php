@@ -3,7 +3,7 @@
 namespace SpikeTeam\UserBundle\Tests\Entity;
 use SpikeTeam\UserBundle\Entity\Spiker;
 
-class SpikerGroupHelperTest extends \PHPUnit_Framework_TestCase
+class SpikerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetPhoneNumber()
     {

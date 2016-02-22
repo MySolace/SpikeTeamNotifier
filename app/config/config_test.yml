@@ -14,3 +14,31 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+services:
+    pdo:
+        class: PDO
+        arguments:
+            - "mysql:host=%database_host%;dbname=spike_test"
+            - %database_user%
+            - %database_password%
+        calls:
+            - [setAttribute, [3, 2]] # \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "spike_test"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        profiling: false
+        logging: false
+        schema_filter: ~^(?!sf_profiler_data)~
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true

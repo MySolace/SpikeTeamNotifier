@@ -3,7 +3,7 @@
 namespace SpikeTeam\UserBundle\Tests\Entity;
 use SpikeTeam\UserBundle\Entity\Admin;
 
-class SpikerGroupHelperTest extends \PHPUnit_Framework_TestCase
+class AdminTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetFriendlyRoleName()
     {
