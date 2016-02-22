@@ -24,6 +24,11 @@ spike_team_api:
     prefix: /api
     resource: "@SpikeTeamApiBundle/Resources/config/routing.yml"
 
+spike_team_alert:
+    resource:   "@SpikeTeamAlertBundle/Controller/"
+    type:       annotation
+    prefix:     /
+
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
