@@ -149,7 +149,7 @@ class SpikerController extends Controller
             $this->em->persist($newSpiker);
             $this->em->flush();
 
-            $this->signupService->newSignup($spiker);
+            $this->get('spike_team.spiker_signup_helper')->newSignup($newSpiker);
 
             return $this->render('SpikeTeamUserBundle:Spiker:success.html.twig', array(
                 'spiker' => $newSpiker

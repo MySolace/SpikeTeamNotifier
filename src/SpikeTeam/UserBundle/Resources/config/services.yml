@@ -5,3 +5,6 @@ services:
     spike_team.spiker_group_helper:
         class: SpikeTeam\UserBundle\Helper\SpikerGroupHelper
         arguments: ["@doctrine.orm.entity_manager"]
+    spike_team.spiker_signup_helper:
+        class: SpikeTeam\UserBundle\Helper\SpikerSignupHelper
+        arguments: ["@mailer"]
