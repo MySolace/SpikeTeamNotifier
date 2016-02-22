@@ -19,11 +19,11 @@ class AlertListener
     public function onAlert(AlertEvent $event)
     {
         $admins = $this->em->getRepository('SpikeTeamUserBundle:Admin')->findAll();
-        $recipients = array_merge($event->getSpikers(), $admins);
-        foreach($recipients as $recipient) {
-            if ($recipient->getIsEnabled() && $recipient->getPhoneNumber()) {
-                $preference = $recipient->getNotificationPreference();
-                $phoneNumber = $recipient->getPhoneNumber();
+        $spikers = $event->getSpikers();
+        foreach($spikers as $spiker) {
+            if ($spiker->getIsEnabled() && $spiker->getPhoneNumber()) {
+                $preference = $spiker->getNotificationPreference();
+                $phoneNumber = $spiker->getPhoneNumber();
 
                 switch ($preference) {
                     case 0:
@@ -39,6 +39,10 @@ class AlertListener
                         break;
                 }
             }
+        }
+
+        foreach($admins as $admin) {
+            $this->notificationService->sendMessage($admin->getPhoneNumber());
         }
     }
 }
