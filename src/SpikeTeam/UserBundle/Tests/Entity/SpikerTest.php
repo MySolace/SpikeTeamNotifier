@@ -21,4 +21,14 @@ class SpikerTest extends \PHPUnit_Framework_TestCase
         $spiker->setPhoneNumber('1-(123)-456-7890');
         $this->assertEquals($spiker->getPhoneNumber(), '11234567890');
     }
+
+    public function testGetFullName()
+    {
+        $spiker = new Spiker();
+
+        $spiker->setFirstName("Test");
+        $spiker->setLastName("User");
+
+        $this->assertEquals($spiker->getFullName(), "Test User");
+    }
 }

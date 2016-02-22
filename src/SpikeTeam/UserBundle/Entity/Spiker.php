@@ -182,6 +182,16 @@ class Spiker
     }
 
     /**
+     * Get full name
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->firstName . " " . $this->lastName;
+    }
+
+    /**
      * Set phoneNumber
      *
      * @param string $phoneNumber
