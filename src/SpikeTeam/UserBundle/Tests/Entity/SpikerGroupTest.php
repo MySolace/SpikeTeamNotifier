@@ -3,6 +3,7 @@
 namespace SpikeTeam\UserBundle\Tests\Entity;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
 
@@ -18,7 +19,8 @@ class SpikerGroupTest extends WebTestCase
     {
         $em = $this->container->get('doctrine')->getManager();
 
-        $user = $em->getRepository('SpikeTeam\UserBundle\Entity\Admin')->findByUsername('admin@sample.com')[0];
+        $user = $em->getRepository('SpikeTeam\UserBundle\Entity\Admin')
+                   ->findOneByEmail('admin@sample.com');
 
         $spikerGroup = new SpikerGroup();
         $buttonPush = new ButtonPush($user->getId());
