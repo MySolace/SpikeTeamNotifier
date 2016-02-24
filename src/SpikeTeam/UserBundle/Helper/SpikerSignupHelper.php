@@ -24,7 +24,13 @@ class SpikerSignupHelper
         $spikerName = $spiker->getFullName();
         $spikerEmail = $spiker->getEmail();
         $spikerDay = $spiker->getGroup()->getName();
-        $captainEmail = $spiker->getGroup()->getCaptain()->getEmail();
+        $captain = $spiker->getGroup()->getCaptain();
+
+        if (is_null($captain)) {
+            return;
+        }
+
+        $captainEmail = $captain->getEmail();
 
         $message = \Swift_Message::newInstance()
                 ->setSubject("New $spikerDay Spike Team Member:  $spikerName")
