@@ -174,7 +174,7 @@ class SpikerController extends Controller
         $allUrl = $this->generateUrl('spikers');
         $editUrl = $this->generateUrl('spikers_edit', array('input' => $input));
 
-        $spiker = $this->repo->findOneByPhoneNumber($edit);
+        $spiker = $this->repo->findOneByPhoneNumber($input);
         $oldGroup = $spiker->getGroup();
         $oldIsCaptain = $spiker->getIsCaptain();
 

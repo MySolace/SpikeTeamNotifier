@@ -28,7 +28,10 @@ class ButtonController extends Controller
                      ->getRepository('SpikeTeamUserBundle:SpikerGroup')
                      ->find($currentGroupId);
 
-        $canPush = $currentGroup->getRecentPushesCount() < 2;
+        $maxAlerts = $em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('alerts_per_day');
+        $maxAlerts = ($maxAlerts) ? intval($maxAlerts->getSetting()) : 2;
+
+        $canPush = $currentGroup->getRecentPushesCount() < $maxAlerts;
 
         if (!$securityContext->isGranted('ROLE_ADMIN')) {
             $canPush = false;
@@ -91,14 +94,11 @@ class ButtonController extends Controller
             $em->persist($push);
             $em->flush();
 
-            $next = $spikerGroupHelper->getCurrentGroupId();
-
             // Send back latest push info
-            $id = ($push->getGroup() == null) ? 'All Spikers' : 'Group '.$push->getGroup()->getId();
+            $id = ($push->getGroup() == null) ? 'All Spikers' : $push->getGroup()->getName() . ' Group';
             return new JsonResponse(array(
                 'id' => $id,
                 'time' => $push->getPushTime()->format('G:i, m/d/y'),
-                'next' => $next,
                 'enabled' => $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds()
             ));
         } else {

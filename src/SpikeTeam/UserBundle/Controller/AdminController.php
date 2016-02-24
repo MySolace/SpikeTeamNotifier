@@ -40,6 +40,7 @@ class AdminController extends Controller
 
         if ($form->isValid()) {
             $newAdmin->setPlainPassword($newAdmin->getPassword());
+            $newAdmin->setEnabled(true);
             $this->em->persist($newAdmin);
             $this->em->flush();
 
@@ -69,6 +70,8 @@ class AdminController extends Controller
             $admin = $this->repo->findOneByEmail($email);
 
             $form = $this->createForm(new AdminType(), $admin);
+            $form->remove('password');
+            $form->add('password', 'password', array('required' => false));
 
             if (!$securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form->remove('roles');

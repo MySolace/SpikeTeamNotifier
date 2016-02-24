@@ -21,6 +21,8 @@ class Version20160217163543 extends AbstractMigration
         $this->addSql('UPDATE spiker_group SET name = "Friday" WHERE id = 6');
         $this->addSql('UPDATE spiker_group SET name = "Saturday" WHERE id = 7');
         $this->addSql('DELETE FROM spiker_group WHERE id = 8');
+        $this->addSql('ALTER TABLE spiker ADD notification_preference INT DEFAULT 0 NOT NULL');
+        $this->addSql('INSERT INTO setting VALUES (null, "alerts_per_day", "2")');
     }
 
     public function down(Schema $schema)
@@ -33,5 +35,7 @@ class Version20160217163543 extends AbstractMigration
         $this->addSql('UPDATE spiker_group SET name = "Group 5" WHERE id = 5');
         $this->addSql('UPDATE spiker_group SET name = "Group 6" WHERE id = 6');
         $this->addSql('UPDATE spiker_group SET name = "Group 7" WHERE id = 7');
+        $this->addSql('ALTER TABLE spiker DROP notification_preference');
+        $this->addSql('DELETE FROM setting WHERE name = "alerts_per_day"');
     }
 }

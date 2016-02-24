@@ -42,7 +42,9 @@ class AlertListener
         }
 
         foreach($admins as $admin) {
-            $this->notificationService->sendMessage($admin->getPhoneNumber());
+            if ($admin->getIsEnabled() && $admin->getPhoneNumber()) {
+                $this->notificationService->sendMessage($admin->getPhoneNumber());
+            }
         }
     }
 }

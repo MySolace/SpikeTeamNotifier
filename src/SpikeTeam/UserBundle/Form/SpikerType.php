@@ -25,8 +25,12 @@ class SpikerType extends AbstractType
                 'required'          => true,
                 'error_bubbling'    => true
             ))
-            ->add('isSupervisor', 'checkbox')
-            ->add('isEnabled', 'checkbox')
+            ->add('isSupervisor', 'checkbox', array(
+                'required'          => false
+            ))
+            ->add('isEnabled', 'checkbox', array(
+                'required'          => false
+            ))
             ->add('cohort', 'text', array(
                 'required'  => true,
                 'attr'      => array('size' => '2'),

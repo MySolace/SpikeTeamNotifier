@@ -39,11 +39,11 @@ class SettingController extends Controller
 
     /**
      * Showing indiv setting here
-     * @Route("/settings/{name}/edit")
+     * @Route("/settings/{name}/edit", name="settings_edit")
      */
     public function settingEditAction($name, Request $request)
     {
-        $allUrl = $this->generateUrl('spiketeam_setting_setting_settingsall');
+        $allUrl = $this->generateUrl('settings');
         if ($name != 'twilio_message' && !$this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($allUrl);
         }

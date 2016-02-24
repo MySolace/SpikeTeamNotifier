@@ -24,7 +24,7 @@
             Send Alert to Group:
             <select {% if currentGroup.getCaptain() %}class="{{ currentGroup.getCaptain().preferredTime }}"{% endif %}>
                 <option value="all">All</option>
-                <option value="{{ currentGroup.id }}" selected="selected"> {{ currentGroup.name }} </option>
+                <option value="{{ currentGroup.id }}" selected="selected">{{ currentGroup.name }}</option>
             </select>
         </div>
         <div class="latest">

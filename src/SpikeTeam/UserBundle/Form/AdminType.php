@@ -34,7 +34,7 @@ class AdminType extends AbstractType
             ))
             ->add('isEnabled', 'checkbox', array(
                 'data'      => true,
-                'required'  => true
+                'required'  => false
             ))
             ->add('save', 'submit')
         ;
