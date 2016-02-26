@@ -31,6 +31,10 @@ class ButtonController extends Controller
         $maxAlerts = $em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('alerts_per_day');
         $maxAlerts = ($maxAlerts) ? intval($maxAlerts->getSetting()) : 2;
 
+        $message = $em->getRepository('SpikeTeamSettingBundle:Setting')
+                      ->findOneByName('twilio_message')
+                      ->getSetting();
+
         $canPush = $currentGroup->getRecentPushesCount() < $maxAlerts;
 
         if (!$securityContext->isGranted('ROLE_ADMIN')) {
@@ -38,10 +42,11 @@ class ButtonController extends Controller
         }
 
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
-            'goUrl' => $this->generateUrl('goteamgo', array('gid' => $currentGroup)),
-            'canPush' => $canPush,
-            'mostRecent' => $mostRecent,
-            'currentGroup' => $currentGroup
+            'goUrl'         => $this->generateUrl('goteamgo', array('gid' => $currentGroup)),
+            'canPush'       => $canPush,
+            'message'       => $message,
+            'mostRecent'    => $mostRecent,
+            'currentGroup'  => $currentGroup
         ));
     }
 

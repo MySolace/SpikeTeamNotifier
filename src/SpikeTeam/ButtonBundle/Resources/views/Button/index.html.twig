@@ -8,7 +8,7 @@
     </div>
     <div id="button-box">
         <div id="button-box-inner">
-            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
+            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}" data-message="{{ message }}">
                 {% if canPush %}
                     <a href="{{ goUrl }}">
                         <button class="button-image" /></button>

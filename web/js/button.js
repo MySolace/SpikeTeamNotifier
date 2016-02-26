@@ -2,12 +2,14 @@ var Button = {
     init: function() {
         $("#button.enabled").find("button").unwrap();
         $("#button").click(function(){
-            var groupId = $('.group-select select').val();
-            var groupName = $('option:selected').text();
+            var groupId = $('.group-select select').val(),
+                groupName = $('option:selected').text(),
+                message = $('#button').data('message');
 
             if ($(this).is(".enabled")) {
                 if (confirm("Are you sure you want to notify the " +
-                    groupName + " Spike Team?")) {
+                    groupName + " Spike Team with the following message: " +
+                    "\"" + message + "\"?")) {
                     $(this).removeClass("enabled").addClass("disabled");
                     Button.goCallback(groupId);
                 }

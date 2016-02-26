@@ -100,6 +100,7 @@ class ButtonControllerTest extends WebTestCase
         $buttonPush->setGroup($spikeGroup);
         $this->em->persist($buttonPush);
         $this->em->persist($spikeGroup);
+        $this->em->flush();
 
         $crawler = $this->client->request('GET', '/');
 

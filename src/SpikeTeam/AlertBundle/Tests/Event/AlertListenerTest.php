@@ -75,11 +75,10 @@ class AlertListenerTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    private function emptyMock($klass, $methods=array()) {
+    private function emptyMock($className) {
         return $this
-            ->getMockBuilder($klass)
+            ->getMockBuilder($className)
             ->disableOriginalConstructor()
-            ->setMethods($methods)
             ->getMock();
     }
 }
