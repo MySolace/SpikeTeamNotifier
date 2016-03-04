@@ -54,21 +54,25 @@ class NotificationService
         $client = new Services_Twilio($this->sid, $this->token);
 
         //callback url for delivering a message
-        $url = 'http://' . $this->host .
-            $this->router->generate('alert_message', array(
+        $url = $this->router->generate(
+            'alert_message',
+            array(
                 'Message' => $this->message,
                 'api_key' => $this->apiKey
-            )
+            ),
+            true
         );
 
         $params = array('Timeout' => 20, 'IfMachine' => 'Hangup');
 
         if ($sendTextOnFail) {
             //status callback url to check result of the call
-            $statusCallbackUrl = 'https://' . $this->host .
-                $this->router->generate('alert_callback', array(
+            $statusCallbackUrl = $this->router->generate(
+                'alert_callback',
+                array(
                     'api_key' => $this->apiKey
-                )
+                ),
+                true
             );
 
             $params['StatusCallback'] = $statusCallbackUrl;

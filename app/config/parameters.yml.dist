@@ -19,5 +19,4 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    host:              127.0.0.1:8000
     api_key:           banana
