@@ -28,8 +28,7 @@ class ButtonController extends Controller
                      ->getRepository('SpikeTeamUserBundle:SpikerGroup')
                      ->find($currentGroupId);
 
-        $maxAlerts = $em->getRepository('SpikeTeamSettingBundle:Setting')->findOneByName('alerts_per_day');
-        $maxAlerts = ($maxAlerts) ? intval($maxAlerts->getSetting()) : 2;
+        $maxAlerts = $this->get('config')->get('alerts_per_day', 2);
 
         $message = $em->getRepository('SpikeTeamSettingBundle:Setting')
                       ->findOneByName('twilio_message')
