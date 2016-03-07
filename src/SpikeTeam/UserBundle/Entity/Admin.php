@@ -68,7 +68,7 @@ class Admin extends BaseUser
      *
      * @ORM\Column(name="is_enabled", type="boolean", options={"default" = 0})
      */
-    private $isEnabled = 0;
+    private $isEnabled = false;
 
     /**
      * Get id

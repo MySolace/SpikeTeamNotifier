@@ -7,4 +7,4 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
     spike_team.spiker_signup_helper:
         class: SpikeTeam\UserBundle\Helper\SpikerSignupHelper
-        arguments: ["@mailer"]
+        arguments: ["@mailer", "@config"]

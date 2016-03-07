@@ -6,4 +6,4 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@spike_team.notification_service"]
     spike_team.notification_service:
         class: SpikeTeam\AlertBundle\Services\NotificationService
-        arguments: ["@doctrine.orm.entity_manager", "@router", %host%, %api_key%]
+        arguments: ["@doctrine.orm.entity_manager", "@router", %api_key%]

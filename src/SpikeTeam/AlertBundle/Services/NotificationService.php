@@ -7,57 +7,49 @@ use Services_Twilio;
 class NotificationService
 {
     protected $em;
-    protected $host;
     protected $apiKey;
     protected $router;
 
-    public function __construct($em, $router, $host, $apiKey)
+    public function __construct($em, $router, $apiKey)
     {
         $this->em = $em;
         $this->router = $router;
-        $this->host = $host;
         $this->apiKey = $apiKey;
 
         $this->settingRepo = $this->em->getRepository('SpikeTeamSettingBundle:Setting');
-        // Pulling CTL Twilio credentials from settings in db
-        $this->sid = $this->settingRepo->findOneByName('twilio_sid')->getSetting();
-        $this->token = $this->settingRepo->findOneByName('twilio_token')->getSetting();
-        $this->message = $this->settingRepo->findOneByName('twilio_message')->getSetting();
-        $this->from = $this->settingRepo->findOneByName('twilio_number')->getSetting();
     }
 
     public function sendMessage($phoneNumber)
     {
-        $client = new Services_Twilio($this->sid, $this->token);
+        $client = $this->setupTwilioClient();
+        $message = $this->settingRepo->findOneByName('twilio_message')->getSetting();
+        $from = $this->settingRepo->findOneByName('twilio_number')->getSetting();
 
         try {
             $twilioSend = $client->account->messages->create(array(
-                "From" => $this->from,
+                "From" => $from,
                 "To" => $phoneNumber,
-                "Body" => $this->message,
+                "Body" => $message,
             ));
         } catch (\Services_Twilio_RestException $e) {
             if ($e->getStatus() != 200) {
-                $recipient = $this->em
-                                  ->getRepository('SpikeTeamUserBundle:Spiker')
-                                  ->findOneByPhoneNumber($phoneNumber);
-
-                $recipient->setIsEnabled(false);
-                $this->em->persist($recipient);
-                $this->em->flush();
+                $this->disableNumber($phoneNumber, 'Spiker');
+                $this->disableNumber($phoneNumber, 'Admin');
             }
         }
     }
 
     public function sendCall($phoneNumber, $sendTextOnFail = false)
     {
-        $client = new Services_Twilio($this->sid, $this->token);
+        $client = $this->setupTwilioClient();
+        $message = $this->settingRepo->findOneByName('twilio_message')->getSetting();
+        $from = $this->settingRepo->findOneByName('twilio_number')->getSetting();
 
         //callback url for delivering a message
         $url = $this->router->generate(
             'alert_message',
             array(
-                'Message' => $this->message,
+                'Message' => $message,
                 'api_key' => $this->apiKey
             ),
             true
@@ -79,10 +71,32 @@ class NotificationService
         }
 
         $client->account->calls->create(
-            $this->from,
+            $from,
             $phoneNumber,
             $url,
             $params
         );
+    }
+
+    private function setupTwilioClient()
+    {
+        $sid = $this->settingRepo->findOneByName('twilio_sid')->getSetting();
+        $token = $this->settingRepo->findOneByName('twilio_token')->getSetting();
+
+        return new Services_Twilio($sid, $token);
+    }
+
+    private function disableNumber($phoneNumber, $type)
+    {
+        $recipient = $this->em
+                          ->getRepository('SpikeTeamUserBundle:'.$type)
+                          ->findOneByPhoneNumber($phoneNumber);
+
+        if ($recipient) {
+            $recipient->setIsEnabled(false);
+            $this->em->persist($recipient);
+        }
+
+        $this->em->flush();
     }
 }
