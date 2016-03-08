@@ -5,12 +5,22 @@ namespace SpikeTeam\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use SpikeTeam\UserBundle\Entity\SpikerGroup;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Spiker
  *
  * @ORM\Table(name="spiker")
  * @ORM\Entity(repositoryClass="SpikeTeam\UserBundle\Entity\SpikerRepository")
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="This email is already signed up."
+ * )
+ * @UniqueEntity(
+ *     fields="phoneNumber",
+ *     message="This phone number is already signed up."
+ * )
  */
 class Spiker
 {
@@ -25,6 +35,9 @@ class Spiker
 
     /**
      * @var string
+     * @Assert\NotBlank(
+     *      message="First name cannot be blank."
+     * )
      *
      * @ORM\Column(name="first_name", type="string", length=60, nullable=true)
      */
@@ -32,6 +45,9 @@ class Spiker
 
     /**
      * @var string
+     * @Assert\NotBlank(
+     *      message="Last name cannot be blank."
+     * )
      *
      * @ORM\Column(name="last_name", type="string", length=60, nullable=true)
      */
@@ -39,14 +55,24 @@ class Spiker
 
     /**
      * @var string
-     *
+     * @Assert\Regex(
+     *     pattern="/[0-9]/",
+     *     message="Your phone number must consist only of numbers."
+     * )
+     *  @Assert\Length(
+     *      min = 11,
+     *      max = 11,
+     *      exactMessage = "Phone number has an incorrect number of digits.",
+     * )
      * @ORM\Column(name="phone_number", type="string", length=11, unique=true)
      */
     private $phoneNumber;
 
     /**
      * @var string
-     *
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     * )
      * @ORM\Column(name="email", type="string", unique=true, nullable=true)
      */
     private $email;
@@ -90,6 +116,14 @@ class Spiker
      * @ORM\Column(name="preferred_time", type="string", nullable=true)
      */
     private $preferredTime;
+
+    /**
+     * @var int
+     * 0 = text, 1 = phone call, 2 = both
+     *
+     * @ORM\Column(name="notification_preference", type="integer", nullable=false, options={"default" = 0})
+     */
+    private $notificationPreference = 0;
 
     /**
      * Get id
@@ -148,6 +182,16 @@ class Spiker
     }
 
     /**
+     * Get full name
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->firstName . " " . $this->lastName;
+    }
+
+    /**
      * Set phoneNumber
      *
      * @param string $phoneNumber
@@ -155,6 +199,17 @@ class Spiker
      */
     public function setPhoneNumber($phoneNumber)
     {
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        switch (strlen($phoneNumber)) {
+            case 10:
+                $phoneNumber = '1' . $phoneNumber;
+                break;
+            case 11:
+                $phoneNumber = $phoneNumber;
+                break;
+        }
+
         $this->phoneNumber = $phoneNumber;
 
         return $this;
@@ -331,5 +386,28 @@ class Spiker
     public function getPreferredTime()
     {
         return $this->preferredTime;
+    }
+
+    /**
+     * Set notificationPreference
+     *
+     * @param integer $notificationPreference
+     * @return Spiker
+     */
+    public function setNotificationPreference($notificationPreference)
+    {
+        $this->notificationPreference = $notificationPreference;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationPreference
+     *
+     * @return integer
+     */
+    public function getNotificationPreference()
+    {
+        return $this->notificationPreference;
     }
 }

@@ -7,8 +7,9 @@ security:
             id: fos_user.user_provider.username_email
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_CAPTAIN:       [ROLE_USER]
+        ROLE_ADMIN:         [ROLE_CAPTAIN]
+        ROLE_SUPER_ADMIN:   [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     firewalls:
         dev:
@@ -36,8 +37,10 @@ security:
 
     access_control:
         - { path: ^/twilio, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/alert, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/spikers/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/stats, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
         - { path: ^/api/v2, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
-        - { path: ^/, roles: ROLE_ADMIN, requires_channel: https }
+        - { path: ^/, roles: ROLE_CAPTAIN, requires_channel: https }
+        - { path: ^/admin|^/settings, roles: ROLE_ADMIN, requires_channel: https }
         - { path: ^/api/v1, roles: ROLE_API, requires_channel: http }

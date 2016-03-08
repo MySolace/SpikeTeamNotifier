@@ -3,52 +3,48 @@
 namespace SpikeTeam\AlertBundle\Event;
 
 use SpikeTeam\ButtonBundle\Event\AlertEvent;
-use Services_Twilio;
+use SpikeTeam\AlertBundle\Services\NotificationService;
 
 class AlertListener
 {
-
     protected $em;
+    protected $notificationService;
 
-    public function __construct($em)
+    public function __construct($em, NotificationService $notificationService)
     {
         $this->em = $em;
+        $this->notificationService = $notificationService;
     }
 
     public function onAlert(AlertEvent $event)
     {
         $admins = $this->em->getRepository('SpikeTeamUserBundle:Admin')->findAll();
-        $recipients = array_merge($event->getSpikers(), $admins);
-        foreach($recipients as $recipient) {
-            if ($recipient->getIsEnabled() && $recipient->getPhoneNumber()) {
-                $this->sendMessage($recipient);
-            }
-        }
-    }
+        $spikers = $event->getSpikers();
+        foreach($spikers as $spiker) {
+            if ($spiker->getIsEnabled() && $spiker->getPhoneNumber()) {
+                $preference = $spiker->getNotificationPreference();
+                $phoneNumber = $spiker->getPhoneNumber();
 
-    public function sendMessage($recipient)
-    {
-        $settingRepo = $this->em->getRepository('SpikeTeamSettingBundle:Setting');
-        // Pulling CTL Twilio credentials from settings in db
-        $sid = $settingRepo->findOneByName('twilio_sid')->getSetting();
-        $token = $settingRepo->findOneByName('twilio_token')->getSetting();
-        $message = $settingRepo->findOneByName('twilio_message')->getSetting();
-        $from = $settingRepo->findOneByName('twilio_number')->getSetting();
-        $client = new Services_Twilio($sid, $token);
-
-        try {
-            $twilioSend = $client->account->messages->create(array(
-                "From" => $from,
-                "To" => $recipient->getPhoneNumber(),
-                "Body" => $message,
-            ));       
-        } catch (\Services_Twilio_RestException $e) {
-            if ($e->getStatus() != 200) {
-                $recipient->setIsEnabled(false);
-                $this->em->persist($recipient);
-                $this->em->flush();
+                switch ($preference) {
+                    case 0:
+                        $this->notificationService->sendMessage($phoneNumber);
+                        break;
+                    case 1:
+                        $this->notificationService->sendCall($phoneNumber, false);
+                        break;
+                    case 2:
+                        $this->notificationService->sendCall($phoneNumber, true);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
+        foreach($admins as $admin) {
+            if ($admin->getIsEnabled() && $admin->getPhoneNumber()) {
+                $this->notificationService->sendMessage($admin->getPhoneNumber());
+            }
+        }
     }
 }

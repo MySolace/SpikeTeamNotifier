@@ -44,19 +44,18 @@ class ButtonPush
     /**
      * Construct with $pushTime and $userId
      *
-     * @param \DateTime $pushTime
      * @param integer $userId
      */
-    public function __construct($pushTime, $userId)
+    public function __construct($userId)
     {
-        $this->pushTime = $pushTime;
+        $this->pushTime = new \DateTime();
         $this->userId = $userId;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,7 +78,7 @@ class ButtonPush
     /**
      * Get pushTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPushTime()
     {

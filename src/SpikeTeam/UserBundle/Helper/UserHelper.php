@@ -29,27 +29,6 @@ class UserHelper
     }
 
     /**
-     * Process number so that it will work w/ Twilio
-     *
-     * @param string $phoneNumber
-     * @return string
-     */
-    public function processNumber($phoneNumber)
-    {
-        $return = false;
-        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
-        switch (strlen($phoneNumber)) {
-            case 10:
-                $return = '1' . $phoneNumber;
-                break;
-            case 11:
-                $return = $phoneNumber;
-                break;
-        }
-        return $return;
-    }
-
-    /**
      * Do all the things to set a user as the captain of a group
      *
      * @param Spiker $captain

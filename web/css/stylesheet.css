@@ -1,11 +1,11 @@
 /* Stylesheet for CTL's Spike Team Notifier app
- * 
+ *
  * Image Credits:
  * Metal 006 - Brushed Metal: ZooBoing | TurboSquid (http://www.turbosquid.com/FullPreview/Index.cfm/ID/682619)
  * Button: http://server.ashoresystems.com/~battlepa/battleparty/assets/scripts/game/images/
  */
 body {
-  font-size: 16px; }
+  font-size: 14px; }
 
 .nameplate {
   font-size: 24px; }
@@ -162,6 +162,22 @@ td.center {
 .import-link {
   cursor: pointer; }
 
+.errors {
+  text-align: center;
+  background: #A80000;
+  color: white;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
+.success {
+  text-align: center;
+  background: #00cc00;
+  color: white;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+
 body.anon #inner #fos-user {
   margin: 150px auto;
   width: 300px; }
@@ -236,117 +252,6 @@ body.anon #inner #fos-user {
   .group-select option.night {
     background-color: #9393D8;
     color: white; }
-
-/**
- * CSS for On/Off button from https://proto.io/freebies/onoff/
- */
-.onoffswitch {
-  margin-top: 3px;
-  width: 64px;
-  position: relative;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none; }
-
-.onoffswitch-checkbox {
-  display: none; }
-
-.onoffswitch-label {
-  display: block;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid #FFFFFF;
-  border-radius: 50px; }
-
-.onoffswitch-inner {
-  display: block;
-  width: 200%;
-  margin-left: -100%;
-  transition: margin 0.3s ease-in 0s; }
-
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-  display: block;
-  float: left;
-  width: 50%;
-  height: 25px;
-  padding: 0;
-  line-height: 25px;
-  font-size: 12px;
-  color: white;
-  font-weight: bold;
-  box-sizing: border-box; }
-
-.onoffswitch-inner:before {
-  content: "ON";
-  padding-left: 10px;
-  background-color: #337AB7;
-  color: #FFFFFF; }
-
-.onoffswitch-inner:after {
-  content: "OFF";
-  padding-right: 10px;
-  background-color: #EEEEEE;
-  color: #999999;
-  text-align: right; }
-
-.onoffswitch-switch {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 5px;
-  background: #FFFFFF;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 35px;
-  border: 2px solid #FFFFFF;
-  border-radius: 20px;
-  transition: all 0.3s ease-in 0s; }
-
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-  margin-left: 0; }
-
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-  right: 0px; }
-
-div.stats-container {
-  padding: 10px;
-  background: white;
-  -webkit-box-shadow: 0 8px 6px -6px black;
-  -moz-box-shadow: 0 8px 6px -6px black;
-  box-shadow: 0 8px 6px -6px black; }
-
-div.dashboard-container {
-  text-align: center; }
-
-.stats span, .issues span {
-  color: red; }
-
-.date-select {
-  text-align: center;
-  margin: 10px 0; }
-
-ul.users-list, ul.stats-list {
-  border-bottom: 1px solid black; }
-
-ul.users-list, ul.stats-list, ul.issues-list, .issues {
-  text-align: center;
-  list-style-type: none; }
-  @media screen and (max-width: 600px) {
-    ul.users-list, ul.stats-list, ul.issues-list, .issues {
-      text-align: left; } }
-
-ul.users-list, ul.stats-list {
-  padding: 10px 0; }
-
-.issues, ul.issues-list {
-  padding: 5px 0; }
-
-.issues p:last-of-type {
-  text-decoration: underline; }
-
-ul.left-list li, ul.right-list li {
-  margin: 5px; }
 
 body {
   background-image: url("../images/steel-bg.jpg"); }

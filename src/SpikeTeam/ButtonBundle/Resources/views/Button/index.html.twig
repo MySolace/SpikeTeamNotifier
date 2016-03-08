@@ -8,7 +8,7 @@
     </div>
     <div id="button-box">
         <div id="button-box-inner">
-            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}">
+            <div id="button" class="{% if canPush %}enabled{% else %}disabled{% endif %}" data-message="{{ message }}">
                 {% if canPush %}
                     <a href="{{ goUrl }}">
                         <button class="button-image" /></button>
@@ -21,15 +21,10 @@
     </div>
     <div class="page">
         <div class="group-select">
-            Send Alert to Group: 
-            <select {% if next.getCaptain() %}class="{{ next.getCaptain().preferredTime }}"{% endif %}>
+            Send Alert to Group:
+            <select {% if currentGroup.getCaptain() %}class="{{ currentGroup.getCaptain().preferredTime }}"{% endif %}>
                 <option value="all">All</option>
-                {% for listedGroup in groupList %}
-                    <option value="{{ listedGroup.id }}"
-                        {% if listedGroup.id == next.id %}selected="selected"{% endif %}
-                        {% if not listedGroup.enabled %}disabled="disabled"{% endif %}
-                        {% if listedGroup.getCaptain() %}class="{{ listedGroup.getCaptain().preferredTime }}"{% endif %}>{{ listedGroup.id }}</option>
-                {% endfor %}
+                <option value="{{ currentGroup.id }}" selected="selected">{{ currentGroup.name }}</option>
             </select>
         </div>
         <div class="latest">
@@ -37,7 +32,7 @@
             Latest:
                 <span class="latest-group">
                     {% if mostRecent.group.id is defined %}
-                        Group {{ mostRecent.group.id }}
+                        {{ mostRecent.group.name }} Group
                     {% else %}
                         All Spikers
                     {% endif %}

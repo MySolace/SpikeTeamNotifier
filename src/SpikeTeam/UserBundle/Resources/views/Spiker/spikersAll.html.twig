@@ -1,6 +1,7 @@
 {% extends 'admin.spikers.html.twig' %}
 
 {% block body %}
+    {% include '_errors.html.twig' %}
     <div class="nameplate">
         <div class="nameplate-inner">
             &bull;&nbsp;&nbsp;SPIKE TEAM MEMBERS&nbsp;&nbsp;&bull;
@@ -8,38 +9,15 @@
     </div>
 
     <div class="page table-responsive">
-        {% if existing %}
-            <div class="alert">Sorry! A spiker by this phone number or email address already exists. Please fix the record and try again.</div>
-        {% endif %}
         <div class="groups">
             <div class="buttons">
                 <button class="all btn {% if group is null %}btn-primary{% else %}btn-default{% endif %}">
                     All Spikers
                 </button>
                 {% for listedGroup in groupList %}
-                    <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">Group {{ listedGroup.id }}</button>
+                    <button id="group-{{ listedGroup.id }}" class="group btn{% if listedGroup.id == group %} btn-primary{% else %} btn-default{% endif %}{% if listedGroup.getCaptain() %} {{ listedGroup.getCaptain().preferredTime }}{% endif %}">{{ listedGroup.name }}</button>
                 {% endfor %}
-                {% if is_granted("ROLE_SUPER_ADMIN") %}
-                    <button class="add btn btn-default">Add Group</button>
-                {% endif %}
             </div>
-
-            <div class="group-right">
-                {% if is_granted("ROLE_SUPER_ADMIN") %}
-                    <div class="shufflebutton">
-                        <button id="shuffle" class="shuffle btn" {% if group is not null %}style="display:none;"{% endif %}>Shuffle</button>
-                    </div>
-                {% endif %}
-
-                <div class="onoffswitch" {% if group is null %}style="display:none;"{% endif %}>
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="onoff-{{ group }}" {% if group_enabled %}checked="checked"{% endif %}>
-                    <label class="onoffswitch-label" for="onoff-{{ group }}">
-                        <span class="onoffswitch-inner"></span>
-                        <span class="onoffswitch-switch"></span>
-                    </label>
-                </div>
-            </div>
-
         </div>
 
         <div class="meta">
@@ -48,7 +26,7 @@
             </div>
             {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <div class="import-export">
-                    <a class="import-link">Import</a> | <a href="{{ path('spikers_export', {gid: group}) }}">Export</a>
+                    <a href="{{ path('spikers_export', {gid: group}) }}">Export</a>
                 </div>
             {% endif %}
         </div>
@@ -68,7 +46,7 @@
             <form class="form" action="{{ path('spikers_enable') }}" method="post" id="enabler">
                 <tbody>
                 {% for spiker in spikers %}
-                    <tr class="spiker group-{{ spiker.group.id }}{% if not spiker.group.enabled %} disabled{% endif %}{% if spiker.isCaptain %} captain{% endif %}{% if spiker.preferredTime == 'day' %} day{% elseif spiker.preferredTime == 'night' %} night{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
+                    <tr class="spiker group-{{ spiker.group.id }}{% if spiker.isCaptain %} captain{% endif %}{% if spiker.preferredTime == 'day' %} day{% elseif spiker.preferredTime == 'night' %} night{% endif %}" {% if group is not null and spiker.group.id != group %}style="display:none;"{% endif %}>
                         <td class="center">
                             <input type="checkbox" value="1" id="{{ spiker.id }}-enabled" name="{{ spiker.id }}-enabled" class="inlineCheckbox" {% if spiker.isenabled %}checked="checked"{% endif %}{% if spiker.isCaptain %} disabled{% endif %}/>
                         </td>
@@ -89,7 +67,7 @@
                                         {% if not listedGroup.enabled %}
                                             class="disabled"
                                         {% endif %}>
-                                        {{ listedGroup.id }}
+                                        {{ listedGroup.name }}
                                     </option>
                                 {% endfor %}
                             </select>
@@ -98,7 +76,7 @@
                         <td>{{ spiker.lastName }}</td>
                         <td>{{ spiker.phoneNumber }}</td>
                         <td>{{ spiker.email }}</td>
-                        <td>{{ spiker.cohort }}</td>
+                        <td class="center">{{ spiker.cohort }}</td>
                         <td class="center edit">
                             <a href="{{ path('spikers_edit', {'input': spiker.phoneNumber}) }}">Edit</a>
                         </td>
@@ -129,7 +107,7 @@
                             <td>{{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}</td>
                             <td>{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}</td>
                             <td class="center">{{ form_widget(form.cohort) }}</td>
-                            <td class="center">{{ form_widget(form.Add, {'attr': {'class': 'btn btn-default'} }) }}</td>
+                            <td class="center">{{ form_widget(form.save, {'attr': {'class': 'btn btn-default'} }) }}</td>
                         {{ form_end(form) }}
                     </tr>
                 </tfoot>

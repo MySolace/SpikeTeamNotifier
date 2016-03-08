@@ -1,8 +1,3 @@
-stats_dashboard:
-    resource: "@StatsDashboardBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 spike_team_setting:
     resource: "@SpikeTeamSettingBundle/Controller/"
     type:     annotation
@@ -28,6 +23,11 @@ spike_team_api:
     type: rest
     prefix: /api
     resource: "@SpikeTeamApiBundle/Resources/config/routing.yml"
+
+spike_team_alert:
+    resource:   "@SpikeTeamAlertBundle/Controller/"
+    type:       annotation
+    prefix:     /
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

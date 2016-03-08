@@ -5,11 +5,18 @@ namespace SpikeTeam\UserBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * User
  *
  * @ORM\Table(name="fos_user")
  * @ORM\Entity()
+ * @UniqueEntity(
+ *     fields="email",
+ *     message="This email is already signed up."
+ * )
  */
 class Admin extends BaseUser
 {
@@ -43,7 +50,15 @@ class Admin extends BaseUser
 
     /**
      * @var string
-     *
+     * @Assert\Regex(
+     *     pattern="/[0-9]/",
+     *     message="Your phone number must consist only of numbers."
+     * )
+     *  @Assert\Length(
+     *      min = 11,
+     *      max = 11,
+     *      exactMessage = "Your phone number has an incorrect number of digits.",
+     * )
      * @ORM\Column(name="phone_number", type="string", length=11, nullable=true)
      */
     private $phoneNumber;
@@ -53,12 +68,12 @@ class Admin extends BaseUser
      *
      * @ORM\Column(name="is_enabled", type="boolean", options={"default" = 0})
      */
-    private $isEnabled = 0;
+    private $isEnabled = false;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -145,6 +160,17 @@ class Admin extends BaseUser
      */
     public function setPhoneNumber($phoneNumber)
     {
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        switch (strlen($phoneNumber)) {
+            case 10:
+                $phoneNumber = '1' . $phoneNumber;
+                break;
+            case 11:
+                $phoneNumber = $phoneNumber;
+                break;
+        }
+
         $this->phoneNumber = $phoneNumber;
 
         return $this;
@@ -181,5 +207,38 @@ class Admin extends BaseUser
     public function getIsEnabled()
     {
         return $this->isEnabled;
+    }
+
+    /**
+     * Get the highest rated role assigned to this user.
+     *
+     * @return string
+     */
+    public function getHighestRole() {
+        return $this->getRoles()[0];
+    }
+
+    /**
+     * Transform array of roles (ROLE_SUPER_ADMIN, ROLE_USER) into a single, user-friendly string
+     *
+     * @param array $role
+     * @return string|boolean
+     */
+    public function getFriendlyRoleName(){
+        //Extract the first role from the roles array, which is the highest role assigned to a user
+        $role = $this->getHighestRole();
+
+        $roleMap = array(
+            'ROLE_CAPTAIN' => 'Captain',
+            'ROLE_ADMIN' => 'Admin',
+            'ROLE_SUPER_ADMIN' => 'Super Admin',
+        );
+
+        if( isset($roleMap[$role]) ){
+            return $roleMap[$role];
+        }
+        else{
+            return false;
+        }
     }
 }

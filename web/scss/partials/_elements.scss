@@ -125,3 +125,17 @@ td.center {
 .import-link {
     cursor: pointer;
 }
+
+.errors {
+    text-align: center;
+    background: #A80000;
+    color: white;
+    @include drops;
+}
+
+.success {
+    text-align: center;
+    background: #00cc00;
+    color: white;
+    @include drops;
+}

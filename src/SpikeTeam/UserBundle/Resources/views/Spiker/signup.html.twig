@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include '_errors.html.twig' %}
+    <div class="nameplate">
+        <div class="nameplate-inner">
+            Spike Team Signup
+        </div>
+    </div>
+    <div class="page">
+        {{ form_start(form) }}
+        <div class="form-left">
+            <div class="form-group">
+                {{ form_label(form.firstName, 'First Name') }}
+                {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.lastName, 'Last Name') }}
+                {{ form_widget(form.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.phoneNumber, 'Phone Number') }}
+                {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'} }) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'} }) }}
+            </div>
+        </div>
+
+        <div class="form-right">
+            <div class="form-group">
+                {{ form_label(form.notificationPreference, 'Notification Preference') }}
+                {{ form_widget(form.notificationPreference) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.group, 'Group') }}
+                {{ form_widget(form.group) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.cohort, 'Cohort #') }}
+                {{ form_widget(form.cohort) }}
+            </div>
+        </div>
+
+        <div class="form-bottom">
+            {{ form_widget(form.save, { 'label': 'Signup!', 'attr': {'class': 'btn btn-default btn-danger'} }) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -21,7 +21,7 @@
                     <td>{{ setting.setting }}</td>
                     <td class="center">
                         {% if is_granted('ROLE_SUPER_ADMIN') or setting.name == 'twilio_message' %}
-                            <a href="/settings/{{ setting.name }}/edit">Edit</a>
+                            <a href="{{ path('settings_edit', { name: setting.name }) }}">Edit</a>
                         {% endif %}
                     </td>
                 </tr>
