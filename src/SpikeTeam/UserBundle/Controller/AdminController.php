@@ -69,9 +69,8 @@ class AdminController extends Controller
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
 
-            $form = $this->createForm(new AdminType(), $admin);
-            $form->remove('password');
-            $form->add('password', 'password', array('required' => false));
+            $form = $this->createForm(new AdminType(), $admin)
+                         ->add('password', 'password', array('required' => false));
 
             if (!$securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form->remove('roles');
