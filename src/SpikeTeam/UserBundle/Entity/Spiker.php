@@ -45,9 +45,6 @@ class Spiker
 
     /**
      * @var string
-     * @Assert\NotBlank(
-     *      message="Last name cannot be blank."
-     * )
      *
      * @ORM\Column(name="last_name", type="string", length=60, nullable=true)
      */

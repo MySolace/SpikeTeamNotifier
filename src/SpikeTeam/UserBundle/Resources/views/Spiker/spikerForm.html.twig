@@ -1,6 +1,7 @@
 {% extends 'admin.spikers.html.twig' %}
 
 {% block body %}
+    {% include '_errors.html.twig' %}
     <div class="nameplate">
         <div class="nameplate-inner">
             &bull;&nbsp;&nbsp;SPIKER: {{ spiker.firstName }} {{ spiker.lastName }}&nbsp;&nbsp;&bull;

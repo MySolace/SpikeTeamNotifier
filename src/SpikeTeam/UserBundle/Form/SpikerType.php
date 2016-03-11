@@ -8,6 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class SpikerType extends AbstractType
 {
+    private $options;
+    public function __construct($options = array())
+    {
+        $this->options = array(
+            'lastNameRequired'  => true,
+            'cohortRequired'    => true
+        );
+
+        $this->options = array_merge($this->options, $options);
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -16,32 +27,42 @@ class SpikerType extends AbstractType
     {
         $builder
             ->add('group', 'entity', array(
-                'class'     => 'SpikeTeamUserBundle:SpikerGroup',
-                'property'  => 'name',
-            ))
+                    'class'     => 'SpikeTeamUserBundle:SpikerGroup',
+                    'property'  => 'name',
+                )
+            )
             ->add('firstName', 'text', array('required' => true))
-            ->add('lastName', 'text', array('required' => true))
+            ->add('lastName', 'text', array(
+                    'required' => $this->options['lastNameRequired']
+                )
+            )
             ->add('phoneNumber', 'text', array(
-                'required'          => true,
-                'error_bubbling'    => true
-            ))
+                    'required'          => true,
+                    'error_bubbling'    => true
+                )
+            )
             ->add('isSupervisor', 'checkbox', array(
-                'required'          => false
-            ))
+                    'required'          => false
+                )
+            )
             ->add('isEnabled', 'checkbox', array(
-                'required'          => false
-            ))
+                    'required'          => false
+                )
+            )
             ->add('cohort', 'text', array(
-                'required'  => true,
-                'attr'      => array('size' => '2'),
-            ))
+                    'required' => $this->options['cohortRequired'],
+                    'attr'      => array('size' => '2'),
+                )
+            )
             ->add('isCaptain', 'checkbox', array(
-                'required' => false,
-            ))
+                    'required' => false,
+                )
+            )
             ->add('email', 'text', array(
-                'required'          => true,
-                'error_bubbling'    => true
-            ))
+                    'required'          => true,
+                    'error_bubbling'    => true
+                )
+            )
             ->add('notificationPreference', 'choice', array(
                 'choices' => array(
                     0 => 'Text',
