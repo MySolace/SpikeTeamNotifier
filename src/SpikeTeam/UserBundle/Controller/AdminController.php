@@ -34,8 +34,7 @@ class AdminController extends Controller
         $admins = $this->repo->findAll();
 
         $newAdmin = new Admin();
-        $form = $this->createForm(new AdminType(), $newAdmin)
-                     ->add('save', 'submit');
+        $form = $this->createForm(new AdminType(), $newAdmin);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -69,9 +68,8 @@ class AdminController extends Controller
         if ($currentUser->getEmail() == $email || $securityContext->isGranted('ROLE_SUPER_ADMIN')) {
             $admin = $this->repo->findOneByEmail($email);
 
-            $form = $this->createForm(new AdminType(), $admin);
-            $form->remove('password');
-            $form->add('password', 'password', array('required' => false));
+            $options = array('passwordRequired' => false);
+            $form = $this->createForm(new AdminType($options), $admin);
 
             if (!$securityContext->isGranted('ROLE_SUPER_ADMIN')) {
                 $form->remove('roles');

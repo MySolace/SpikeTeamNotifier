@@ -179,8 +179,13 @@ class SpikerController extends Controller
         $oldIsCaptain = $spiker->getIsCaptain();
 
         $groupEditAttr = ($spiker->getIsCaptain()) ? array('disabled' => true) : [];
-        $form = $this->createForm(new SpikerType(), $spiker);
 
+        $options =  array(
+            'cohortRequired' => false,
+            'lastNameRequired' => false
+        );
+
+        $form = $this->createForm(new SpikerType($options), $spiker);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

@@ -9,6 +9,16 @@ use SpikeTeam\UserBundle\Form\StringToArrayTransformer;
 
 class AdminType extends AbstractType
 {
+    private $options;
+    public function __construct($options = array())
+    {
+        $this->options = array(
+            'passwordRequired'  => true
+        );
+
+        $this->options = array_merge($this->options, $options);
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -27,7 +37,7 @@ class AdminType extends AbstractType
                 'error_bubbling' => true
             ))
             ->add('password', 'password', array(
-                'required' => true,
+                'required' => $this->options['passwordRequired'],
             ))
             ->add('phoneNumber', 'text', array(
                 'required' => true,
