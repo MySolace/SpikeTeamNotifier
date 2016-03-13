@@ -37,7 +37,7 @@ security:
 
     access_control:
         - { path: ^/twilio, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
-        - { path: ^/alert, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/alert, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/spikers/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v2, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
