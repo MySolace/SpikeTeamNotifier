@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Common\Collections\Criteria;
 
 use SpikeTeam\ButtonBundle\Entity\ButtonPush;
 use SpikeTeam\ButtonBundle\Event\AlertEvent;
@@ -21,17 +22,17 @@ class ButtonController extends Controller
         $em = $this->getDoctrine()->getManager();
         $spikerGroupHelper = $this->get('spike_team.spiker_group_helper');
         $securityContext = $this->get('security.context');
-        $mostRecent = $em->getRepository('SpikeTeamButtonBundle:ButtonPush')->findMostRecent();
-        $currentGroupId = $spikerGroupHelper->getCurrentGroupId();
 
-        $currentGroup = $this->getDoctrine()
-                     ->getRepository('SpikeTeamUserBundle:SpikerGroup')
-                     ->find($currentGroupId);
+        $buttonPushRepo = $em->getRepository('SpikeTeamButtonBundle:ButtonPush');
+        $groupRepo = $em->getRepository('SpikeTeamUserBundle:SpikerGroup');
+        $settingRepo = $em->getRepository('SpikeTeamSettingBundle:Setting');
+
+        $mostRecent = $buttonPushRepo->findMostRecent();
+        $currentGroupId = $spikerGroupHelper->getCurrentGroupId();
+        $currentGroup = $groupRepo->find($currentGroupId);
 
         $maxAlerts = $this->get('config')->get('alerts_per_day', 2);
-
-        $message = $em->getRepository('SpikeTeamSettingBundle:Setting')
-                      ->findOneByName('twilio_message')
+        $message = $settingRepo->findOneByName('twilio_message')
                       ->getSetting();
 
         $canPush = $currentGroup->getRecentPushesCount() < $maxAlerts;
@@ -50,13 +51,22 @@ class ButtonController extends Controller
             7 => 'Saturday'
         );
 
+        $otherGroups = $groupRepo->findAll();
+        $otherNames = array();
+        foreach ($otherGroups as $otherGroup) {
+            $id = $otherGroup->getId();
+            if ($id <= 7) continue;
+            $otherNames[$otherGroup->getId()] = $otherGroup->getName();
+        }
+
         return $this->render('SpikeTeamButtonBundle:Button:index.html.twig', array(
             'goUrl'         => $this->generateUrl('goteamgo', array('gid' => $currentGroup)),
             'canPush'       => $canPush,
             'message'       => $message,
             'mostRecent'    => $mostRecent,
             'currentGroup'  => $currentGroup,
-            'weekdayNames'  => $weekdayNames
+            'weekdayNames'  => $weekdayNames,
+            'otherNames'    => $otherNames,
         ));
     }
 

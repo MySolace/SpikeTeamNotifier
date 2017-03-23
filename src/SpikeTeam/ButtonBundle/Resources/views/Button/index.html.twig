@@ -31,6 +31,10 @@
                     <option value="{{ key }}">{{ name }}</option>
                     {% endif %}
                 {% endfor %}
+                <option disabled="disabled" role="separator">——————</option>
+                {% for key, name in otherNames %}
+                    <option value="{{ key }}">{{ name }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="latest">
