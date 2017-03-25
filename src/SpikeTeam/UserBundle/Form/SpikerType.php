@@ -29,6 +29,11 @@ class SpikerType extends AbstractType
             ->add('group', 'entity', array(
                     'class'     => 'SpikeTeamUserBundle:SpikerGroup',
                     'property'  => 'name',
+                    'query_builder' => function($repository) {
+                        $qb = $repository->createQueryBuilder('sg');
+                        return $qb
+                            ->where($qb->expr()->eq('sg.public', '1'));
+                    },
                 )
             )
             ->add('firstName', 'text', array('required' => true))

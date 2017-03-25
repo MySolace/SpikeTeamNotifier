@@ -78,15 +78,17 @@ class ButtonController extends Controller
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->get('security.context');
         $spikerGroupHelper = $this->get('spike_team.spiker_group_helper');
+        $sgRepo = $em->getRepository('SpikeTeamUserBundle:SpikerGroup');
+        $sRepo = $em->getRepository('SpikeTeamUserBundle:Spiker');
+        $config = $this->get('config');
 
-        if ($gid == 'all') {
-            $canPush = true;
-        } else {
-            $group = $this->getDoctrine()
-                          ->getRepository('SpikeTeamUserBundle:SpikerGroup')
-                          ->find($gid);
-
-            $canPush = $group->getRecentPushesCount() < 2;
+        $pushIsPublic = true;
+        $canPush = true;
+        if ($gid !== 'all') {
+            $group = $sgRepo->find($gid);
+            $pushIsPublic = $group->getPublic();
+            $perDay = $config->get('alerts_per_day', 5);
+            $canPush = $group->getRecentPushesCount() < $perDay;
         }
 
         if (!$securityContext->isGranted('ROLE_ADMIN')) {
@@ -95,20 +97,18 @@ class ButtonController extends Controller
 
         if ($canPush) {
             // Dispatch alert event, to appropriate group if specified
+
             switch($gid) {
                 case 'all':
-                    $spikers = $this->getDoctrine()
-                                    ->getRepository('SpikeTeamUserBundle:Spiker')
-                                    ->findByEnabledGroup();
+                    $spikers = $sRepo->findByEnabledGroup();
                     break;
                 default:
-                    $spikers = $this->getDoctrine()
-                                    ->getRepository('SpikeTeamUserBundle:Spiker')
-                                    ->findByGroup($group);
+                    $spikers = $sRepo->findByGroup($group);
                     break;
             }
+
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('alert.send', new AlertEvent($spikers));
+            $dispatcher->dispatch('alert.send', new AlertEvent($spikers, $pushIsPublic));
 
             // Record button push
             $push = new ButtonPush($this->getUser()->getId());
@@ -124,7 +124,7 @@ class ButtonController extends Controller
             return new JsonResponse(array(
                 'id' => $id,
                 'time' => $push->getPushTime()->format('G:i, m/d/y'),
-                'enabled' => $this->getDoctrine()->getRepository('SpikeTeamUserBundle:SpikerGroup')->getAllIds()
+                'enabled' => $sgRepo->getAllIds()
             ));
         } else {
             return new JsonResponse(false);

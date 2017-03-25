@@ -18,7 +18,6 @@ class AlertListener
 
     public function onAlert(AlertEvent $event)
     {
-        $admins = $this->em->getRepository('SpikeTeamUserBundle:Admin')->findAll();
         $spikers = $event->getSpikers();
         foreach($spikers as $spiker) {
             if ($spiker->getIsEnabled() && $spiker->getPhoneNumber()) {
@@ -41,6 +40,9 @@ class AlertListener
             }
         }
 
+        if (!$event->pushIsPublic()) return;
+
+        $admins = $this->em->getRepository('SpikeTeamUserBundle:Admin')->findAll();
         foreach($admins as $admin) {
             if ($admin->getIsEnabled() && $admin->getPhoneNumber()) {
                 $this->notificationService->sendMessage($admin->getPhoneNumber());

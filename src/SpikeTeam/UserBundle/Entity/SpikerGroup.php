@@ -52,6 +52,11 @@ class SpikerGroup
      */
     private $enabled = true;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" = 1})
+     */
+    private $public = true;
+
     public function __construct()
     {
         $this->spikers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -182,7 +187,7 @@ class SpikerGroup
     /**
      * Set enabled
      *
-     * @param string $enabled
+     * @param bool $enabled
      * @return SpikerGroup
      */
     public function setEnabled($enabled)
@@ -195,11 +200,34 @@ class SpikerGroup
     /**
      * Get enabled
      *
-     * @return string
+     * @return bool
      */
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * Set if group is public
+     *
+     * @param bool $enabled
+     * @return SpikerGroup
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+
+        return $this;
+    }
+
+    /**
+     * Get if group is public
+     *
+     * @return bool
+     */
+    public function getPublic()
+    {
+        return $this->public;
     }
 
     /**
