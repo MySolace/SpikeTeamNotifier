@@ -103,7 +103,7 @@ class ButtonController extends Controller
                     $spikers = $sRepo->findByEnabledGroup();
                     break;
                 default:
-                    $spikers = $sRepo->findByGroup($group);
+                    $spikers = $sRepo->findByGroupDesc($group);
                     break;
             }
 
