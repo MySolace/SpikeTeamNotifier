@@ -1,5 +1,8 @@
 Spike Team Notifier
 ===================
+
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1431/badge)](https://bestpractices.coreinfrastructure.org/projects/1431)
+
 This is the app developed by Crisis Text Line (crisistextline.org) to notify CTL's spike team, a hardcore group of on-call volunteers in the event of a spike in volume in the system. It is essentially a list of phone numbers, and an API call to a Twilio account to send a standardized message to all of the volunteers. There is also API for the app itself, secured by WSSE, for CRUD operations related to the team members.
 
 Getting Started
