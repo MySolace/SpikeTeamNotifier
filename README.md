@@ -2,6 +2,8 @@ Spike Team Notifier
 ===================
 
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1431/badge)](https://bestpractices.coreinfrastructure.org/projects/1431)
+[![Maintainability](https://api.codeclimate.com/v1/badges/53481b14f66c640ce96f/maintainability)](https://codeclimate.com/github/MySolace/SpikeTeamNotifier/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/53481b14f66c640ce96f/test_coverage)](https://codeclimate.com/github/MySolace/SpikeTeamNotifier/test_coverage)
 [![Build Status](https://travis-ci.org/MySolace/SpikeTeamNotifier.svg?branch=master)](https://travis-ci.org/MySolace/SpikeTeamNotifier)
 
 ---
